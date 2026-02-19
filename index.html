@@ -71,10 +71,11 @@
         th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
         .badge { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 12px; font-weight: bold; }
 
-        /* Print CSS (Hide form, show summary) */
+        /* Print CSS - ซ่อนทุกอย่างยกเว้นตารางประวัติ */
         @media print {
             body { background: white; }
-            .no-print, .sticky-header, #page-search, #page-assess { display: none !important; }
+            /* แก้ไข ID ให้ตรงกับหน้าจอเพื่อซ่อนได้ถูกต้องสมบูรณ์ */
+            .no-print, .sticky-header, #screen-search, #screen-assess { display: none !important; }
             .modal { position: static; display: block; background: transparent; }
             .modal-content { box-shadow: none; border: none; max-width: 100%; padding: 0; overflow: visible; }
             .print-only { display: block !important; }
@@ -167,7 +168,7 @@
             </div>
         </div>
 
-        <div id="page-search" class="screen active container">
+        <div id="screen-search" class="screen active container">
             <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
                 <h2 style="color: var(--primary-dark); margin:0;">ระบุตัวผู้ป่วย</h2>
                 <p style="color: var(--secondary);">กรุณากรอกข้อมูลเพื่อดึงแฟ้มประวัติ</p>
@@ -194,7 +195,7 @@
             </div>
         </div>
 
-        <div id="page-assess" class="screen container">
+        <div id="screen-assess" class="screen container">
             <input type="hidden" id="editTimestamp" value="">
             
             <div id="editAlert" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
@@ -317,8 +318,10 @@
             document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
         }
 
+        // --- แก้ไขบั๊กส่วนนี้ (ID Mismatch) ให้ตรงกับชื่อของ HTML ---
         function navigate(page) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // เปลี่ยนมาใช้ ID ให้ตรงกับ HTML คือ screen-search และ screen-assess
             document.getElementById('screen-' + page).classList.add('active');
             
             document.getElementById('main-topbar').style.display = page === 'login' ? 'none' : 'flex';
@@ -348,11 +351,18 @@
                     document.getElementById('topUsername').innerText = res.name;
                     document.getElementById('printOrgName').innerText = res.orgType + " " + res.orgName;
                     patientDirectory = res.patients || [];
+                    
+                    document.getElementById('screen-login').style.display = 'none';
+                    document.getElementById('app-layout').style.display = 'block';
                     navigate('search');
                 } else alert(res.message);
             });
         }
-        function logout() { document.getElementById('logPin').value = ''; currentUser = null; navigate('login'); }
+        function logout() { 
+            document.getElementById('logPin').value = ''; currentUser = null; 
+            document.getElementById('app-layout').style.display = 'none';
+            navigate('login'); 
+        }
 
         // --- Autocomplete 2 ช่องอิสระ ---
         function filterAutocomplete(type) {
@@ -393,7 +403,7 @@
             document.getElementById('printPatientName').innerText = `HN: ${hn} | ชื่อ: ${name}`;
             
             resetForm();
-            document.getElementById('editTimestamp').value = ""; // เคลียร์โหมดแก้ไข
+            document.getElementById('editTimestamp').value = ""; 
             document.getElementById('editAlert').style.display = 'none';
             document.getElementById('btnSaveSubmit').innerHTML = '<i class="fas fa-save"></i> ยืนยันบันทึกคะแนนใหม่';
 
@@ -420,7 +430,6 @@
                     const dStr = new Date(r.date).toLocaleDateString('th-TH') + ' ' + String(new Date(r.date).getHours()).padStart(2,'0') + ':' + String(new Date(r.date).getMinutes()).padStart(2,'0');
                     const checked = index === 0 ? "checked" : "";
                     
-                    // เช็คสิทธิ์ปุ่มแก้ไข (Edit)
                     const canEdit = r.assessor === currentUser.name;
                     const editBtn = canEdit ? `<button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadEditData(${index})"><i class="fas fa-pen"></i> แก้ไข</button>` : '-';
 
@@ -442,14 +451,12 @@
             const data = currentHistory[index];
             if(data.assessor !== currentUser.name) return alert("คุณไม่มีสิทธิ์แก้ไขรายการของผู้อื่น");
             
-            // ดึงข้อมูลลงฟอร์ม
             selectScore('1a', data.s1a); selectScore('1b', data.s1b); selectScore('1c', data.s1c);
             selectScore('2', data.s2); selectScore('3', data.s3); selectScore('4', data.s4);
             selectScoreDual('5R', data.s5r); selectScoreDual('5L', data.s5l);
             selectScoreDual('6R', data.s6r); selectScoreDual('6L', data.s6l);
             selectScore('7', data.s7); selectScore('8', data.s8); selectScore('9', data.s9); selectScore('10', data.s10); selectScore('11', data.s11);
             
-            // เปลี่ยนสถานะเป็นแก้ไข
             document.getElementById('editTimestamp').value = data.date;
             document.getElementById('editAlert').style.display = 'block';
             document.getElementById('btnSaveSubmit').innerHTML = '<i class="fas fa-save"></i> บันทึกการแก้ไขข้อมูล';
@@ -505,7 +512,7 @@
             document.getElementById(`val_${group}`).value = value;
             calculateTotal();
         }
-        function selectScoreDual(subGroup, value) { selectScore(subGroup, value); } // Logic เหมือนกัน
+        function selectScoreDual(subGroup, value) { selectScore(subGroup, value); }
 
         function calculateTotal() {
             let total = 0; document.querySelectorAll('.nihss-val').forEach(i => { if(i.value !== "") total += parseInt(i.value); });
@@ -539,7 +546,7 @@
                 if(res.status === 'success') {
                     if(!patientDirectory.find(p => p.hn === hn)) patientDirectory.push({hn: hn, name: data.patientName});
                     document.getElementById('successScore').innerText = data.totalScore;
-                    document.getElementById('successModal').style.display = 'flex'; // โชว์ Popup ความสำเร็จ
+                    document.getElementById('successModal').style.display = 'flex';
                 } else alert(res.message);
             });
         }
