@@ -9,21 +9,24 @@
     <style>
         :root { --primary: #0f766e; --primary-dark: #115e59; --secondary: #64748b; --success: #10b981; --danger: #ef4444; --bg-body: #f3f4f6; --bg-surface: #ffffff; --text-dark: #1f2937; --border: #e5e7eb; }
         body { font-family: 'Sarabun', sans-serif; background-color: var(--bg-body); margin: 0; padding: 0; color: var(--text-dark); }
-        .screen { display: none; padding-bottom: 50px; }
-        .screen.active { display: block; animation: fadeIn 0.3s; }
+        
+        /* Screen System - แก้อาการจอขาว */
+        .screen { display: none; padding-bottom: 50px; min-height: 100vh; width: 100%; box-sizing: border-box; }
+        .screen.active { display: block !important; animation: fadeIn 0.3s forwards; }
+        #screen-login.active { display: flex !important; align-items: center; justify-content: center; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Login Screen */
-        .login-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .login-wrapper { width: 100%; display: flex; justify-content: center; }
         .login-card { background: var(--bg-surface); width: 90%; max-width: 400px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); text-align: center; }
 
-        /* Topbar & Sticky Banner */
-        .sticky-header { position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        /* Header & Banner */
+        .sticky-header { position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); width: 100%; display: none; }
         .topbar { background: #1e293b; color: white; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
         .topbar-brand { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .topbar-actions { display: flex; gap: 10px; }
+        .topbar-actions { display: flex; gap: 10px; align-items: center;}
         
-        .patient-banner { background: var(--bg-surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .patient-banner { background: var(--bg-surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: none; justify-content: space-between; align-items: center; }
         .patient-info h2 { margin: 0; color: var(--primary-dark); font-size: 16px; }
         .patient-info p { margin: 2px 0 0 0; color: var(--secondary); font-size: 13px; }
 
@@ -70,8 +73,9 @@
         table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; }
         th, td { padding: 8px 4px; border: 1px solid var(--border); }
         th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
-        
-        /* CSS เฉพาะสำหรับการ Print (แก้อาการตัวหนังสือซ้อนทับกัน) */
+        .badge { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 12px; font-weight: bold; }
+
+        /* CSS เฉพาะสำหรับการ Print */
         @media print {
             body { background: white; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             body > *:not(#historyModal) { display: none !important; }
@@ -84,16 +88,14 @@
             
             .table-responsive { overflow: visible !important; }
             table { width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 20px; }
-            th, td { border: 1px solid #333 !important; padding: 6px 2px; font-size: 11pt; color: #000; text-align: center; vertical-align: middle; }
+            th, td { border: 1px solid #000 !important; padding: 6px 2px; font-size: 11pt; color: #000; text-align: center; vertical-align: middle; }
             th { background-color: #f1f5f9 !important; font-weight: bold; }
             
-            /* กำหนดความกว้างและจัดการเว้นวรรคให้ช่องที่มีปัญหา */
             .col-date { white-space: nowrap !important; width: 16%; font-size: 10pt; }
             .col-total { width: 5%; font-weight: bold; color: #dc2626 !important; font-size: 12pt; }
             .col-score { width: 4.5%; }
             .col-assessor { width: 16%; font-size: 10pt; line-height: 1.2; word-wrap: break-word; }
 
-            /* ส่วนลายเซ็นท้ายกระดาษ */
             .signature-block { width: 100%; display: flex; justify-content: flex-end; margin-top: 40px; page-break-inside: avoid; }
             .signature-box { text-align: center; width: 280px; }
             
@@ -104,7 +106,7 @@
 </head>
 <body>
 
-    <div id="loadingModal" class="modal" style="z-index: 9999;"><div class="modal-content" style="width:auto;"><i class="fas fa-spinner fa-spin" style="font-size: 35px; color: var(--primary); margin-bottom:15px;"></i><div style="font-weight: 500;">กำลังประมวลผล...</div></div></div>
+    <div id="loadingModal" class="modal"><div class="modal-content" style="width:auto;"><i class="fas fa-spinner fa-spin" style="font-size: 35px; color: var(--primary); margin-bottom:15px;"></i><div style="font-weight: 500;">กำลังประมวลผล...</div></div></div>
 
     <div id="successModal" class="modal" style="z-index: 9998;">
         <div class="modal-content" style="max-width: 350px;">
@@ -118,6 +120,30 @@
             <div style="display: flex; gap: 10px; flex-direction: column;">
                 <button class="btn btn-primary" onclick="shareCurrentScore()"><i class="fab fa-line"></i> แชร์คะแนนปัจจุบัน</button>
                 <button class="btn btn-outline" onclick="closeSuccessAndGoHome()">ประเมินคนไข้อื่นต่อ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-header" class="sticky-header">
+        <div class="topbar">
+            <div class="topbar-brand"><i class="fas fa-stethoscope"></i> NIHSS</div>
+            <div class="topbar-actions">
+                <span id="topUsername" style="font-size: 14px; margin-right: 10px;">ชื่อผู้ใช้งาน</span>
+                <button class="btn btn-outline-light" id="btnNavSearch" onclick="navigate('search')" style="display: none; height: 36px; padding: 0 12px;"><i class="fas fa-search"></i> ค้นหาคนไข้</button>
+                <button class="btn btn-danger" onclick="logout()" style="height: 36px; padding: 0 12px;"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+        <div id="patientBanner" class="patient-banner">
+            <div>
+                <h2 id="bannerHnName">HN: - | ชื่อ: -</h2>
+                <p id="bannerHistoryText">ประวัติล่าสุด: -</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="text-align: center; border-right: 1px solid var(--border); padding-right: 15px;">
+                    <div style="font-size: 11px; color: var(--secondary); font-weight: 600;">คะแนนรวม</div>
+                    <div id="display-total" style="font-size: 28px; font-weight: bold; color: var(--primary); line-height: 1;">0</div>
+                </div>
+                <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()"><i class="fas fa-history"></i> ประวัติ/ปริ้นท์</button>
             </div>
         </div>
     </div>
@@ -157,34 +183,8 @@
         </div>
     </div>
 
-    <div id="app-layout" style="display: none;">
-        
-        <div class="sticky-header">
-            <div class="topbar">
-                <div class="topbar-brand"><i class="fas fa-stethoscope"></i> NIHSS</div>
-                <div class="topbar-actions">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-right: 15px; font-size: 14px;"><i class="fas fa-user-circle"></i> <span id="topUsername">ชื่อผู้ใช้งาน</span></div>
-                    <button class="btn btn-outline-light" id="btnNavSearch" onclick="navigate('search')" style="display: none;"><i class="fas fa-search"></i> ค้นหาคนไข้</button>
-                    <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
-                </div>
-            </div>
-            
-            <div id="patientBanner" class="patient-banner" style="display: none;">
-                <div>
-                    <h3 id="bannerHnName" style="margin:0; font-size: 16px; color: var(--primary-dark);">HN: - | ชื่อ: -</h3>
-                    <div id="bannerHistoryText" style="color: var(--secondary); font-size: 13px; margin-top: 4px;">ประวัติล่าสุด: -</div>
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="text-align: center; border-right: 1px solid var(--border); padding-right: 15px;">
-                        <div style="font-size: 11px; color: var(--secondary); font-weight: 600;">คะแนนรวม</div>
-                        <div id="display-total" style="font-size: 28px; font-weight: bold; color: var(--primary); line-height: 1;">0</div>
-                    </div>
-                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()"><i class="fas fa-history"></i> ประวัติ/ปริ้นท์</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="screen-search" class="screen active container">
+    <div id="screen-search" class="screen">
+        <div class="container">
             <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
                 <h2 style="color: var(--primary-dark); margin:0;">ระบุตัวผู้ป่วย</h2>
                 <p style="color: var(--secondary);">กรุณากรอกข้อมูลเพื่อดึงแฟ้มประวัติ</p>
@@ -210,8 +210,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div id="screen-assess" class="screen container">
+    <div id="screen-assess" class="screen">
+        <div class="container">
             <input type="hidden" id="editTimestamp" value="">
             
             <div id="editAlert" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
@@ -266,7 +268,7 @@
     </div>
 
     <div id="historyModal" class="modal">
-        <div class="modal-content" style="max-width: 1000px; text-align: left;">
+        <div class="modal-content" style="max-width: 950px; text-align: left;">
             <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 style="margin:0; color: var(--primary-dark);"><i class="fas fa-folder-open"></i> แฟ้มประวัติและเปรียบเทียบคะแนน</h3>
                 <button class="btn btn-outline" style="padding: 5px 12px; border:none;" onclick="document.getElementById('historyModal').style.display='none'"><i class="fas fa-times" style="font-size: 20px;"></i></button>
@@ -287,10 +289,12 @@
                     <thead>
                         <tr>
                             <th class="no-print">เลือก</th>
-                            <th>วัน/เวลา</th><th>Total</th>
-                            <th>1a</th><th>1b</th><th>1c</th><th>2</th><th>3</th><th>4</th>
-                            <th>5R</th><th>5L</th><th>6R</th><th>6L</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th>
-                            <th>ผู้ประเมิน</th>
+                            <th class="col-date">วัน/เวลา</th>
+                            <th class="col-total">Total</th>
+                            <th class="col-score">1a</th><th class="col-score">1b</th><th class="col-score">1c</th><th class="col-score">2</th><th class="col-score">3</th><th class="col-score">4</th>
+                            <th class="col-score">5R</th><th class="col-score">5L</th><th class="col-score">6R</th><th class="col-score">6L</th>
+                            <th class="col-score">7</th><th class="col-score">8</th><th class="col-score">9</th><th class="col-score">10</th><th class="col-score">11</th>
+                            <th class="col-assessor">ผู้ประเมิน</th>
                             <th class="no-print">จัดการ</th>
                         </tr>
                     </thead>
@@ -323,20 +327,22 @@
             document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
         }
 
+        // --- ระบบนำทางหน้าจอ (ป้องกันจอขาว 100%) ---
         function navigate(page) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             const targetScreen = document.getElementById('screen-' + page);
             if(targetScreen) targetScreen.classList.add('active');
             
-            const topbar = document.getElementById('main-header');
-            if(topbar) topbar.style.display = page === 'login' ? 'none' : 'block';
-            
-            const btnSearch = document.getElementById('btnNavSearch');
-            if(btnSearch) btnSearch.style.display = page === 'assess' ? 'block' : 'none';
-            
-            const banner = document.getElementById('patientBanner');
-            if(banner) banner.style.display = page === 'assess' ? 'flex' : 'none';
-            
+            const header = document.getElementById('app-header');
+            if(header) {
+                if(page === 'login') {
+                    header.style.display = 'none';
+                } else {
+                    header.style.display = 'block';
+                    document.getElementById('btnNavSearch').style.display = page === 'assess' ? 'block' : 'none';
+                    document.getElementById('patientBanner').style.display = page === 'assess' ? 'flex' : 'none';
+                }
+            }
             closeAllDropdowns(); window.scrollTo(0,0);
         }
 
@@ -346,7 +352,8 @@
             if(!phone || pin.length !== 6) return alert('กรอกเบอร์โทร และ รหัส PIN 6 หลัก');
             document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "register", phone: phone, pin: pin, name: document.getElementById('regName').value, orgType: document.getElementById('regOrgType').value, orgName: document.getElementById('regOrgName').value })})
-            .then(r => r.json()).then(res => { document.getElementById('loadingModal').style.display = 'none'; if(res.status === 'success') { alert('สำเร็จ'); toggleAuth('login'); } else alert(res.message); });
+            .then(r => r.json()).then(res => { document.getElementById('loadingModal').style.display = 'none'; if(res.status === 'success') { alert('สำเร็จ'); toggleAuth('login'); } else alert(res.message); })
+            .catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("เชื่อมต่อผิดพลาด"); });
         }
 
         function login() {
@@ -362,11 +369,11 @@
                     patientDirectory = res.patients || [];
                     navigate('search');
                 } else alert(res.message);
-            });
+            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("เชื่อมต่อฐานข้อมูลล้มเหลว"); });
         }
-        function logout() { document.getElementById('logPin').value = ''; currentUser = null; document.getElementById('app-layout').style.display = 'none'; document.getElementById('screen-login').style.display = 'flex'; navigate('login'); }
+        function logout() { document.getElementById('logPin').value = ''; currentUser = null; navigate('login'); }
 
-        // --- Autocomplete 2 ช่อง ---
+        // --- Autocomplete ---
         function filterAutocomplete(type) {
             const inputHn = document.getElementById('searchHn'); const inputName = document.getElementById('searchName');
             const targetInput = type === 'hn' ? inputHn : inputName;
@@ -416,10 +423,7 @@
                     document.getElementById('bannerHistoryText').innerText = "ผู้ป่วยรายใหม่ (ยังไม่มีประวัติ)";
                 }
                 navigate('assess');
-            }).catch(err => {
-                document.getElementById('loadingModal').style.display = 'none';
-                navigate('assess');
-            });
+            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; navigate('assess'); });
         }
 
         // --- History & Print & Edit ---
@@ -465,10 +469,8 @@
             window.scrollTo(0,0);
         }
 
-        // ระบบ Print ฉบับสมบูรณ์ ไม่จำกัดจำนวนบรรทัด และจัดหน้าสวยงาม
         function printSelected() {
-            const rows = document.querySelectorAll('.history-row'); 
-            const checkboxes = document.querySelectorAll('.print-checkbox');
+            const rows = document.querySelectorAll('.history-row'); const checkboxes = document.querySelectorAll('.print-checkbox');
             let hasSelection = false;
             
             checkboxes.forEach((cb, i) => { 
@@ -478,7 +480,7 @@
             
             if(!hasSelection) { 
                 rows.forEach(r => r.classList.remove('no-print'));
-                return alert("กรุณาติ๊กเลือกประวัติอย่างน้อย 1 รายการเพื่อพิมพ์"); 
+                return alert("กรุณาเลือกประวัติอย่างน้อย 1 รายการเพื่อพิมพ์"); 
             }
 
             document.getElementById('printAssessorName').innerText = currentUser.name;
@@ -498,7 +500,7 @@
 
         function shareSelectedHistory() {
             const checkboxes = document.querySelectorAll('.print-checkbox:checked');
-            if(checkboxes.length === 0) return alert("กรุณาเลือกประวัติอย่างน้อย 1 รายการเพื่อแชร์");
+            if(checkboxes.length === 0) return alert("เลือกประวัติอย่างน้อย 1 รายการเพื่อแชร์");
             let text = `รายงานประวัติ NIHSS\nผู้ป่วย: ${document.getElementById('searchName').value} (HN: ${document.getElementById('searchHn').value})\n\n`;
             checkboxes.forEach(cb => {
                 const d = currentHistory[cb.value];
@@ -508,7 +510,7 @@
             else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
         }
 
-        // --- Form Functions แก้ปัญหาปุ่มกดไม่ได้ 100% ---
+        // --- Form Functions ---
         function resetForm() {
             document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.nihss-val').forEach(i => i.value = "");
@@ -518,22 +520,17 @@
         function selectScore(group, value, elem) {
             const container = document.getElementById(`group-${group}`);
             if(!container) return;
-            
-            // ลบสีเขียวออกจากปุ่มทั้งหมดในกลุ่มนี้ก่อน
             container.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
             
             if(elem) {
-                // หากถูกคลิกด้วยเมาส์โดยตรง
                 elem.classList.add('active');
             } else {
-                // หากถูกสั่งจากระบบ Edit (ดึงข้อมูลเก่า)
                 const btns = container.querySelectorAll('.score-btn');
                 btns.forEach(b => {
                     const strVal = String(value).toUpperCase();
                     if (strVal === 'X') {
                         if(b.innerText.includes('X') || b.innerText.includes('x')) b.classList.add('active');
                     } else {
-                        // เช็คตัวเลขจากกล่อง span.score-num
                         const numSpan = b.querySelector('.score-num');
                         if(numSpan && numSpan.innerText == value) b.classList.add('active');
                     }
@@ -547,9 +544,7 @@
         function calculateTotal() {
             let total = 0; 
             document.querySelectorAll('.nihss-val').forEach(i => { 
-                if(i.value !== "" && String(i.value).toUpperCase() !== "X") {
-                    total += parseInt(i.value) || 0; 
-                }
+                if(i.value !== "" && String(i.value).toUpperCase() !== "X") { total += parseInt(i.value) || 0; }
             });
             document.getElementById('display-total').innerText = total; 
             return total;
@@ -578,16 +573,12 @@
             document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r => r.json()).then(res => {
                 document.getElementById('loadingModal').style.display = 'none';
-                
                 if(res.status === 'success') {
                     if(!patientDirectory.find(p => p.hn === hn)) patientDirectory.push({hn: hn, name: data.patientName});
                     document.getElementById('successScore').innerText = data.totalScore;
                     document.getElementById('successModal').style.display = 'flex';
                 } else alert(res.message);
-            }).catch(err => {
-                document.getElementById('loadingModal').style.display = 'none';
-                alert("บันทึกข้อมูลล้มเหลว กรุณาลองใหม่อีกครั้ง");
-            });
+            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("บันทึกข้อมูลล้มเหลว กรุณาลองใหม่อีกครั้ง"); });
         }
 
         function closeSuccessAndGoHome() {
