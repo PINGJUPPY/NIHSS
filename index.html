@@ -74,7 +74,6 @@
         /* Print CSS - ซ่อนทุกอย่างยกเว้นตารางประวัติ */
         @media print {
             body { background: white; }
-            /* แก้ไข ID ให้ตรงกับหน้าจอเพื่อซ่อนได้ถูกต้องสมบูรณ์ */
             .no-print, .sticky-header, #screen-search, #screen-assess { display: none !important; }
             .modal { position: static; display: block; background: transparent; }
             .modal-content { box-shadow: none; border: none; max-width: 100%; padding: 0; overflow: visible; }
@@ -148,7 +147,7 @@
                 <div class="topbar-brand"><i class="fas fa-stethoscope"></i> NIHSS</div>
                 <div class="topbar-actions">
                     <div style="display: flex; align-items: center; gap: 8px; margin-right: 15px; font-size: 14px;"><i class="fas fa-user-circle"></i> <span id="topUsername">ชื่อผู้ใช้งาน</span></div>
-                    <button class="btn btn-outline-light" onclick="navigate('search')"><i class="fas fa-search"></i> ค้นหาคนไข้</button>
+                    <button class="btn btn-outline-light" id="btnNavSearch" onclick="navigate('search')" style="display: none;"><i class="fas fa-search"></i> ค้นหาคนไข้</button>
                     <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
@@ -318,15 +317,22 @@
             document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
         }
 
-        // --- แก้ไขบั๊กส่วนนี้ (ID Mismatch) ให้ตรงกับชื่อของ HTML ---
+        // --- ระบบนำทาง & การแสดงผล Header ---
         function navigate(page) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            // เปลี่ยนมาใช้ ID ให้ตรงกับ HTML คือ screen-search และ screen-assess
             document.getElementById('screen-' + page).classList.add('active');
             
+            // จัดการ Header ให้อยู่ถูกที่
             document.getElementById('main-topbar').style.display = page === 'login' ? 'none' : 'flex';
-            document.getElementById('btnNavSearch').style.display = page === 'assess' ? 'block' : 'none';
-            document.getElementById('patientBanner').style.display = page === 'assess' ? 'flex' : 'none';
+            
+            // หน้าประเมินให้ซ่อนปุ่มค้นหาใน Topbar แล้วโชว์แถบ Patient Banner แทน
+            if (page === 'assess') {
+                document.getElementById('btnNavSearch').style.display = 'block';
+                document.getElementById('patientBanner').style.display = 'flex';
+            } else {
+                document.getElementById('btnNavSearch').style.display = 'none';
+                document.getElementById('patientBanner').style.display = 'none';
+            }
             
             closeAllDropdowns(); window.scrollTo(0,0);
         }
