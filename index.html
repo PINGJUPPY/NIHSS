@@ -29,9 +29,9 @@
 
         /* Autocomplete UX */
         .autocomplete-wrapper { position: relative; width: 100%; }
-        .autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 200px; overflow-y: auto; z-index: 999; display: none; }
-        .autocomplete-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 15px; text-align: left;}
-        .autocomplete-item:hover { background: #f0fdfa; color: var(--primary); }
+        .autocomplete-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 0 0 8px 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 200px; overflow-y: auto; z-index: 999; display: none; text-align: left; }
+        .autocomplete-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-size: 15px; }
+        .autocomplete-item:hover { background: #f0fdfa; color: var(--primary); font-weight: 600; }
 
         /* Forms & Cards */
         .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
@@ -71,14 +71,17 @@
         th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
         .badge { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 12px; font-weight: bold; }
 
-        /* Print CSS - ซ่อนทุกอย่างยกเว้นตารางประวัติ */
+        /* Print CSS - ซ่อน Form 100% เอาเฉพาะตาราง HistoryModal */
         @media print {
-            body { background: white; }
-            .no-print, .sticky-header, #screen-search, #screen-assess { display: none !important; }
-            .modal { position: static; display: block; background: transparent; }
-            .modal-content { box-shadow: none; border: none; max-width: 100%; padding: 0; overflow: visible; }
+            body { background: white; margin: 0; padding: 0; }
+            body > *:not(#historyModal) { display: none !important; }
+            #historyModal { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: transparent; }
+            .modal-content { box-shadow: none; border: none; max-width: 100%; padding: 0; width: 100%; overflow: visible; }
+            .no-print { display: none !important; }
             .print-only { display: block !important; }
-            @page { margin: 1cm; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #000; padding: 8px; font-size: 12pt; }
+            @page { margin: 15mm; size: landscape; }
         }
         .print-only { display: none; }
     </style>
@@ -160,7 +163,7 @@
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <div style="text-align: center; border-right: 1px solid var(--border); padding-right: 15px;">
                         <div style="font-size: 11px; color: var(--secondary); font-weight: 600;">คะแนนรวม</div>
-                        <div id="display-total" style="font-size: 26px; font-weight: bold; color: var(--primary); line-height: 1;">0</div>
+                        <div id="display-total" style="font-size: 28px; font-weight: bold; color: var(--primary); line-height: 1;">0</div>
                     </div>
                     <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()"><i class="fas fa-history"></i> ประวัติ/ปริ้นท์</button>
                 </div>
@@ -206,27 +209,32 @@
                 <div class="card-body">
                     <div class="score-row">
                         <label class="form-label">1a. Level of Consciousness</label>
-                        <div class="score-options" id="group-1a"><button class="score-btn" onclick="selectScore('1a', 0)"><span class="score-num">0</span> Alert</button><button class="score-btn" onclick="selectScore('1a', 1)"><span class="score-num">1</span> Drowsy</button><button class="score-btn" onclick="selectScore('1a', 2)"><span class="score-num">2</span> Stuporous</button><button class="score-btn" onclick="selectScore('1a', 3)"><span class="score-num">3</span> Coma</button></div><input type="hidden" id="val_1a" class="nihss-val require-val">
+                        <div class="score-options" id="group-1a">
+                            <button class="score-btn" onclick="selectScore('1a', 0, this)"><span class="score-num">0</span> Alert</button>
+                            <button class="score-btn" onclick="selectScore('1a', 1, this)"><span class="score-num">1</span> Drowsy</button>
+                            <button class="score-btn" onclick="selectScore('1a', 2, this)"><span class="score-num">2</span> Stuporous</button>
+                            <button class="score-btn" onclick="selectScore('1a', 3, this)"><span class="score-num">3</span> Coma</button>
+                        </div><input type="hidden" id="val_1a" class="nihss-val require-val">
                     </div>
                     <div class="score-row">
                         <label class="form-label">1b. LOC Questions (อายุ/เดือน)</label>
-                        <div class="score-options" id="group-1b"><button class="score-btn" onclick="selectScore('1b', 0)"><span class="score-num">0</span> Both correct</button><button class="score-btn" onclick="selectScore('1b', 1)"><span class="score-num">1</span> One correct</button><button class="score-btn" onclick="selectScore('1b', 2)"><span class="score-num">2</span> None correct</button></div><input type="hidden" id="val_1b" class="nihss-val require-val">
+                        <div class="score-options" id="group-1b"><button class="score-btn" onclick="selectScore('1b', 0, this)"><span class="score-num">0</span> Both correct</button><button class="score-btn" onclick="selectScore('1b', 1, this)"><span class="score-num">1</span> One correct</button><button class="score-btn" onclick="selectScore('1b', 2, this)"><span class="score-num">2</span> None correct</button></div><input type="hidden" id="val_1b" class="nihss-val require-val">
                     </div>
                     <div class="score-row">
                         <label class="form-label">1c. LOC Commands (หลับตา/กำมือ)</label>
-                        <div class="score-options" id="group-1c"><button class="score-btn" onclick="selectScore('1c', 0)"><span class="score-num">0</span> Both correct</button><button class="score-btn" onclick="selectScore('1c', 1)"><span class="score-num">1</span> One correct</button><button class="score-btn" onclick="selectScore('1c', 2)"><span class="score-num">2</span> None correct</button></div><input type="hidden" id="val_1c" class="nihss-val require-val">
+                        <div class="score-options" id="group-1c"><button class="score-btn" onclick="selectScore('1c', 0, this)"><span class="score-num">0</span> Both correct</button><button class="score-btn" onclick="selectScore('1c', 1, this)"><span class="score-num">1</span> One correct</button><button class="score-btn" onclick="selectScore('1c', 2, this)"><span class="score-num">2</span> None correct</button></div><input type="hidden" id="val_1c" class="nihss-val require-val">
                     </div>
                     <div class="score-row">
                         <label class="form-label">2. Best Gaze</label>
-                        <div class="score-options" id="group-2"><button class="score-btn" onclick="selectScore('2', 0)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('2', 1)"><span class="score-num">1</span> Partial palsy</button><button class="score-btn" onclick="selectScore('2', 2)"><span class="score-num">2</span> Forced deviation</button></div><input type="hidden" id="val_2" class="nihss-val require-val">
+                        <div class="score-options" id="group-2"><button class="score-btn" onclick="selectScore('2', 0, this)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('2', 1, this)"><span class="score-num">1</span> Partial palsy</button><button class="score-btn" onclick="selectScore('2', 2, this)"><span class="score-num">2</span> Forced deviation</button></div><input type="hidden" id="val_2" class="nihss-val require-val">
                     </div>
                     <div class="score-row">
                         <label class="form-label">3. Visual Field</label>
-                        <div class="score-options" id="group-3"><button class="score-btn" onclick="selectScore('3', 0)"><span class="score-num">0</span> No visual loss</button><button class="score-btn" onclick="selectScore('3', 1)"><span class="score-num">1</span> Partial hemianopia</button><button class="score-btn" onclick="selectScore('3', 2)"><span class="score-num">2</span> Complete hemianopia</button><button class="score-btn" onclick="selectScore('3', 3)"><span class="score-num">3</span> Bilateral hemianopia</button></div><input type="hidden" id="val_3" class="nihss-val require-val">
+                        <div class="score-options" id="group-3"><button class="score-btn" onclick="selectScore('3', 0, this)"><span class="score-num">0</span> No visual loss</button><button class="score-btn" onclick="selectScore('3', 1, this)"><span class="score-num">1</span> Partial hemianopia</button><button class="score-btn" onclick="selectScore('3', 2, this)"><span class="score-num">2</span> Complete hemianopia</button><button class="score-btn" onclick="selectScore('3', 3, this)"><span class="score-num">3</span> Bilateral hemianopia</button></div><input type="hidden" id="val_3" class="nihss-val require-val">
                     </div>
                     <div class="score-row">
                         <label class="form-label">4. Facial Palsy</label>
-                        <div class="score-options" id="group-4"><button class="score-btn" onclick="selectScore('4', 0)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('4', 1)"><span class="score-num">1</span> Minor paralysis</button><button class="score-btn" onclick="selectScore('4', 2)"><span class="score-num">2</span> Partial paralysis</button><button class="score-btn" onclick="selectScore('4', 3)"><span class="score-num">3</span> Complete</button></div><input type="hidden" id="val_4" class="nihss-val require-val">
+                        <div class="score-options" id="group-4"><button class="score-btn" onclick="selectScore('4', 0, this)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('4', 1, this)"><span class="score-num">1</span> Minor paralysis</button><button class="score-btn" onclick="selectScore('4', 2, this)"><span class="score-num">2</span> Partial paralysis</button><button class="score-btn" onclick="selectScore('4', 3, this)"><span class="score-num">3</span> Complete</button></div><input type="hidden" id="val_4" class="nihss-val require-val">
                     </div>
                 </div>
             </div>
@@ -237,15 +245,15 @@
                     <div class="score-row">
                         <label class="form-label">5. Motor Arm (แขน)</label>
                         <div class="row">
-                            <div class="col"><div style="background:#fef2f2; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--danger); margin-bottom:10px;">ขวา (R)</div><div class="score-options" id="group-5R"><button class="score-btn" onclick="selectScoreDual('5R', 0)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('5R', 1)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('5R', 2)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('5R', 3)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('5R', 4)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('5R', 0)">X: Amputation</button></div><input type="hidden" id="val_5R" class="nihss-val require-val"></div>
-                            <div class="col"><div style="background:#f0fdfa; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--primary); margin-bottom:10px;">ซ้าย (L)</div><div class="score-options" id="group-5L"><button class="score-btn" onclick="selectScoreDual('5L', 0)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('5L', 1)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('5L', 2)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('5L', 3)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('5L', 4)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('5L', 0)">X: Amputation</button></div><input type="hidden" id="val_5L" class="nihss-val require-val"></div>
+                            <div class="col"><div style="background:#fef2f2; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--danger); margin-bottom:10px;">ขวา (R)</div><div class="score-options" id="group-5R"><button class="score-btn" onclick="selectScoreDual('5R', 0, this)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('5R', 1, this)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('5R', 2, this)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('5R', 3, this)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('5R', 4, this)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('5R', 'X', this)">X: Amputation</button></div><input type="hidden" id="val_5R" class="nihss-val require-val"></div>
+                            <div class="col"><div style="background:#f0fdfa; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--primary); margin-bottom:10px;">ซ้าย (L)</div><div class="score-options" id="group-5L"><button class="score-btn" onclick="selectScoreDual('5L', 0, this)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('5L', 1, this)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('5L', 2, this)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('5L', 3, this)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('5L', 4, this)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('5L', 'X', this)">X: Amputation</button></div><input type="hidden" id="val_5L" class="nihss-val require-val"></div>
                         </div>
                     </div>
                     <div class="score-row">
                         <label class="form-label">6. Motor Leg (ขา)</label>
                         <div class="row">
-                            <div class="col"><div style="background:#fef2f2; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--danger); margin-bottom:10px;">ขวา (R)</div><div class="score-options" id="group-6R"><button class="score-btn" onclick="selectScoreDual('6R', 0)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('6R', 1)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('6R', 2)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('6R', 3)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('6R', 4)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('6R', 0)">X: Amputation</button></div><input type="hidden" id="val_6R" class="nihss-val require-val"></div>
-                            <div class="col"><div style="background:#f0fdfa; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--primary); margin-bottom:10px;">ซ้าย (L)</div><div class="score-options" id="group-6L"><button class="score-btn" onclick="selectScoreDual('6L', 0)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('6L', 1)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('6L', 2)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('6L', 3)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('6L', 4)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('6L', 0)">X: Amputation</button></div><input type="hidden" id="val_6L" class="nihss-val require-val"></div>
+                            <div class="col"><div style="background:#fef2f2; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--danger); margin-bottom:10px;">ขวา (R)</div><div class="score-options" id="group-6R"><button class="score-btn" onclick="selectScoreDual('6R', 0, this)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('6R', 1, this)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('6R', 2, this)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('6R', 3, this)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('6R', 4, this)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('6R', 'X', this)">X: Amputation</button></div><input type="hidden" id="val_6R" class="nihss-val require-val"></div>
+                            <div class="col"><div style="background:#f0fdfa; padding:5px; text-align:center; border-radius:4px; font-weight:600; color:var(--primary); margin-bottom:10px;">ซ้าย (L)</div><div class="score-options" id="group-6L"><button class="score-btn" onclick="selectScoreDual('6L', 0, this)">0: No drift</button><button class="score-btn" onclick="selectScoreDual('6L', 1, this)">1: Drift</button><button class="score-btn" onclick="selectScoreDual('6L', 2, this)">2: Some effort</button><button class="score-btn" onclick="selectScoreDual('6L', 3, this)">3: No effort</button><button class="score-btn" onclick="selectScoreDual('6L', 4, this)">4: No movement</button><button class="score-btn" onclick="selectScoreDual('6L', 'X', this)">X: Amputation</button></div><input type="hidden" id="val_6L" class="nihss-val require-val"></div>
                         </div>
                     </div>
                 </div>
@@ -254,11 +262,11 @@
             <div class="card">
                 <div class="card-header"><i class="fas fa-hand-paper"></i> หมวด 3: การประสานงานและการรับรู้</div>
                 <div class="card-body">
-                    <div class="score-row"><label class="form-label">7. Limb Ataxia</label><div class="score-options" id="group-7"><button class="score-btn" onclick="selectScore('7', 0)"><span class="score-num">0</span> Absent</button><button class="score-btn" onclick="selectScore('7', 1)"><span class="score-num">1</span> Present in 1 limb</button><button class="score-btn" onclick="selectScore('7', 2)"><span class="score-num">2</span> Present in 2 limbs</button><button class="score-btn" onclick="selectScore('7', 0)"><span class="score-num">X</span> Amputation</button></div><input type="hidden" id="val_7" class="nihss-val require-val"></div>
-                    <div class="score-row"><label class="form-label">8. Sensory</label><div class="score-options" id="group-8"><button class="score-btn" onclick="selectScore('8', 0)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('8', 1)"><span class="score-num">1</span> Mild-to-moderate loss</button><button class="score-btn" onclick="selectScore('8', 2)"><span class="score-num">2</span> Severe-to-total loss</button></div><input type="hidden" id="val_8" class="nihss-val require-val"></div>
-                    <div class="score-row"><label class="form-label">9. Best Language</label><div class="score-options" id="group-9"><button class="score-btn" onclick="selectScore('9', 0)"><span class="score-num">0</span> No aphasia</button><button class="score-btn" onclick="selectScore('9', 1)"><span class="score-num">1</span> Mild-to-moderate aphasia</button><button class="score-btn" onclick="selectScore('9', 2)"><span class="score-num">2</span> Severe aphasia</button><button class="score-btn" onclick="selectScore('9', 3)"><span class="score-num">3</span> Mute, global aphasia</button></div><input type="hidden" id="val_9" class="nihss-val require-val"></div>
-                    <div class="score-row"><label class="form-label">10. Dysarthria</label><div class="score-options" id="group-10"><button class="score-btn" onclick="selectScore('10', 0)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('10', 1)"><span class="score-num">1</span> Mild-to-moderate dysarthria</button><button class="score-btn" onclick="selectScore('10', 2)"><span class="score-num">2</span> Severe dysarthria</button><button class="score-btn" onclick="selectScore('10', 0)"><span class="score-num">X</span> Intubated</button></div><input type="hidden" id="val_10" class="nihss-val require-val"></div>
-                    <div class="score-row"><label class="form-label">11. Extinction/Inattention</label><div class="score-options" id="group-11"><button class="score-btn" onclick="selectScore('11', 0)"><span class="score-num">0</span> No abnormality</button><button class="score-btn" onclick="selectScore('11', 1)"><span class="score-num">1</span> Visual/tactile inattention</button><button class="score-btn" onclick="selectScore('11', 2)"><span class="score-num">2</span> Profound hemi-inattention</button></div><input type="hidden" id="val_11" class="nihss-val require-val"></div>
+                    <div class="score-row"><label class="form-label">7. Limb Ataxia</label><div class="score-options" id="group-7"><button class="score-btn" onclick="selectScore('7', 0, this)"><span class="score-num">0</span> Absent</button><button class="score-btn" onclick="selectScore('7', 1, this)"><span class="score-num">1</span> Present in 1 limb</button><button class="score-btn" onclick="selectScore('7', 2, this)"><span class="score-num">2</span> Present in 2 limbs</button><button class="score-btn" onclick="selectScore('7', 'X', this)"><span class="score-num">X</span> Amputation</button></div><input type="hidden" id="val_7" class="nihss-val require-val"></div>
+                    <div class="score-row"><label class="form-label">8. Sensory</label><div class="score-options" id="group-8"><button class="score-btn" onclick="selectScore('8', 0, this)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('8', 1, this)"><span class="score-num">1</span> Mild-to-moderate loss</button><button class="score-btn" onclick="selectScore('8', 2, this)"><span class="score-num">2</span> Severe-to-total loss</button></div><input type="hidden" id="val_8" class="nihss-val require-val"></div>
+                    <div class="score-row"><label class="form-label">9. Best Language</label><div class="score-options" id="group-9"><button class="score-btn" onclick="selectScore('9', 0, this)"><span class="score-num">0</span> No aphasia</button><button class="score-btn" onclick="selectScore('9', 1, this)"><span class="score-num">1</span> Mild-to-moderate aphasia</button><button class="score-btn" onclick="selectScore('9', 2, this)"><span class="score-num">2</span> Severe aphasia</button><button class="score-btn" onclick="selectScore('9', 3, this)"><span class="score-num">3</span> Mute, global aphasia</button></div><input type="hidden" id="val_9" class="nihss-val require-val"></div>
+                    <div class="score-row"><label class="form-label">10. Dysarthria</label><div class="score-options" id="group-10"><button class="score-btn" onclick="selectScore('10', 0, this)"><span class="score-num">0</span> Normal</button><button class="score-btn" onclick="selectScore('10', 1, this)"><span class="score-num">1</span> Mild-to-moderate dysarthria</button><button class="score-btn" onclick="selectScore('10', 2, this)"><span class="score-num">2</span> Severe dysarthria</button><button class="score-btn" onclick="selectScore('10', 'X', this)"><span class="score-num">X</span> Intubated</button></div><input type="hidden" id="val_10" class="nihss-val require-val"></div>
+                    <div class="score-row"><label class="form-label">11. Extinction/Inattention</label><div class="score-options" id="group-11"><button class="score-btn" onclick="selectScore('11', 0, this)"><span class="score-num">0</span> No abnormality</button><button class="score-btn" onclick="selectScore('11', 1, this)"><span class="score-num">1</span> Visual/tactile inattention</button><button class="score-btn" onclick="selectScore('11', 2, this)"><span class="score-num">2</span> Profound hemi-inattention</button></div><input type="hidden" id="val_11" class="nihss-val require-val"></div>
                 </div>
             </div>
 
@@ -274,11 +282,11 @@
             </div>
             
             <div class="no-print" style="margin-bottom: 15px; font-size: 13px; color: var(--text-light); background: #f8fafc; padding: 10px; border-radius: 6px;">
-                <i class="fas fa-info-circle"></i> ติ๊กเลือกรายการ (สูงสุด 2 ช่อง) เพื่อพิมพ์เปรียบเทียบอาการคนไข้
+                <i class="fas fa-info-circle"></i> ติ๊กเลือกรายการที่ต้องการพิมพ์ (ไม่จำกัดจำนวน)
             </div>
 
             <div class="print-only" style="text-align: center; margin-bottom: 20px;">
-                <h2 style="margin: 0;">รายงานประเมิน NIHSS</h2>
+                <h2 style="margin: 0;">รายงานสรุปประเมิน NIHSS</h2>
                 <h3 id="printPatientName" style="margin: 5px 0;"></h3>
                 <p style="margin: 0; color: #666;" id="printOrgName"></p>
             </div>
@@ -299,6 +307,13 @@
                 </table>
             </div>
 
+            <div class="print-only" style="margin-top: 40px; display: flex; justify-content: flex-end;">
+                <div style="text-align: center;">
+                    <p style="margin-bottom: 30px;">ลงชื่อ.......................................................ผู้รายงาน</p>
+                    <p>( <span id="printAssessorName"></span> )</p>
+                </div>
+            </div>
+
             <div class="no-print" style="display: flex; gap: 10px; margin-top: 25px; justify-content: flex-end;">
                 <button class="btn btn-outline" style="color: #0284c7; border-color: #0284c7;" onclick="shareSelectedHistory()"><i class="fab fa-line"></i> แชร์ข้อมูลที่เลือก</button>
                 <button class="btn btn-primary" onclick="printSelected()"><i class="fas fa-print"></i> พิมพ์ / บันทึก PDF</button>
@@ -317,36 +332,21 @@
             document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
         }
 
-        // --- ระบบนำทาง (ป้องกัน Error) ---
         function navigate(page) {
-            // ปิดหน้าจอทั้งหมดก่อน
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            
-            // เปิดหน้าจอเป้าหมาย (เช็คก่อนว่ามี Element ไหม)
             const targetScreen = document.getElementById('screen-' + page);
-            if (targetScreen) {
-                targetScreen.classList.add('active');
-            }
+            if(targetScreen) targetScreen.classList.add('active');
             
-            // แสดง/ซ่อน Topbar
             const topbar = document.getElementById('main-topbar');
-            if (topbar) {
-                topbar.style.display = page === 'login' ? 'none' : 'flex';
-            }
+            if(topbar) topbar.style.display = page === 'login' ? 'none' : 'flex';
             
-            // แสดง/ซ่อน ปุ่มค้นหา และ แถบคนไข้
-            const btnNavSearch = document.getElementById('btnNavSearch');
-            if (btnNavSearch) {
-                btnNavSearch.style.display = page === 'assess' ? 'block' : 'none';
-            }
+            const btnSearch = document.getElementById('btnNavSearch');
+            if(btnSearch) btnSearch.style.display = page === 'assess' ? 'block' : 'none';
             
-            const patientBanner = document.getElementById('patientBanner');
-            if (patientBanner) {
-                patientBanner.style.display = page === 'assess' ? 'flex' : 'none';
-            }
+            const banner = document.getElementById('patientBanner');
+            if(banner) banner.style.display = page === 'assess' ? 'flex' : 'none';
             
-            closeAllDropdowns(); 
-            window.scrollTo(0,0);
+            closeAllDropdowns(); window.scrollTo(0,0);
         }
 
         // --- Auth ---
@@ -376,14 +376,9 @@
                 } else alert(res.message);
             });
         }
-        function logout() { 
-            document.getElementById('logPin').value = ''; currentUser = null; 
-            document.getElementById('app-layout').style.display = 'none';
-            document.getElementById('screen-login').style.display = 'flex';
-            navigate('login'); 
-        }
+        function logout() { document.getElementById('logPin').value = ''; currentUser = null; document.getElementById('app-layout').style.display = 'none'; document.getElementById('screen-login').style.display = 'flex'; navigate('login'); }
 
-        // --- Autocomplete 2 ช่องอิสระ ---
+        // --- Autocomplete 2 ช่อง ---
         function filterAutocomplete(type) {
             const inputHn = document.getElementById('searchHn'); const inputName = document.getElementById('searchName');
             const targetInput = type === 'hn' ? inputHn : inputName;
@@ -439,7 +434,6 @@
                 navigate('assess');
             }).catch(err => {
                 document.getElementById('loadingModal').style.display = 'none';
-                alert("เกิดข้อผิดพลาดในการดึงประวัติ แต่คุณยังสามารถประเมินต่อได้ครับ");
                 navigate('assess');
             });
         }
@@ -451,13 +445,13 @@
             else {
                 currentHistory.forEach((r, index) => {
                     const dStr = new Date(r.date).toLocaleDateString('th-TH') + ' ' + String(new Date(r.date).getHours()).padStart(2,'0') + ':' + String(new Date(r.date).getMinutes()).padStart(2,'0');
-                    const checked = index === 0 ? "checked" : "";
+                    const checked = index === 0 ? "checked" : ""; // ค่า Default ติ๊กอันล่าสุดให้
                     
                     const canEdit = r.assessor === currentUser.name;
                     const editBtn = canEdit ? `<button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadEditData(${index})"><i class="fas fa-pen"></i> แก้ไข</button>` : '-';
 
                     tbody.innerHTML += `<tr class="history-row">
-                        <td class="no-print"><input type="checkbox" class="print-checkbox" value="${index}" ${checked} onclick="limitCheckboxes()"></td>
+                        <td class="no-print"><input type="checkbox" class="print-checkbox" value="${index}" ${checked}></td>
                         <td style="white-space:nowrap;">${dStr}</td><td style="font-weight:bold; color:var(--danger);">${r.total}</td>
                         <td>${r.s1a}</td><td>${r.s1b}</td><td>${r.s1c}</td><td>${r.s2}</td><td>${r.s3}</td><td>${r.s4}</td>
                         <td>${r.s5r}</td><td>${r.s5l}</td><td>${r.s6r}</td><td>${r.s6l}</td>
@@ -486,18 +480,28 @@
             document.getElementById('historyModal').style.display = 'none';
         }
 
-        function limitCheckboxes() {
-            const checkboxes = document.querySelectorAll('.print-checkbox:checked');
-            if (checkboxes.length > 2) { alert("เลือกเปรียบเทียบประวัติได้สูงสุด 2 รายการ"); event.target.checked = false; }
-        }
-
+        // ระบบ Print แบบล้ำๆ (ซ่อนอันที่ไม่ได้ติ๊ก)
         function printSelected() {
-            const rows = document.querySelectorAll('.history-row'); const checkboxes = document.querySelectorAll('.print-checkbox');
+            const rows = document.querySelectorAll('.history-row'); 
+            const checkboxes = document.querySelectorAll('.print-checkbox');
             let hasSelection = false;
-            checkboxes.forEach((cb, i) => { if(!cb.checked) rows[i].style.display = 'none'; else hasSelection = true; });
-            if(!hasSelection) { rows.forEach(r => r.style.display = 'table-row'); return alert("เลือกประวัติอย่างน้อย 1 รายการ"); }
+            
+            checkboxes.forEach((cb, i) => { 
+                if(!cb.checked) rows[i].classList.add('no-print'); 
+                else hasSelection = true; 
+            });
+            
+            if(!hasSelection) { 
+                rows.forEach(r => r.classList.remove('no-print'));
+                return alert("กรุณาเลือกประวัติอย่างน้อย 1 รายการเพื่อพิมพ์"); 
+            }
+
+            // ใส่ชื่อคนล็อกอินในช่องลายเซ็น
+            document.getElementById('printAssessorName').innerText = currentUser.name;
             window.print();
-            rows.forEach(r => r.style.display = 'table-row');
+            
+            // คืนค่าแสดงผลหลังปริ้นเสร็จ
+            setTimeout(() => { rows.forEach(r => r.classList.remove('no-print')); }, 500);
         }
 
         function shareCurrentScore() {
@@ -521,25 +525,44 @@
             else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางใน LINE ได้เลยครับ"); }
         }
 
-        // --- Form ---
+        // --- แก้บั๊ก Form Selection 100% Robust ---
         function resetForm() {
             document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.nihss-val').forEach(i => i.value = "");
             calculateTotal();
         }
 
-        function selectScore(group, value) {
-            document.querySelectorAll(`#group-${group} .score-btn`).forEach(b => b.classList.remove('active'));
-            const btns = document.querySelectorAll(`#group-${group} .score-btn`);
-            for(let b of btns) { if(b.innerHTML.includes(`>X<`) ? value == 0 : b.innerHTML.includes(`>${value}<`)) b.classList.add('active'); }
+        function selectScore(group, value, elem) {
+            const container = document.getElementById(`group-${group}`);
+            if(!container) return;
+            container.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
+            
+            if(elem) {
+                // หากคลิกเองจากหน้าเว็บ
+                elem.classList.add('active');
+            } else {
+                // หากถูกสั่งงานจากฟังก์ชัน loadEditData (ดึงของเก่ามาโชว์)
+                const btns = container.querySelectorAll('.score-btn');
+                btns.forEach(b => {
+                    const str = b.getAttribute('onclick');
+                    const regex = new RegExp(`['"]?${group}['"]?\\s*,\\s*['"]?${value}['"]?\\s*,`);
+                    if(regex.test(str)) b.classList.add('active');
+                });
+            }
             document.getElementById(`val_${group}`).value = value;
             calculateTotal();
         }
-        function selectScoreDual(subGroup, value) { selectScore(subGroup, value); }
+        function selectScoreDual(group, value, elem) { selectScore(group, value, elem); }
 
         function calculateTotal() {
-            let total = 0; document.querySelectorAll('.nihss-val').forEach(i => { if(i.value !== "") total += parseInt(i.value); });
-            document.getElementById('display-total').innerText = total; return total;
+            let total = 0; 
+            document.querySelectorAll('.nihss-val').forEach(i => { 
+                if(i.value !== "" && i.value !== "X" && i.value !== "x") {
+                    total += parseInt(i.value) || 0; 
+                }
+            });
+            document.getElementById('display-total').innerText = total; 
+            return total;
         }
 
         function saveAssessment() {
