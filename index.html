@@ -16,7 +16,7 @@
         }
         body { font-family: 'Sarabun', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        /* --- หน้า Login PIN --- */
+        /* --- ระบบ Login PIN --- */
         #login-section { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100%; background: white; }
         .pin-dots { display: flex; gap: 15px; margin-bottom: 30px; }
         .dot { width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--primary); }
@@ -29,15 +29,15 @@
         #app-section { display: none; width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; }
         .header { text-align: center; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);}
         
-        /* สไตล์ Card และระบบเปลี่ยนสีเมื่อทำเสร็จ */
+        /* สไตล์ Card เปลี่ยนสีได้ */
         .card { 
             background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 15px; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--border-color); /* สีแถบด้านซ้ายตอนเริ่มต้น */
+            border-left: 5px solid var(--border-color); 
             transition: all 0.3s ease;
         }
         .card.completed {
-            border-left: 5px solid var(--success); /* เปลี่ยนเป็นสีเขียวเมื่อทำเสร็จ */
+            border-left: 5px solid var(--success);
             background-color: #f9fff9;
         }
         
@@ -48,7 +48,7 @@
         label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
         input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; font-family: 'Sarabun';}
         
-        /* ปุ่มคะแนน */
+        /* ปุ่มให้คะแนน */
         .score-group { display: flex; flex-direction: column; gap: 8px; }
         .score-btn { padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; background: white; text-align: left; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; font-family: 'Sarabun'; }
         .score-btn.active { background-color: #e8f0fe; border-color: var(--primary); color: var(--primary); font-weight: bold; }
@@ -69,7 +69,7 @@
 
     <div id="login-section">
         <h2 style="color: var(--text-main); margin-bottom: 5px;">กรุณากรอกรหัส PIN</h2>
-        <p style="color: #666; margin-top: 0; margin-bottom: 30px;">รหัสทดสอบ: 123456</p>
+        <p style="color: #666; margin-top: 0; margin-bottom: 30px;">รหัสเข้าใช้งาน: 123456</p>
         <div class="pin-dots" id="pin-dots">
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
             <div class="dot"></div><div class="dot"></div><div class="dot"></div>
@@ -84,7 +84,7 @@
             <button class="num-btn" onclick="addPin('7')">7</button>
             <button class="num-btn" onclick="addPin('8')">8</button>
             <button class="num-btn" onclick="addPin('9')">9</button>
-            <button class="num-btn" style="background:transparent; box-shadow:none; font-size: 16px;"></button>
+            <button class="num-btn" style="background:transparent; box-shadow:none;"></button>
             <button class="num-btn" onclick="addPin('0')">0</button>
             <button class="num-btn" onclick="deletePin()" style="background:transparent; box-shadow:none; font-size: 16px;">ลบ</button>
         </div>
@@ -165,7 +165,7 @@
             </div>
 
             <div class="card" id="card-4">
-                <h3>4. Facial palsy ตรวจการเคลื่อนไหวของกล้ามเนื้อใบหน้า<span class="sub-text">- ยิงฟัน ยิ้ม หลับตา</span></h3>
+                <h3>4. Facial palsy ตรวจกล้ามเนื้อใบหน้า<span class="sub-text">- ยิงฟัน ยิ้ม หลับตา</span></h3>
                 <div class="score-group" id="group-4">
                     <button class="score-btn" type="button" onclick="selectScore('4', 0)"><span class="score-number">0</span> Normal</button>
                     <button class="score-btn" type="button" onclick="selectScore('4', 1)"><span class="score-number">1</span> Minor paralysis</button>
@@ -176,7 +176,7 @@
             </div>
 
             <div class="card" id="card-5">
-                <h3>5. Motor arm ตรวจกำลังกล้ามเนื้อแขน<span class="sub-text">- ยกแขน 90° (นั่ง) หรือ 45° (นอน) นาน 10 วินาที</span></h3>
+                <h3>5. Motor arm ตรวจกำลังกล้ามเนื้อแขน<span class="sub-text">- ยกแขน 90° หรือ 45° นาน 10 วินาที</span></h3>
                 <div class="split-col">
                     <div>
                         <label style="text-align:center; color:#d93025; background:#fad2cf; padding:5px; border-radius:5px;">ขวา (R)</label>
@@ -186,7 +186,7 @@
                             <button class="score-btn" type="button" onclick="selectScoreDual('5R', 'card-5', 2)">2: Some effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('5R', 'card-5', 3)">3: No effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('5R', 'card-5', 4)">4: No movement</button>
-                            <button class="score-btn" type="button" onclick="selectScoreDual('5R', 'card-5', 0, 'X')">X: Amputation</button>
+                            <button class="score-btn" type="button" onclick="selectScoreDual('5R', 'card-5', 0)">X: Amputation</button>
                         </div>
                         <input type="hidden" id="val_5R" class="nihss-val require-dual" value="">
                     </div>
@@ -198,7 +198,7 @@
                             <button class="score-btn" type="button" onclick="selectScoreDual('5L', 'card-5', 2)">2: Some effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('5L', 'card-5', 3)">3: No effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('5L', 'card-5', 4)">4: No movement</button>
-                            <button class="score-btn" type="button" onclick="selectScoreDual('5L', 'card-5', 0, 'X')">X: Amputation</button>
+                            <button class="score-btn" type="button" onclick="selectScoreDual('5L', 'card-5', 0)">X: Amputation</button>
                         </div>
                         <input type="hidden" id="val_5L" class="nihss-val require-dual" value="">
                     </div>
@@ -216,7 +216,7 @@
                             <button class="score-btn" type="button" onclick="selectScoreDual('6R', 'card-6', 2)">2: Some effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('6R', 'card-6', 3)">3: No effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('6R', 'card-6', 4)">4: No movement</button>
-                            <button class="score-btn" type="button" onclick="selectScoreDual('6R', 'card-6', 0, 'X')">X: Amputation</button>
+                            <button class="score-btn" type="button" onclick="selectScoreDual('6R', 'card-6', 0)">X: Amputation</button>
                         </div>
                         <input type="hidden" id="val_6R" class="nihss-val require-dual" value="">
                     </div>
@@ -228,7 +228,7 @@
                             <button class="score-btn" type="button" onclick="selectScoreDual('6L', 'card-6', 2)">2: Some effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('6L', 'card-6', 3)">3: No effort</button>
                             <button class="score-btn" type="button" onclick="selectScoreDual('6L', 'card-6', 4)">4: No movement</button>
-                            <button class="score-btn" type="button" onclick="selectScoreDual('6L', 'card-6', 0, 'X')">X: Amputation</button>
+                            <button class="score-btn" type="button" onclick="selectScoreDual('6L', 'card-6', 0)">X: Amputation</button>
                         </div>
                         <input type="hidden" id="val_6L" class="nihss-val require-dual" value="">
                     </div>
@@ -245,7 +245,7 @@
     </div>
 
     <script>
-        // เอาลิงก์ Google Apps Script ของคุณมาวางตรงนี้ได้เลยครับ
+        // ลิงก์เชื่อมโยงกับ Google Apps Script ของ รพ.
         const API_URL = 'https://script.google.com/macros/s/AKfycby-zXVnE-y_PqjIXTQ2HqK3H04J_u6rsbXwXZ_ffK9wNG8Tf4cdvHxPAP9YyKvWRlR4/exec';
         
         let currentPin = "";
@@ -265,7 +265,7 @@
                 updateDots();
                 if (currentPin.length === 6) {
                     setTimeout(() => {
-                        if(currentPin === "123456") { // รหัสผ่านทดสอบ
+                        if(currentPin === "123456") { 
                             document.getElementById('login-section').style.display = 'none';
                             document.getElementById('app-section').style.display = 'block';
                             window.scrollTo(0, 0);
@@ -289,24 +289,19 @@
             event.currentTarget.classList.add('active');
             
             document.getElementById(`val_${group}`).value = value;
-            
-            // เปลี่ยนสี Card ทันทีที่กด
-            document.getElementById(`card-${group}`).classList.add('completed');
-            
+            document.getElementById(`card-${group}`).classList.add('completed'); // เปลี่ยนเป็นสีเขียว
             calculateTotal();
         }
 
         // --- ระบบให้คะแนน & เปลี่ยนสี Card (ข้อคู่ 5-6 ซ้ายขวา) ---
-        // กรณีข้อ 5, 6 ต้องกดทั้งซ้ายและขวา Card ถึงจะเปลี่ยนเป็นสีเขียว
-        function selectScoreDual(subGroup, cardId, value, displayLabel) {
+        function selectScoreDual(subGroup, cardId, value) {
             const buttons = document.querySelectorAll(`#group-${subGroup} .score-btn`);
             buttons.forEach(btn => btn.classList.remove('active'));
             event.currentTarget.classList.add('active');
             
-            // ถ้าเลือก X (Amputation) ค่าคำนวณจะเป็น 0 ตามหลักมาตรฐาน
             document.getElementById(`val_${subGroup}`).value = value;
             
-            // ตรวจสอบว่าใน Card นี้ กดครบทั้งซ้ายและขวาหรือยัง
+            // ตรวจสอบว่ากดครบซ้าย-ขวาหรือยัง
             const cardElement = document.getElementById(cardId);
             const inputsInCard = cardElement.querySelectorAll('.require-dual');
             let isAllAnswered = true;
@@ -317,7 +312,6 @@
             if(isAllAnswered) {
                 cardElement.classList.add('completed');
             }
-
             calculateTotal();
         }
 
@@ -334,7 +328,7 @@
             return total;
         }
 
-        // --- ระบบตรวจสอบก่อนส่ง (Validation) ---
+        // --- ตรวจสอบก่อนส่ง ---
         function validateForm() {
             const requiredSingles = document.querySelectorAll('.require-val');
             const requiredDuals = document.querySelectorAll('.require-dual');
@@ -348,13 +342,12 @@
             return true;
         }
 
-        // --- ส่งข้อมูลเข้า Google Sheets ---
+        // --- ยิงข้อมูลเข้า Google Sheets ---
         document.getElementById('nihssForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // ตรวจสอบว่าประเมินครบทุกข้อหรือไม่
             if(!validateForm()) {
-                alert("กรุณาประเมินให้ครบทุกข้อ (กล่องสีเขียว) ก่อนกดบันทึกข้อมูลครับ");
+                alert("กรุณาประเมินให้ครบทุกข้อ (กล่องเปลี่ยนเป็นสีเขียว) ก่อนกดบันทึกข้อมูลครับ");
                 return;
             }
 
@@ -389,20 +382,20 @@
             .then(result => {
                 alert('บันทึกข้อมูลผู้ป่วย HN: ' + payload.hn + ' สำเร็จเรียบร้อย!');
                 
-                // รีเซ็ตฟอร์มทั้งหมดกลับเป็นสถานะเริ่มต้น
+                // คืนค่าฟอร์มกลับจุดเริ่มต้น
                 document.getElementById('nihssForm').reset();
                 document.querySelectorAll('.score-btn').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.nihss-val').forEach(input => input.value = "");
                 document.querySelectorAll('.card').forEach(card => card.classList.remove('completed'));
-                document.getElementById('card-patient').classList.add('completed'); // คืนค่าสีให้ช่องกรอกชื่อ
+                document.getElementById('card-patient').classList.add('completed'); 
                 calculateTotal();
                 
                 btn.innerText = 'บันทึกข้อมูลเข้า Google Sheets';
                 btn.disabled = false;
-                window.scrollTo(0, 0); // เลื่อนกลับไปบนสุดเพื่อเตรียมคีย์คนต่อไป
+                window.scrollTo(0, 0);
             })
             .catch(error => {
-                alert('ส่งข้อมูลสำเร็จ (หรืออาจมีข้อผิดพลาดเครือข่าย ให้ตรวจสอบใน Sheet)');
+                alert('บันทึกข้อมูลสำเร็จ (พบข้อผิดพลาดด้านเครือข่าย กรุณาตรวจสอบใน Sheet)');
                 btn.innerText = 'บันทึกข้อมูลเข้า Google Sheets';
                 btn.disabled = false;
             });
