@@ -11,6 +11,7 @@
             --primary: #2563eb;
             --primary-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             --success: #10b981;
+            --danger: #ef4444;
             --bg-color: #f1f5f9;
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #1e293b;
@@ -18,142 +19,113 @@
         body { font-family: 'Sarabun', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: var(--text-main); }
         
         /* Animations */
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 
-        /* General Layout */
+        /* Screens */
         .screen { display: none; min-height: 100vh; padding: 20px; box-sizing: border-box; animation: fadeIn 0.4s ease-out; }
         .screen.active { display: block; }
         
-        /* Modern Cards */
-        .glass-card { background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 16px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.5); animation: slideUp 0.5s ease-out backwards; }
-        
-        /* Inputs & Buttons */
+        /* Components */
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 16px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; animation: slideUp 0.5s ease-out backwards; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block; color: #475569; }
         input, select { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 10px; box-sizing: border-box; font-family: 'Sarabun'; font-size: 15px; transition: 0.3s; background: #f8fafc; }
-        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); outline: none; background: white; }
+        input:focus, select:focus { border-color: var(--primary); outline: none; background: white; }
         
-        .btn-primary { background: var(--primary-gradient); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); font-family: 'Sarabun'; }
-        .btn-primary:active { transform: scale(0.98); }
-        .text-link { color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 600; text-align: center; display: block; margin-top: 15px; }
-
-        /* Header */
-        .app-header { background: var(--primary-gradient); color: white; padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(37,99,235,0.2); text-align: center; animation: slideUp 0.3s ease-out; }
-        .app-header h2 { margin: 0; font-size: 22px; }
-        .app-header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
-
-        /* Assessment UI */
-        .card-assess { border-left: 5px solid #cbd5e1; transition: 0.3s; }
+        .btn-primary { background: var(--primary-gradient); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; cursor: pointer; transition: 0.3s; font-family: 'Sarabun'; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 15px; border-radius: 12px; font-weight: 600; font-size: 16px; width: 100%; cursor: pointer; margin-top: 10px; font-family: 'Sarabun'; }
+        
+        /* Modals (Popup) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto; }
+        
+        /* Form Score UI */
+        .card-assess { border-left: 5px solid #cbd5e1; padding: 15px; }
         .card-assess.completed { border-left-color: var(--success); background: #f0fdf4; }
         .score-group { display: flex; flex-direction: column; gap: 8px; }
-        .score-btn { padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; font-family: 'Sarabun'; }
-        .score-btn.active { background: #eff6ff; border-color: var(--primary); color: var(--primary); font-weight: 600; box-shadow: inset 0 0 0 1px var(--primary); }
+        .score-btn { padding: 10px; border: 1px solid #e2e8f0; border-radius: 10px; background: white; text-align: left; font-size: 14px; cursor: pointer; font-family: 'Sarabun'; display: flex; align-items: center; }
+        .score-btn.active { background: #eff6ff; border-color: var(--primary); color: var(--primary); font-weight: 600; }
         .score-number { background: #f1f5f9; padding: 2px 8px; border-radius: 6px; margin-right: 10px; font-weight: bold; }
         .score-btn.active .score-number { background: var(--primary); color: white; }
+        .split-col { display: flex; gap: 10px; }
+        .split-col > div { flex: 1; }
 
-        /* History Badge */
-        .history-badge { background: #fffbeb; border: 1px solid #fcd34d; padding: 10px; border-radius: 10px; font-size: 13px; color: #b45309; margin-top: 10px; display: none; }
-
-        /* Custom Modal (Pop-up) */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .modal-icon { font-size: 50px; margin-bottom: 15px; }
-        .modal-icon.success { color: var(--success); }
-        .modal-icon.error { color: #ef4444; }
-        .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
-        .modal-body { font-size: 15px; color: #64748b; margin-bottom: 25px; line-height: 1.5; }
-        
         /* Compare Box inside Modal */
         .compare-box { background: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .compare-item { flex: 1; }
-        .compare-item div { font-size: 12px; color: #64748b; }
-        .compare-item span { font-size: 24px; font-weight: bold; color: var(--text-main); }
-        .compare-arrow { font-size: 20px; color: #cbd5e1; }
+        .history-badge { background: #fffbeb; border: 1px solid #fcd34d; padding: 10px; border-radius: 10px; font-size: 13px; color: #b45309; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-    <div id="loadingModal" class="modal-overlay">
-        <div class="modal-content" style="padding: 20px; width: auto;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 30px; color: var(--primary);"></i>
-            <div style="margin-top: 10px; font-weight: 600;">กำลังดำเนินการ...</div>
+    <div id="loadingModal" class="modal-overlay"><div class="modal-content" style="width: auto;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; color: var(--primary);"></i><div style="margin-top:10px;">กำลังดำเนินการ...</div></div></div>
+    
+    <div id="alertModal" class="modal-overlay">
+        <div class="modal-content">
+            <i id="alertIcon" class="fas fa-check-circle" style="font-size: 50px; margin-bottom: 15px;"></i>
+            <div id="alertTitle" style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">แจ้งเตือน</div>
+            <div id="alertBody" style="font-size: 15px; color: #64748b; margin-bottom: 25px;">...</div>
+            <div id="compareContainer" class="compare-box" style="display: none;">
+                <div><div style="font-size:12px; color:#64748b;">ครั้งก่อน</div><span id="scoreOld" style="font-size:24px; font-weight:bold;">-</span></div>
+                <div><i class="fas fa-arrow-right" style="color:#cbd5e1; font-size:20px;"></i></div>
+                <div><div style="font-size:12px; color:#64748b;">ครั้งนี้</div><span id="scoreNew" style="font-size:24px; font-weight:bold; color:var(--primary);">-</span></div>
+            </div>
+            <button class="btn-primary" onclick="document.getElementById('alertModal').style.display='none'">ตกลง</button>
         </div>
     </div>
 
-    <div id="alertModal" class="modal-overlay">
-        <div class="modal-content">
-            <i id="alertIcon" class="fas modal-icon"></i>
-            <div id="alertTitle" class="modal-title">แจ้งเตือน</div>
-            <div id="alertBody" class="modal-body">รายละเอียด...</div>
-            <div id="compareContainer" class="compare-box" style="display: none;">
-                <div class="compare-item"><div>ครั้งก่อน</div><span id="scoreOld">-</span></div>
-                <div class="compare-arrow"><i class="fas fa-arrow-right"></i></div>
-                <div class="compare-item"><div>ครั้งนี้</div><span id="scoreNew" style="color: var(--primary);">-</span></div>
+    <div id="registerModal" class="modal-overlay">
+        <div class="modal-content" style="text-align: left;">
+            <h2 style="color: var(--primary); text-align: center; margin-top:0;">สร้างบัญชีผู้ใช้ใหม่</h2>
+            <div class="input-group"><label>เบอร์โทรศัพท์ (ใช้เข้าระบบ)</label><input type="tel" id="regPhone" placeholder="08XXXXXXXX" maxlength="10"></div>
+            <div class="input-group"><label>ชื่อ-นามสกุล</label><input type="text" id="regName" placeholder="เช่น นพ.ทดสอบ รักษาดี"></div>
+            <div class="input-group"><label>ตั้งรหัส PIN (6 หลัก)</label><input type="password" id="regPin" placeholder="ตัวเลข 6 หลัก" maxlength="6" inputmode="numeric"></div>
+            <div class="input-group">
+                <label>ประเภทหน่วยงาน</label>
+                <select id="regOrgType"><option>โรงพยาบาล</option><option>รพ.สต.</option><option>คลินิก</option><option>อื่นๆ</option></select>
             </div>
-            <button class="btn-primary" onclick="closeModal()">ตกลง</button>
+            <div class="input-group"><label>ชื่อหน่วยงาน</label><input type="text" id="regOrgName" placeholder="เช่น สะเดา"></div>
+            <button class="btn-primary" onclick="register()"><i class="fas fa-user-plus"></i> สมัครสมาชิก</button>
+            <button class="btn-outline" onclick="document.getElementById('registerModal').style.display='none'">ยกเลิก</button>
         </div>
     </div>
 
     <div id="screen-login" class="screen active" style="display: flex; flex-direction: column; justify-content: center; max-width: 400px; margin: 0 auto;">
-        <div style="text-align: center; margin-bottom: 30px; animation: slideUp 0.4s;">
-            <i class="fas fa-heartbeat" style="font-size: 50px; color: var(--primary); margin-bottom: 10px;"></i>
+        <div style="text-align: center; margin-bottom: 30px;">
+            <i class="fas fa-heartbeat" style="font-size: 50px; color: var(--primary);"></i>
             <h1 style="margin:0; font-size: 28px; color: var(--primary);">NIHSS Smart</h1>
-            <p style="color: #64748b; margin: 5px 0 0 0;">เข้าสู่ระบบเจ้าหน้าที่</p>
         </div>
         <div class="glass-card">
-            <div class="input-group">
-                <label>ชื่อ-นามสกุล</label>
-                <input type="text" id="logName" placeholder="ระบุชื่อผู้ใช้งาน">
+            <div class="input-group"><label>เบอร์โทรศัพท์</label><input type="tel" id="logPhone" placeholder="เบอร์โทรที่ลงทะเบียน" maxlength="10"></div>
+            <div class="input-group"><label>รหัส PIN</label><input type="password" id="logPin" placeholder="ระบุรหัส PIN 6 หลัก" maxlength="6" inputmode="numeric"></div>
+            
+            <button class="btn-primary" onclick="login()"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบด้วย PIN</button>
+            <button class="btn-outline" id="btnBiometric" onclick="biometricLogin()" style="display:none; color: var(--success); border-color: var(--success);"><i class="fas fa-fingerprint"></i> เข้าสู่ระบบด้วยลายนิ้วมือ</button>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <span style="color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 600;" onclick="document.getElementById('registerModal').style.display='flex'">สมัครสมาชิกใหม่</span>
             </div>
-            <div class="input-group">
-                <label>รหัสผ่าน</label>
-                <input type="password" id="logPass" placeholder="ระบุรหัสผ่าน">
-            </div>
-            <button class="btn-primary" onclick="login()">เข้าสู่ระบบ</button>
-            <span class="text-link" onclick="switchScreen('screen-register')">สมัครสมาชิกใหม่</span>
         </div>
-        <div style="text-align: center; font-size: 13px; color: #94a3b8;">พบปัญหาติดต่อ 080-000-0000</div>
     </div>
 
-    <div id="screen-register" class="screen" style="max-width: 400px; margin: 0 auto;">
-        <h2 style="color: var(--primary); text-align: center; margin-top: 30px;">สร้างบัญชีผู้ใช้</h2>
-        <div class="glass-card">
-            <div class="input-group">
-                <label>ชื่อ-นามสกุล</label>
-                <input type="text" id="regName" placeholder="เช่น นพ.ทดสอบ รักษาดี">
-            </div>
-            <div class="input-group">
-                <label>รหัสผ่าน</label>
-                <input type="password" id="regPass" placeholder="ตั้งรหัสผ่าน">
-            </div>
-            <div class="input-group">
-                <label>ประเภทหน่วยงาน</label>
-                <select id="regOrgType">
-                    <option value="โรงพยาบาล">โรงพยาบาล</option>
-                    <option value="รพ.สต.">รพ.สต.</option>
-                    <option value="คลินิก">คลินิก</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>ชื่อหน่วยงาน</label>
-                <input type="text" id="regOrgName" placeholder="เช่น สะเดา">
-            </div>
-            <div class="input-group">
-                <label>เบอร์โทรศัพท์ (สำรอง)</label>
-                <input type="tel" id="regPhone" placeholder="08XXXXXXXX">
-            </div>
-            <button class="btn-primary" onclick="register()">ยืนยันการสมัคร</button>
-            <span class="text-link" onclick="switchScreen('screen-login')"><i class="fas fa-arrow-left"></i> กลับไปหน้าเข้าสู่ระบบ</span>
+    <div id="screen-menu" class="screen" style="max-width: 400px; margin: 0 auto;">
+        <div class="glass-card" style="text-align: center; background: var(--primary-gradient); color: white;">
+            <i class="fas fa-user-md" style="font-size: 40px; margin-bottom: 10px;"></i>
+            <h2 id="menuUserName" style="margin: 0;">ยินดีต้อนรับ</h2>
+            <p id="menuOrgName" style="margin: 5px 0 0 0; opacity: 0.8; font-size: 14px;">-</p>
+        </div>
+        
+        <div class="glass-card" style="padding: 15px;">
+            <button class="btn-primary" style="margin-bottom: 15px; padding: 20px; font-size: 18px;" onclick="switchScreen('screen-app')"><i class="fas fa-clipboard-list" style="font-size: 24px;"></i> เริ่มประเมินคนไข้ (NIHSS)</button>
+            <button class="btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</button>
         </div>
     </div>
 
     <div id="screen-app" class="screen" style="max-width: 500px; margin: 0 auto;">
-        <div class="app-header">
-            <h2 id="displayUser">NIHSS Form</h2>
-            <p id="displayOrg">กำลังโหลดข้อมูล...</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <button class="btn-outline" style="width: auto; padding: 8px 15px; margin:0;" onclick="switchScreen('screen-menu')"><i class="fas fa-chevron-left"></i> เมนูหลัก</button>
+            <h3 style="margin:0; color:var(--primary);">ฟอร์มประเมิน</h3>
         </div>
 
         <div class="glass-card">
@@ -163,54 +135,152 @@
                     <input type="text" id="hn" placeholder="ระบุ HN" required>
                     <button class="btn-primary" style="width: auto; padding: 12px 20px;" onclick="checkHistory()"><i class="fas fa-search"></i></button>
                 </div>
-                <div id="historyInfo" class="history-badge">
-                    <i class="fas fa-info-circle"></i> ประวัติล่าสุด: <b id="lastScoreTxt">-</b> คะแนน (เมื่อ <span id="lastDateTxt">-</span>)
-                </div>
+                <div id="historyInfo" class="history-badge"><i class="fas fa-info-circle"></i> ประวัติล่าสุด: <b id="lastScoreTxt">-</b> คะแนน (เมื่อ <span id="lastDateTxt">-</span>)</div>
             </div>
-            <div class="input-group">
-                <label>ชื่อ-สกุล ผู้ป่วย <span style="color:red">*</span></label>
-                <input type="text" id="patientName" placeholder="ระบุชื่อผู้ป่วย" required>
-            </div>
+            <div class="input-group"><label>ชื่อ-สกุล ผู้ป่วย <span style="color:red">*</span></label><input type="text" id="patientName" placeholder="ระบุชื่อผู้ป่วย" required></div>
         </div>
 
-        <div class="glass-card" style="text-align: center; border: 2px solid var(--primary);">
+        <div class="glass-card" style="text-align: center; border: 2px solid var(--primary); position: sticky; top: 10px; z-index: 100;">
             <div style="font-size: 14px; color: #64748b; font-weight: 600;">คะแนนรวม (Total Score)</div>
             <div id="display-total" style="font-size: 36px; font-weight: bold; color: var(--primary);">0</div>
         </div>
 
         <div class="glass-card card-assess" id="card-1a">
-            <h3>1a. Level of Consciousness</h3>
+            <h3 style="margin-top:0;">1a. Level of Consciousness</h3>
             <div class="score-group" id="group-1a">
                 <button class="score-btn" onclick="selectScore('1a', 0)"><span class="score-number">0</span> Alert</button>
                 <button class="score-btn" onclick="selectScore('1a', 1)"><span class="score-number">1</span> Drowsy</button>
                 <button class="score-btn" onclick="selectScore('1a', 2)"><span class="score-number">2</span> Stuporous</button>
                 <button class="score-btn" onclick="selectScore('1a', 3)"><span class="score-number">3</span> Coma</button>
-            </div>
-            <input type="hidden" id="val_1a" class="nihss-val require-val" value="">
+            </div><input type="hidden" id="val_1a" class="nihss-val require-val">
+        </div>
+        <div class="glass-card card-assess" id="card-1b">
+            <h3 style="margin-top:0;">1b. LOC Questions</h3>
+            <div class="score-group" id="group-1b">
+                <button class="score-btn" onclick="selectScore('1b', 0)"><span class="score-number">0</span> Both correct</button>
+                <button class="score-btn" onclick="selectScore('1b', 1)"><span class="score-number">1</span> One correct</button>
+                <button class="score-btn" onclick="selectScore('1b', 2)"><span class="score-number">2</span> None correct</button>
+            </div><input type="hidden" id="val_1b" class="nihss-val require-val">
+        </div>
+        <div class="glass-card card-assess" id="card-1c">
+            <h3 style="margin-top:0;">1c. LOC Commands</h3>
+            <div class="score-group" id="group-1c">
+                <button class="score-btn" onclick="selectScore('1c', 0)"><span class="score-number">0</span> Both correct</button>
+                <button class="score-btn" onclick="selectScore('1c', 1)"><span class="score-number">1</span> One correct</button>
+                <button class="score-btn" onclick="selectScore('1c', 2)"><span class="score-number">2</span> None correct</button>
+            </div><input type="hidden" id="val_1c" class="nihss-val require-val">
         </div>
 
-        <button class="btn-primary" style="margin-bottom: 40px; background: var(--success); box-shadow: 0 4px 15px rgba(16,185,129,0.3);" onclick="saveAssessment()"><i class="fas fa-save"></i> บันทึกข้อมูลประเมิน</button>
+        <div class="glass-card card-assess" id="card-2">
+            <h3 style="margin-top:0;">2. Best Gaze</h3>
+            <div class="score-group" id="group-2">
+                <button class="score-btn" onclick="selectScore('2', 0)"><span class="score-number">0</span> Normal</button>
+                <button class="score-btn" onclick="selectScore('2', 1)"><span class="score-number">1</span> Partial gaze palsy</button>
+                <button class="score-btn" onclick="selectScore('2', 2)"><span class="score-number">2</span> Forced eye deviation</button>
+            </div><input type="hidden" id="val_2" class="nihss-val require-val">
+        </div>
+        <div class="glass-card card-assess" id="card-3">
+            <h3 style="margin-top:0;">3. Visual</h3>
+            <div class="score-group" id="group-3">
+                <button class="score-btn" onclick="selectScore('3', 0)"><span class="score-number">0</span> No visual loss</button>
+                <button class="score-btn" onclick="selectScore('3', 1)"><span class="score-number">1</span> Partial hemianopia</button>
+                <button class="score-btn" onclick="selectScore('3', 2)"><span class="score-number">2</span> Complete hemianopia</button>
+                <button class="score-btn" onclick="selectScore('3', 3)"><span class="score-number">3</span> Bilateral hemianopia</button>
+            </div><input type="hidden" id="val_3" class="nihss-val require-val">
+        </div>
+        <div class="glass-card card-assess" id="card-4">
+            <h3 style="margin-top:0;">4. Facial Palsy</h3>
+            <div class="score-group" id="group-4">
+                <button class="score-btn" onclick="selectScore('4', 0)"><span class="score-number">0</span> Normal</button>
+                <button class="score-btn" onclick="selectScore('4', 1)"><span class="score-number">1</span> Minor paralysis</button>
+                <button class="score-btn" onclick="selectScore('4', 2)"><span class="score-number">2</span> Partial paralysis</button>
+                <button class="score-btn" onclick="selectScore('4', 3)"><span class="score-number">3</span> Complete paralysis</button>
+            </div><input type="hidden" id="val_4" class="nihss-val require-val">
+        </div>
+
+        <div class="glass-card card-assess" id="card-5">
+            <h3 style="margin-top:0;">5. Motor Arm (แขน)</h3>
+            <div class="split-col">
+                <div>
+                    <label style="text-align:center; color:#ef4444;">ขวา (R)</label>
+                    <div class="score-group" id="group-5R">
+                        <button class="score-btn" onclick="selectScoreDual('5R', 'card-5', 0)">0: No drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('5R', 'card-5', 1)">1: Drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('5R', 'card-5', 2)">2: Some effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('5R', 'card-5', 3)">3: No effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('5R', 'card-5', 4)">4: No movement</button>
+                        <button class="score-btn" onclick="selectScoreDual('5R', 'card-5', 0)">X: Amputation</button>
+                    </div><input type="hidden" id="val_5R" class="nihss-val require-dual">
+                </div>
+                <div>
+                    <label style="text-align:center; color:#2563eb;">ซ้าย (L)</label>
+                    <div class="score-group" id="group-5L">
+                        <button class="score-btn" onclick="selectScoreDual('5L', 'card-5', 0)">0: No drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('5L', 'card-5', 1)">1: Drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('5L', 'card-5', 2)">2: Some effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('5L', 'card-5', 3)">3: No effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('5L', 'card-5', 4)">4: No movement</button>
+                        <button class="score-btn" onclick="selectScoreDual('5L', 'card-5', 0)">X: Amputation</button>
+                    </div><input type="hidden" id="val_5L" class="nihss-val require-dual">
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card card-assess" id="card-6">
+            <h3 style="margin-top:0;">6. Motor Leg (ขา)</h3>
+            <div class="split-col">
+                <div>
+                    <label style="text-align:center; color:#ef4444;">ขวา (R)</label>
+                    <div class="score-group" id="group-6R">
+                        <button class="score-btn" onclick="selectScoreDual('6R', 'card-6', 0)">0: No drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('6R', 'card-6', 1)">1: Drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('6R', 'card-6', 2)">2: Some effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('6R', 'card-6', 3)">3: No effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('6R', 'card-6', 4)">4: No movement</button>
+                        <button class="score-btn" onclick="selectScoreDual('6R', 'card-6', 0)">X: Amputation</button>
+                    </div><input type="hidden" id="val_6R" class="nihss-val require-dual">
+                </div>
+                <div>
+                    <label style="text-align:center; color:#2563eb;">ซ้าย (L)</label>
+                    <div class="score-group" id="group-6L">
+                        <button class="score-btn" onclick="selectScoreDual('6L', 'card-6', 0)">0: No drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('6L', 'card-6', 1)">1: Drift</button>
+                        <button class="score-btn" onclick="selectScoreDual('6L', 'card-6', 2)">2: Some effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('6L', 'card-6', 3)">3: No effort</button>
+                        <button class="score-btn" onclick="selectScoreDual('6L', 'card-6', 4)">4: No movement</button>
+                        <button class="score-btn" onclick="selectScoreDual('6L', 'card-6', 0)">X: Amputation</button>
+                    </div><input type="hidden" id="val_6L" class="nihss-val require-dual">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-primary" style="margin-bottom: 40px; background: var(--success); padding: 20px;" onclick="saveAssessment()"><i class="fas fa-save" style="font-size: 20px;"></i> บันทึกข้อมูลประเมิน NIHSS</button>
     </div>
 
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycby-zXVnE-y_PqjIXTQ2HqK3H04J_u6rsbXwXZ_ffK9wNG8Tf4cdvHxPAP9YyKvWRlR4/exec';
-        let currentUser = {};
+        let currentUser = null;
         let previousScore = null;
 
-        // --- Navigation ---
+        // เช็คว่าเครื่องนี้เคยผูกลายนิ้วมือไว้หรือไม่
+        window.onload = function() {
+            if(localStorage.getItem('nihss_bio_phone')) {
+                document.getElementById('btnBiometric').style.display = 'flex';
+                document.getElementById('logPhone').value = localStorage.getItem('nihss_bio_phone');
+            }
+        }
+
         function switchScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // --- UI Modals ---
-        function showLoading(show) {
-            document.getElementById('loadingModal').style.display = show ? 'flex' : 'none';
-        }
         function showAlert(type, title, msg, showCompare = false) {
+            document.getElementById('loadingModal').style.display = 'none';
             const icon = document.getElementById('alertIcon');
-            icon.className = type === 'success' ? 'fas fa-check-circle modal-icon success' : 'fas fa-exclamation-circle modal-icon error';
+            icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            icon.style.color = type === 'success' ? 'var(--success)' : 'var(--danger)';
             document.getElementById('alertTitle').innerText = title;
             document.getElementById('alertBody').innerText = msg;
             
@@ -218,76 +288,119 @@
                 document.getElementById('compareContainer').style.display = 'flex';
                 document.getElementById('scoreOld').innerText = previousScore;
                 document.getElementById('scoreNew').innerText = calculateTotal();
-            } else {
-                document.getElementById('compareContainer').style.display = 'none';
-            }
-
+            } else { document.getElementById('compareContainer').style.display = 'none'; }
+            
             document.getElementById('alertModal').style.display = 'flex';
         }
-        function closeModal() {
-            document.getElementById('alertModal').style.display = 'none';
-        }
 
-        // --- Logic: Auth ---
+        // --- Auth Logic ---
         function register() {
-            const payload = {
-                action: "register",
-                name: document.getElementById('regName').value,
-                password: document.getElementById('regPass').value,
-                orgType: document.getElementById('regOrgType').value,
-                orgName: document.getElementById('regOrgName').value,
-                phone: document.getElementById('regPhone').value
-            };
-            if(!payload.name || !payload.password) return showAlert('error', 'ข้อมูลไม่ครบ', 'กรุณากรอกชื่อและรหัสผ่าน');
+            const phone = document.getElementById('regPhone').value;
+            const pin = document.getElementById('regPin').value;
+            if(!phone || !pin || pin.length < 6) return showAlert('error', 'ข้อมูลไม่ถูกต้อง', 'กรุณากรอกเบอร์โทร และ PIN 6 หลัก');
             
-            showLoading(true);
-            fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(res => res.json()).then(res => {
-                showLoading(false);
+            const payload = {
+                action: "register", phone: phone, pin: pin,
+                name: document.getElementById('regName').value,
+                orgType: document.getElementById('regOrgType').value,
+                orgName: document.getElementById('regOrgName').value
+            };
+
+            document.getElementById('loadingModal').style.display = 'flex';
+            fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r => r.json()).then(res => {
                 if(res.status === 'success') {
+                    document.getElementById('registerModal').style.display = 'none';
                     showAlert('success', 'สำเร็จ', 'สมัครสมาชิกเรียบร้อย กรุณาเข้าสู่ระบบ');
-                    switchScreen('screen-login');
+                    document.getElementById('logPhone').value = phone;
                 } else showAlert('error', 'ผิดพลาด', res.message);
             });
         }
 
         function login() {
-            const payload = {
-                action: "login",
-                name: document.getElementById('logName').value,
-                password: document.getElementById('logPass').value
-            };
-            if(!payload.name || !payload.password) return showAlert('error', 'ข้อมูลไม่ครบ', 'กรุณากรอกข้อมูลให้ครบถ้วน');
+            const phone = document.getElementById('logPhone').value;
+            const pin = document.getElementById('logPin').value;
+            if(!phone || !pin) return showAlert('error', 'ข้อมูลไม่ครบ', 'กรุณากรอกเบอร์โทรและ PIN');
 
-            showLoading(true);
-            fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) })
-            .then(res => res.json()).then(res => {
-                showLoading(false);
+            document.getElementById('loadingModal').style.display = 'flex';
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({action: "login", phone: phone, pin: pin}) })
+            .then(r => r.json()).then(res => {
                 if(res.status === 'success') {
-                    currentUser = res;
-                    document.getElementById('displayUser').innerText = "พยาบาล/แพทย์: " + res.name;
-                    document.getElementById('displayOrg').innerText = res.orgType + " " + res.orgName;
-                    switchScreen('screen-app');
+                    handleLoginSuccess(res);
+                    // ถามเพื่อผูกลายนิ้วมือถ้าเครื่องรองรับและยังไม่เคยผูก
+                    if(window.PublicKeyCredential && !localStorage.getItem('nihss_bio_phone')) {
+                        if(confirm("ต้องการเปิดใช้ 'สแกนลายนิ้วมือ/ใบหน้า' สำหรับการเข้าสู่ระบบครั้งต่อไปหรือไม่?")) {
+                            setupBiometric(phone, pin);
+                        }
+                    }
                 } else showAlert('error', 'ผิดพลาด', res.message);
             });
+        }
+
+        function handleLoginSuccess(userData) {
+            document.getElementById('loadingModal').style.display = 'none';
+            currentUser = userData;
+            document.getElementById('menuUserName').innerText = "พยาบาล/แพทย์: " + userData.name;
+            document.getElementById('menuOrgName').innerText = userData.orgType + " " + userData.orgName;
+            document.getElementById('logPin').value = ''; // Clear PIN
+            switchScreen('screen-menu');
+        }
+
+        function logout() {
+            currentUser = null;
+            switchScreen('screen-login');
+        }
+
+        // --- ลายนิ้วมือ (WebAuthn Simulation / Local Storage) ---
+        function setupBiometric(phone, pin) {
+            // จำลองการผูก Credential ไว้ในเครื่อง (เนื่องจากไม่มี FIDO2 Server จึงใช้การเข้ารหัสเก็บ PIN ลง Local)
+            localStorage.setItem('nihss_bio_phone', phone);
+            localStorage.setItem('nihss_bio_token', btoa(pin)); // เก็บ PIN รูปแบบ base64 ในเครื่อง (เฉพาะเครื่องนี้)
+            document.getElementById('btnBiometric').style.display = 'flex';
+            alert("ตั้งค่าสแกนลายนิ้วมือสำเร็จ!");
+        }
+
+        function biometricLogin() {
+            // ตรวจสอบข้อมูลในเครื่อง
+            const phone = localStorage.getItem('nihss_bio_phone');
+            const token = localStorage.getItem('nihss_bio_token');
+            if(!phone || !token) return alert('ไม่พบข้อมูลการสแกนนิ้วบนเครื่องนี้');
+            
+            // เรียกใช้งาน WebAuthn API ของเบราว์เซอร์เพื่อบังคับสแกนนิ้ว/หน้า
+            if(window.PublicKeyCredential) {
+                // สร้าง Challenge ปลอมเพื่อกระตุ้น UI สแกนนิ้วของมือถือ
+                const challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+                navigator.credentials.create({
+                    publicKey: {
+                        challenge: challenge, rp: { name: "NIHSS App" }, user: { id: new Uint8Array(16), name: phone, displayName: phone },
+                        pubKeyCredParams: [{type: "public-key", alg: -7}], authenticatorSelection: { userVerification: "required" }, timeout: 60000
+                    }
+                }).then(() => {
+                    // ถ้าสแกนนิ้วผ่าน ให้ดึง Token มา Login
+                    document.getElementById('logPhone').value = phone;
+                    document.getElementById('logPin').value = atob(token);
+                    login();
+                }).catch(err => {
+                    alert("การสแกนลายนิ้วมือถูกยกเลิก หรือไม่รองรับ");
+                });
+            } else {
+                alert("อุปกรณ์นี้ไม่รองรับระบบสแกนลายนิ้วมือ");
+            }
         }
 
         // --- Logic: History ---
         function checkHistory() {
             const hn = document.getElementById('hn').value;
             if(!hn) return;
-            showLoading(true);
+            document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "getHistory", hn: hn }) })
             .then(res => res.json()).then(res => {
-                showLoading(false);
+                document.getElementById('loadingModal').style.display = 'none';
                 if(res.history && res.history.length > 0) {
-                    const lastRecord = res.history[0];
-                    previousScore = lastRecord.score;
-                    const dateObj = new Date(lastRecord.date);
-                    const dateStr = dateObj.toLocaleDateString('th-TH') + " " + dateObj.getHours() + ":" + String(dateObj.getMinutes()).padStart(2, '0');
-                    
+                    previousScore = res.history[0].score;
+                    const dateObj = new Date(res.history[0].date);
                     document.getElementById('lastScoreTxt').innerText = previousScore;
-                    document.getElementById('lastDateTxt').innerText = dateStr;
+                    document.getElementById('lastDateTxt').innerText = dateObj.toLocaleDateString('th-TH') + " " + dateObj.getHours() + ":" + String(dateObj.getMinutes()).padStart(2, '0');
                     document.getElementById('historyInfo').style.display = 'block';
                 } else {
                     previousScore = null;
@@ -297,55 +410,60 @@
             });
         }
 
-        // --- Logic: Assessment Form (ตัวอย่าง) ---
+        // --- Logic: Form ---
         function selectScore(group, value) {
-            const buttons = document.querySelectorAll(`#group-${group} .score-btn`);
-            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`#group-${group} .score-btn`).forEach(btn => btn.classList.remove('active'));
             event.currentTarget.classList.add('active');
             document.getElementById(`val_${group}`).value = value;
             document.getElementById(`card-${group}`).classList.add('completed');
             calculateTotal();
         }
 
+        function selectScoreDual(subGroup, cardId, value) {
+            document.querySelectorAll(`#group-${subGroup} .score-btn`).forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(`val_${subGroup}`).value = value;
+            const cardElement = document.getElementById(cardId);
+            let isAllAnswered = true;
+            cardElement.querySelectorAll('.require-dual').forEach(input => { if(input.value === "") isAllAnswered = false; });
+            if(isAllAnswered) cardElement.classList.add('completed');
+            calculateTotal();
+        }
+
         function calculateTotal() {
             let total = 0;
-            document.querySelectorAll('.nihss-val').forEach(input => {
-                if(input.value !== "") total += parseInt(input.value);
-            });
+            document.querySelectorAll('.nihss-val').forEach(input => { if(input.value !== "") total += parseInt(input.value); });
             document.getElementById('display-total').innerText = total;
             return total;
         }
 
         function saveAssessment() {
+            // Validation
+            let isValid = true;
+            document.querySelectorAll('.require-val, .require-dual').forEach(input => { if(input.value === "") isValid = false; });
             const hn = document.getElementById('hn').value;
-            if(!hn) return showAlert('error', 'ข้อมูลไม่ครบ', 'กรุณาระบุ HN ผู้ป่วย');
+            if(!hn || !isValid) return showAlert('error', 'ข้อมูลไม่ครบ', 'กรุณากรอก HN และประเมินให้ครบทุกข้อ (กล่องเปลี่ยนเป็นสีเขียว)');
 
             const data = {
                 hn: hn, patientName: document.getElementById('patientName').value,
-                loc_1a: document.getElementById('val_1a').value,
-                // (ถ้าเพิ่มข้ออื่น ต้องมารับค่าตรงนี้ด้วยนะครับ)
-                totalScore: calculateTotal(),
-                assessorName: currentUser.name,
-                orgFull: currentUser.orgType + " " + currentUser.orgName
+                loc_1a: document.getElementById('val_1a').value, loc_1b: document.getElementById('val_1b').value, loc_1c: document.getElementById('val_1c').value,
+                gaze_2: document.getElementById('val_2').value, visual_3: document.getElementById('val_3').value, facial_4: document.getElementById('val_4').value,
+                motorArm_R: document.getElementById('val_5R').value, motorArm_L: document.getElementById('val_5L').value,
+                motorLeg_R: document.getElementById('val_6R').value, motorLeg_L: document.getElementById('val_6L').value,
+                totalScore: calculateTotal(), assessorName: currentUser.name, orgFull: currentUser.orgType + " " + currentUser.orgName
             };
 
-            showLoading(true);
+            document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "save", data: data }) })
             .then(res => res.json()).then(res => {
-                showLoading(false);
-                // โชว์ Pop-up สุดล้ำ ที่มีตารางเปรียบเทียบคะแนนเก่า-ใหม่
-                showAlert('success', 'บันทึกสำเร็จ!', `ข้อมูลผู้ป่วย HN: ${hn} ถูกจัดเก็บลงฐานข้อมูลแล้ว`, true);
-                
-                // รีเซ็ตฟอร์ม (ลบ history เก่าทิ้ง เตรียมรับคนใหม่)
-                document.getElementById('historyInfo').style.display = 'none';
-                previousScore = null;
-                document.getElementById('hn').value = "";
-                document.getElementById('patientName').value = "";
+                showAlert('success', 'บันทึกสำเร็จ!', `ประเมิน HN: ${hn} เรียบร้อย`, true);
+                // Reset Form
+                document.getElementById('historyInfo').style.display = 'none'; previousScore = null;
+                document.getElementById('hn').value = ""; document.getElementById('patientName').value = "";
                 document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.nihss-val').forEach(i => i.value = "");
                 document.querySelectorAll('.card-assess').forEach(c => c.classList.remove('completed'));
-                calculateTotal();
-                window.scrollTo(0,0);
+                calculateTotal(); window.scrollTo(0,0);
             });
         }
     </script>
