@@ -317,24 +317,36 @@
             document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
         }
 
-        // --- ระบบนำทาง & การแสดงผล Header ---
+        // --- ระบบนำทาง (ป้องกัน Error) ---
         function navigate(page) {
+            // ปิดหน้าจอทั้งหมดก่อน
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('screen-' + page).classList.add('active');
             
-            // จัดการ Header ให้อยู่ถูกที่
-            document.getElementById('main-topbar').style.display = page === 'login' ? 'none' : 'flex';
-            
-            // หน้าประเมินให้ซ่อนปุ่มค้นหาใน Topbar แล้วโชว์แถบ Patient Banner แทน
-            if (page === 'assess') {
-                document.getElementById('btnNavSearch').style.display = 'block';
-                document.getElementById('patientBanner').style.display = 'flex';
-            } else {
-                document.getElementById('btnNavSearch').style.display = 'none';
-                document.getElementById('patientBanner').style.display = 'none';
+            // เปิดหน้าจอเป้าหมาย (เช็คก่อนว่ามี Element ไหม)
+            const targetScreen = document.getElementById('screen-' + page);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
             }
             
-            closeAllDropdowns(); window.scrollTo(0,0);
+            // แสดง/ซ่อน Topbar
+            const topbar = document.getElementById('main-topbar');
+            if (topbar) {
+                topbar.style.display = page === 'login' ? 'none' : 'flex';
+            }
+            
+            // แสดง/ซ่อน ปุ่มค้นหา และ แถบคนไข้
+            const btnNavSearch = document.getElementById('btnNavSearch');
+            if (btnNavSearch) {
+                btnNavSearch.style.display = page === 'assess' ? 'block' : 'none';
+            }
+            
+            const patientBanner = document.getElementById('patientBanner');
+            if (patientBanner) {
+                patientBanner.style.display = page === 'assess' ? 'flex' : 'none';
+            }
+            
+            closeAllDropdowns(); 
+            window.scrollTo(0,0);
         }
 
         // --- Auth ---
@@ -367,6 +379,7 @@
         function logout() { 
             document.getElementById('logPin').value = ''; currentUser = null; 
             document.getElementById('app-layout').style.display = 'none';
+            document.getElementById('screen-login').style.display = 'flex';
             navigate('login'); 
         }
 
@@ -423,6 +436,10 @@
                 } else {
                     document.getElementById('bannerHistoryText').innerText = "ผู้ป่วยรายใหม่";
                 }
+                navigate('assess');
+            }).catch(err => {
+                document.getElementById('loadingModal').style.display = 'none';
+                alert("เกิดข้อผิดพลาดในการดึงประวัติ แต่คุณยังสามารถประเมินต่อได้ครับ");
                 navigate('assess');
             });
         }
