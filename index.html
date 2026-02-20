@@ -20,11 +20,12 @@
         .login-card { background: var(--bg-surface); width: 90%; max-width: 400px; padding: 40px 30px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); text-align: center; }
 
         /* Header & Sticky Banner */
-        .sticky-header { position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; display: none; transition: 0.3s; }
+        .sticky-header { position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; transition: 0.3s; }
         .topbar { background: #0f172a; color: white; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
         .topbar-brand { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .topbar-actions { display: flex; gap: 10px; align-items: center;}
         
-        .patient-banner { background: var(--bg-surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: none; justify-content: space-between; align-items: center; }
+        .patient-banner { background: var(--bg-surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .patient-info h2 { margin: 0; color: var(--primary-dark); font-size: 16px; font-weight: 700; }
         .patient-info p { margin: 2px 0 0 0; color: var(--secondary); font-size: 13px; }
 
@@ -33,7 +34,7 @@
         .smart-search-box:focus-within { box-shadow: 0 10px 25px -3px rgba(15, 118, 110, 0.3); transform: translateY(-2px); }
         .smart-search-box input { flex: 1; border: none; font-size: 18px; padding: 15px 0; font-family: 'Sarabun'; outline: none; background: transparent; }
         
-        .search-results { background: white; border-radius: 12px; margin-top: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid var(--border); display: none; }
+        .search-results { background: white; border-radius: 12px; margin-top: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow: hidden; border: 1px solid var(--border); display: none; text-align: left; }
         .search-item { padding: 15px 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: 0.2s; }
         .search-item:last-child { border-bottom: none; }
         .search-item:hover { background: #f0fdfa; padding-left: 25px; }
@@ -44,11 +45,12 @@
         .form-control { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Sarabun'; font-size: 16px; box-sizing: border-box; transition: 0.2s;}
         .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1); }
         
-        .btn { padding: 10px 16px; border-radius: 8px; font-family: 'Sarabun'; font-size: 15px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; justify-content: center; transition: 0.2s; }
+        .btn { padding: 10px 16px; border-radius: 8px; font-family: 'Sarabun'; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; justify-content: center; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--success); color: white; width: 100%; padding: 16px; font-size: 18px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
         .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-dark); }
-        .btn-outline-light { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; }
+        .btn-outline-light { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; }
+        .btn-outline-light:hover { background: rgba(255,255,255,0.25); }
 
         /* Micro-Card สำหรับข้อประเมิน */
         .question-card { background: var(--bg-surface); border-radius: 16px; border: 1px solid var(--border); padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s; scroll-margin-top: 150px; }
@@ -89,7 +91,7 @@
         th, td { padding: 10px 4px; border: 1px solid var(--border); }
         th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
 
-        /* Print Settings สำหรับหน้าประวัติ และหน้าสรุปด่วน */
+        /* Print Settings */
         @media print {
             body { background: white; margin: 0; }
             body > *:not(.print-container) { display: none !important; }
@@ -117,7 +119,7 @@
                 <h2 style="margin: 0; font-size: 24px;">รายงานผลประเมิน NIHSS</h2>
                 <p style="margin: 5px 0 0 0; color: #666;" id="printSummaryOrg"></p>
                 <div style="margin-top: 15px; text-align: left; border: 1px solid #000; padding: 15px;">
-                    <p><strong>ผู้ป่วย:</strong> <span id="printSummaryPatient">ไม่ระบุ (ประเมินด่วน)</span></p>
+                    <p><strong>ผู้ป่วย:</strong> <span id="printSummaryPatient">ไม่ระบุตัวตน (ประเมินด่วน)</span></p>
                     <p><strong>ผู้ประเมิน:</strong> <span id="printSummaryAssessor"></span></p>
                     <p><strong>วัน/เวลา ที่ประเมิน:</strong> <span id="printSummaryTime"></span></p>
                 </div>
@@ -134,8 +136,8 @@
                 <button class="btn btn-outline" style="flex:1;" onclick="printCurrentAssessment()"><i class="fas fa-print"></i> พิมพ์ใบสรุป</button>
             </div>
 
-            <div class="no-print" style="border-top: 1px solid var(--border); padding-top: 20px; text-align: left;">
-                <h4 style="margin: 0 0 15px 0; color: var(--primary-dark);"><i class="fas fa-database"></i> บันทึกลงระบบฐานข้อมูล</h4>
+            <div class="no-print" style="border-top: 1px solid var(--border); padding-top: 20px; text-align: left;" id="dbSaveSection">
+                <h4 style="margin: 0 0 5px 0; color: var(--primary-dark);"><i class="fas fa-database"></i> บันทึกลงระบบฐานข้อมูล</h4>
                 <p style="font-size: 13px; color: var(--secondary); margin-bottom: 15px;">หากต้องการเก็บสถิติผู้ป่วยรายนี้ กรุณาระบุข้อมูลด้านล่างแล้วกดบันทึก</p>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
@@ -144,117 +146,65 @@
                 </div>
                 
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn" style="flex: 1; background: #e2e8f0; color: var(--text-dark);" onclick="closeSummaryAndGoHome()">ปิด (ไม่บันทึก)</button>
+                    <button class="btn" style="flex: 1; background: #e2e8f0; color: var(--text-dark);" onclick="document.getElementById('summaryModal').style.display='none'">ปิด (ไม่บันทึก)</button>
                     <button class="btn btn-primary" style="flex: 2;" onclick="saveToDatabase()"><i class="fas fa-cloud-upload-alt"></i> ยืนยันบันทึก</button>
                 </div>
             </div>
 
-            <div id="printSummaryDetails" class="print-only" style="margin-top: 20px;">
+            <div class="no-print" id="loginPromptSection" style="display:none; border-top: 1px solid var(--border); padding-top: 20px;">
+                <p style="color: var(--danger); font-size: 14px; margin-bottom: 15px;"><i class="fas fa-exclamation-circle"></i> คุณต้องเข้าสู่ระบบก่อน จึงจะสามารถบันทึกข้อมูลลงฐานข้อมูล รพ. ได้</p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" style="flex: 1; background: #e2e8f0; color: var(--text-dark);" onclick="document.getElementById('summaryModal').style.display='none'">ปิดหน้าต่าง</button>
+                    <button class="btn btn-primary" style="flex: 1;" onclick="document.getElementById('summaryModal').style.display='none'; navigate('login');"><i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ</button>
                 </div>
-            
-            <div class="print-only" style="margin-top: 50px; text-align: right;">
-                <p>ลงชื่อ.......................................................ผู้รายงาน</p>
             </div>
+
+            <div id="printSummaryDetails" class="print-only" style="margin-top: 20px;"></div>
+            <div class="print-only" style="margin-top: 50px; text-align: right;"><p>ลงชื่อ.......................................................ผู้รายงาน</p></div>
         </div>
     </div>
 
-    <div id="app-header" class="sticky-header">
+    <div id="app-header" class="sticky-header" style="display: block;">
         <div class="topbar">
             <div class="topbar-brand"><i class="fas fa-stethoscope"></i> NIHSS</div>
-            <div class="topbar-actions">
-                <span id="topUsername" style="font-size: 14px; margin-right: 10px; display: none; @media(min-width: 600px){display: inline-block;}"></span>
-                <button class="btn" style="background:rgba(255,255,255,0.1); color:white; height:36px;" id="btnNavSearch" onclick="navigate('search')" style="display: none;"><i class="fas fa-search"></i></button>
-                <button class="btn btn-danger" onclick="logout()" style="height: 36px; padding: 0 12px;"><i class="fas fa-sign-out-alt"></i></button>
-            </div>
-        </div>
-        <div id="patientBanner" class="patient-banner">
-            <div>
-                <h2 id="bannerHnName" style="margin:0; font-size: 16px;">โหมดประเมินด่วน</h2>
-                <div id="bannerHistoryText" style="font-size: 12px; color: var(--secondary);">ไม่ระบุตัวตนผู้ป่วย</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div style="text-align: center; border-right: 2px solid var(--border); padding-right: 15px;">
-                    <div style="font-size: 11px; color: var(--secondary); font-weight: 600; text-transform: uppercase;">Total Score</div>
-                    <div id="display-total" style="font-size: 30px; font-weight: 800; color: var(--primary); line-height: 1;">0</div>
-                </div>
-                <button class="btn btn-outline" id="btnShowHistory" style="padding: 10px 12px;" onclick="showHistory()"><i class="fas fa-history" style="font-size:18px;"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-login" class="screen active">
-        <div class="login-wrapper">
-            <div class="login-card">
-                <i class="fas fa-hospital-user" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
-                <h2 style="color: var(--text-dark); margin:0;">ระบบประเมิน NIHSS</h2>
-                <p style="color: var(--secondary); margin: 5px 0 25px 0; font-size: 14px;">โรงพยาบาลสะเดา จ.สงขลา</p>
+            <div class="topbar-actions" id="topbarActions">
+                <button class="btn btn-outline-light" id="btnGoLogin" onclick="navigate('login')"><i class="fas fa-user-circle"></i> ล็อกอิน (บันทึกข้อมูล)</button>
                 
-                <div id="form-login">
-                    <input type="tel" id="logPhone" class="form-control" placeholder="เบอร์โทรศัพท์ (Username)" maxlength="10" style="text-align: center; margin-bottom: 15px;">
-                    <input type="password" id="logPin" class="form-control" placeholder="รหัส PIN 6 หลัก" maxlength="6" inputmode="numeric" oninput="if(this.value.length > 6) this.value = this.value.slice(0, 6);" style="text-align: center; font-size: 20px; letter-spacing: 5px; margin-bottom: 15px;">
-                    <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px;" onclick="login()">เข้าสู่ระบบ</button>
-                    <div style="margin-top: 25px; font-size: 14px;">
-                        <span style="color: var(--primary); cursor: pointer; font-weight: 600;" onclick="toggleAuth('register')">ลงทะเบียนเจ้าหน้าที่ใหม่</span>
-                    </div>
+                <span id="topUsername" style="font-size: 14px; margin-right: 5px; display: none;"></span>
+                <button class="btn btn-danger" onclick="logout()" id="btnLogout" style="display:none; height: 32px; padding: 0 12px;"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+        
+        <div id="patientBanner" class="patient-banner" style="display: flex;">
+            <div>
+                <h2 id="bannerHnName"><i class="fas fa-user-injured" style="color: var(--primary);"></i> ไม่ระบุตัวตน (ประเมินด่วน)</h2>
+                <div id="bannerHistoryText" style="font-size: 12px; color: var(--secondary); margin-top:2px;">ยังไม่ได้ดึงประวัติผู้ป่วย</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="text-align: right;">
+                    <div style="font-size: 10px; color: var(--secondary); text-transform: uppercase;">Total Score</div>
+                    <div id="display-total" style="font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1;">0</div>
                 </div>
-
-                <div id="form-register" style="display: none; text-align: left;">
-                    <label class="form-label">เบอร์โทรศัพท์</label><input type="tel" id="regPhone" class="form-control" placeholder="08XXXXXXXX" maxlength="10">
-                    <label class="form-label">ชื่อ - สกุล</label><input type="text" id="regName" class="form-control" placeholder="นพ. / พย. ...">
-                    <label class="form-label">ตั้งรหัส PIN 6 หลัก</label><input type="password" id="regPin" class="form-control" maxlength="6" inputmode="numeric" oninput="if(this.value.length > 6) this.value = this.value.slice(0, 6);">
-                    <div class="row" style="margin-bottom: 15px;">
-                        <div class="col"><label class="form-label">หน่วยงาน</label><select id="regOrgType" class="form-control"><option>โรงพยาบาล</option><option>รพ.สต.</option><option>คลินิก</option></select></div>
-                        <div class="col"><label class="form-label">ชื่อหน่วยงาน</label><input type="text" id="regOrgName" class="form-control" placeholder="เช่น สะเดา"></div>
-                    </div>
-                    <button class="btn btn-primary" style="width: 100%; padding: 14px;" onclick="register()">บันทึกการลงทะเบียน</button>
-                    <button class="btn btn-outline" style="width: 100%; margin-top: 10px; padding: 14px;" onclick="toggleAuth('login')">ยกเลิกกลับไปล็อคอิน</button>
-                </div>
+                <button class="btn btn-primary" style="padding: 10px 12px;" onclick="openSearchModal()" title="ค้นหา/ผูกประวัติ"><i class="fas fa-search"></i></button>
+                <button class="btn btn-outline" style="padding: 10px 12px;" onclick="showHistory()" title="ดูแฟ้มประวัติ"><i class="fas fa-folder-open"></i></button>
             </div>
         </div>
     </div>
 
-    <div id="screen-search" class="screen">
-        <div class="container" style="max-width: 600px; padding-top: 40px;">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <i class="fas fa-search-plus" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
-                <h2 style="color: var(--text-dark); margin:0;">ค้นหาผู้ป่วย</h2>
-                <p style="color: var(--secondary);">ระบุข้อมูลเพื่อดึงประวัติ หรือเลือกประเมินด่วน</p>
-            </div>
-            
-            <div class="smart-search-box">
-                <i class="fas fa-search" style="font-size: 20px; color: var(--primary);"></i>
-                <input type="text" id="smartInput" placeholder="พิมพ์ HN หรือ ชื่อ นามสกุล..." oninput="handleSmartSearch()" autocomplete="off">
-                <button class="btn btn-primary" style="border-radius: 8px; padding: 10px 20px;" onclick="manualProceed()">ค้นหา</button>
-            </div>
-            <div id="searchResults" class="search-results"></div>
-
-            <div style="text-align: center; margin-top: 30px; position: relative;">
-                <div style="border-top: 1px solid var(--border); position: absolute; top: 50%; width: 100%; z-index: -1;"></div>
-                <span style="background: var(--bg-body); padding: 0 15px; color: var(--secondary); font-size: 14px; font-weight: 600;">หรือ</span>
-            </div>
-
-            <button class="btn btn-outline" style="width: 100%; padding: 18px; font-size: 16px; margin-top: 25px; border: 2px dashed #94a3b8; color: var(--primary-dark);" onclick="startQuickAssess()">
-                <i class="fas fa-bolt" style="color: #f59e0b; font-size: 20px;"></i> ข้ามการระบุตัวตน (ประเมินด่วน)
-            </button>
-        </div>
-    </div>
-
-    <div id="screen-assess" class="screen">
+    <div id="screen-assess" class="screen active">
         <div class="container">
+            <input type="hidden" id="currentHn" value="">
+            <input type="hidden" id="currentName" value="">
             <input type="hidden" id="editTimestamp" value="">
-            <input type="hidden" id="isQuickMode" value="false">
             
-            <div id="editAlert" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center; font-size: 15px; font-weight: 600; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.1);">
-                <i class="fas fa-pen"></i> โหมดแก้ไขข้อมูล: คุณกำลังแก้ไขประวัติย้อนหลัง
+            <div id="editAlert" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 14px; font-weight: 600;">
+                <i class="fas fa-pen"></i> โหมดแก้ไขข้อมูลประวัติย้อนหลัง
             </div>
 
-            <div class="section-divider"><span>1. LOC & Visual</span></div>
+            <div class="section-divider" style="margin-top: 10px;"><span>1. LOC & Visual</span></div>
 
             <div class="question-card" id="q-1a">
-                <div class="question-title">
-                    <div class="question-number">1a</div>
-                    <div><div class="question-text">Level of Consciousness</div><span class="question-sub">ระดับความรู้สึกตัว</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">1a</div><div><div class="question-text">Level of Consciousness</div><span class="question-sub">ระดับความรู้สึกตัว</span></div></div>
                 <div class="score-options" id="group-1a">
                     <div class="score-btn" onclick="selectScore('1a', 0, this, 'q-1b')"><div class="score-num">0</div><div class="score-text">Alert</div></div>
                     <div class="score-btn" onclick="selectScore('1a', 1, this, 'q-1b')"><div class="score-num">1</div><div class="score-text">Drowsy</div></div>
@@ -264,10 +214,7 @@
             </div>
 
             <div class="question-card" id="q-1b">
-                <div class="question-title">
-                    <div class="question-number">1b</div>
-                    <div><div class="question-text">LOC Questions</div><span class="question-sub">ถามอายุ และ เดือนปัจจุบัน</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">1b</div><div><div class="question-text">LOC Questions</div><span class="question-sub">ถามอายุ และ เดือนปัจจุบัน</span></div></div>
                 <div class="score-options" id="group-1b">
                     <div class="score-btn" onclick="selectScore('1b', 0, this, 'q-1c')"><div class="score-num">0</div><div class="score-text">Both correct</div></div>
                     <div class="score-btn" onclick="selectScore('1b', 1, this, 'q-1c')"><div class="score-num">1</div><div class="score-text">One correct</div></div>
@@ -276,10 +223,7 @@
             </div>
 
             <div class="question-card" id="q-1c">
-                <div class="question-title">
-                    <div class="question-number">1c</div>
-                    <div><div class="question-text">LOC Commands</div><span class="question-sub">สั่งหลับตา-ลืมตา / กำมือ-แบมือ</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">1c</div><div><div class="question-text">LOC Commands</div><span class="question-sub">สั่งหลับตา-ลืมตา / กำมือ-แบมือ</span></div></div>
                 <div class="score-options" id="group-1c">
                     <div class="score-btn" onclick="selectScore('1c', 0, this, 'q-2')"><div class="score-num">0</div><div class="score-text">Both correct</div></div>
                     <div class="score-btn" onclick="selectScore('1c', 1, this, 'q-2')"><div class="score-num">1</div><div class="score-text">One correct</div></div>
@@ -288,10 +232,7 @@
             </div>
 
             <div class="question-card" id="q-2">
-                <div class="question-title">
-                    <div class="question-number">2</div>
-                    <div><div class="question-text">Best Gaze</div><span class="question-sub">การเคลื่อนไหวของตา (Horizontal EOM)</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">2</div><div><div class="question-text">Best Gaze</div><span class="question-sub">การเคลื่อนไหวของตา (Horizontal EOM)</span></div></div>
                 <div class="score-options" id="group-2">
                     <div class="score-btn" onclick="selectScore('2', 0, this, 'q-3')"><div class="score-num">0</div><div class="score-text">Normal</div></div>
                     <div class="score-btn" onclick="selectScore('2', 1, this, 'q-3')"><div class="score-num">1</div><div class="score-text">Partial gaze palsy</div></div>
@@ -300,10 +241,7 @@
             </div>
 
             <div class="question-card" id="q-3">
-                <div class="question-title">
-                    <div class="question-number">3</div>
-                    <div><div class="question-text">Visual Field</div><span class="question-sub">การมองเห็น ลานสายตา</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">3</div><div><div class="question-text">Visual Field</div><span class="question-sub">การมองเห็น ลานสายตา</span></div></div>
                 <div class="score-options" id="group-3">
                     <div class="score-btn" onclick="selectScore('3', 0, this, 'q-4')"><div class="score-num">0</div><div class="score-text">No visual loss</div></div>
                     <div class="score-btn" onclick="selectScore('3', 1, this, 'q-4')"><div class="score-num">1</div><div class="score-text">Partial hemianopia</div></div>
@@ -313,10 +251,7 @@
             </div>
 
             <div class="question-card" id="q-4">
-                <div class="question-title">
-                    <div class="question-number">4</div>
-                    <div><div class="question-text">Facial Palsy</div><span class="question-sub">กล้ามเนื้อใบหน้า ยิงฟัน ยิ้ม หลับตา</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">4</div><div><div class="question-text">Facial Palsy</div><span class="question-sub">กล้ามเนื้อใบหน้า ยิงฟัน ยิ้ม หลับตา</span></div></div>
                 <div class="score-options" id="group-4">
                     <div class="score-btn" onclick="selectScore('4', 0, this, 'q-5')"><div class="score-num">0</div><div class="score-text">Normal</div></div>
                     <div class="score-btn" onclick="selectScore('4', 1, this, 'q-5')"><div class="score-num">1</div><div class="score-text">Minor paralysis</div></div>
@@ -328,10 +263,7 @@
             <div class="section-divider"><span>2. Motor (กำลังกล้ามเนื้อ)</span></div>
 
             <div class="question-card" id="q-5">
-                <div class="question-title">
-                    <div class="question-number">5</div>
-                    <div><div class="question-text">Motor Arm</div><span class="question-sub">กำลังแขน ซ้าย/ขวา ยกค้าง 10 วินาที</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">5</div><div><div class="question-text">Motor Arm</div><span class="question-sub">กำลังแขน ซ้าย/ขวา ยกค้าง 10 วินาที</span></div></div>
                 <div class="dual-container">
                     <div>
                         <div class="dual-side-title dual-r">แขนขวา (Right)</div>
@@ -359,10 +291,7 @@
             </div>
 
             <div class="question-card" id="q-6">
-                <div class="question-title">
-                    <div class="question-number">6</div>
-                    <div><div class="question-text">Motor Leg</div><span class="question-sub">กำลังขา ซ้าย/ขวา ยกค้าง 5 วินาที</span></div>
-                </div>
+                <div class="question-title"><div class="question-number">6</div><div><div class="question-text">Motor Leg</div><span class="question-sub">กำลังขา ซ้าย/ขวา ยกค้าง 5 วินาที</span></div></div>
                 <div class="dual-container">
                     <div>
                         <div class="dual-side-title dual-r">ขาขวา (Right)</div>
@@ -391,118 +320,101 @@
 
             <div class="section-divider"><span>3. Coordination & Sensation</span></div>
 
-            <div class="question-card" id="q-7">
-                <div class="question-title">
-                    <div class="question-number">7</div>
-                    <div><div class="question-text">Limb Ataxia</div><span class="question-sub">การกะระยะ (Finger to nose, Heel down shin)</span></div>
-                </div>
-                <div class="score-options" id="group-7">
-                    <div class="score-btn" onclick="selectScore('7', 0, this, 'q-8')"><div class="score-num">0</div><div class="score-text">Absent</div></div>
-                    <div class="score-btn" onclick="selectScore('7', 1, this, 'q-8')"><div class="score-num">1</div><div class="score-text">Present in 1 limb</div></div>
-                    <div class="score-btn" onclick="selectScore('7', 2, this, 'q-8')"><div class="score-num">2</div><div class="score-text">Present in 2 limbs</div></div>
-                    <div class="score-btn" onclick="selectScore('7', 'X', this, 'q-8')"><div class="score-num" style="color:var(--danger);">X</div><div class="score-text">Amputation</div></div>
-                </div><input type="hidden" id="val_7" class="nihss-val require-val">
-            </div>
+            <div class="question-card" id="q-7"><div class="question-title"><div class="question-number">7</div><div><div class="question-text">Limb Ataxia</div><span class="question-sub">การกะระยะ (Finger to nose, Heel down shin)</span></div></div><div class="score-options" id="group-7"><div class="score-btn" onclick="selectScore('7', 0, this, 'q-8')"><div class="score-num">0</div><div class="score-text">Absent</div></div><div class="score-btn" onclick="selectScore('7', 1, this, 'q-8')"><div class="score-num">1</div><div class="score-text">Present in 1 limb</div></div><div class="score-btn" onclick="selectScore('7', 2, this, 'q-8')"><div class="score-num">2</div><div class="score-text">Present in 2 limbs</div></div><div class="score-btn" onclick="selectScore('7', 'X', this, 'q-8')"><div class="score-num" style="color:var(--danger);">X</div><div class="score-text">Amputation</div></div></div><input type="hidden" id="val_7" class="nihss-val require-val"></div>
+            <div class="question-card" id="q-8"><div class="question-title"><div class="question-number">8</div><div><div class="question-text">Sensory</div><span class="question-sub">ความรู้สึกสัมผัส</span></div></div><div class="score-options" id="group-8"><div class="score-btn" onclick="selectScore('8', 0, this, 'q-9')"><div class="score-num">0</div><div class="score-text">Normal</div></div><div class="score-btn" onclick="selectScore('8', 1, this, 'q-9')"><div class="score-num">1</div><div class="score-text">Mild/Moderate loss</div></div><div class="score-btn" onclick="selectScore('8', 2, this, 'q-9')"><div class="score-num">2</div><div class="score-text">Severe/Total loss</div></div></div><input type="hidden" id="val_8" class="nihss-val require-val"></div>
+            <div class="question-card" id="q-9"><div class="question-title"><div class="question-number">9</div><div><div class="question-text">Best Language</div><span class="question-sub">การใช้ภาษาและความเข้าใจ</span></div></div><div class="score-options" id="group-9"><div class="score-btn" onclick="selectScore('9', 0, this, 'q-10')"><div class="score-num">0</div><div class="score-text">No aphasia</div></div><div class="score-btn" onclick="selectScore('9', 1, this, 'q-10')"><div class="score-num">1</div><div class="score-text">Mild/Moderate</div></div><div class="score-btn" onclick="selectScore('9', 2, this, 'q-10')"><div class="score-num">2</div><div class="score-text">Severe aphasia</div></div><div class="score-btn" onclick="selectScore('9', 3, this, 'q-10')"><div class="score-num">3</div><div class="score-text">Mute</div></div></div><input type="hidden" id="val_9" class="nihss-val require-val"></div>
+            <div class="question-card" id="q-10"><div class="question-title"><div class="question-number">10</div><div><div class="question-text">Dysarthria</div><span class="question-sub">การออกเสียง</span></div></div><div class="score-options" id="group-10"><div class="score-btn" onclick="selectScore('10', 0, this, 'q-11')"><div class="score-num">0</div><div class="score-text">Normal</div></div><div class="score-btn" onclick="selectScore('10', 1, this, 'q-11')"><div class="score-num">1</div><div class="score-text">Mild/Moderate</div></div><div class="score-btn" onclick="selectScore('10', 2, this, 'q-11')"><div class="score-num">2</div><div class="score-text">Severe dysarthria</div></div><div class="score-btn" onclick="selectScore('10', 'X', this, 'q-11')"><div class="score-num" style="color:var(--danger);">X</div><div class="score-text">Intubated</div></div></div><input type="hidden" id="val_10" class="nihss-val require-val"></div>
+            <div class="question-card" id="q-11"><div class="question-title"><div class="question-number">11</div><div><div class="question-text">Extinction and Inattention</div><span class="question-sub">การละเลยการรับรู้ (Neglect)</span></div></div><div class="score-options" id="group-11"><div class="score-btn" onclick="selectScore('11', 0, this)"><div class="score-num">0</div><div class="score-text">No abnormality</div></div><div class="score-btn" onclick="selectScore('11', 1, this)"><div class="score-num">1</div><div class="score-text">Visual/tactile inattention</div></div><div class="score-btn" onclick="selectScore('11', 2, this)"><div class="score-num">2</div><div class="score-text">Profound inattention</div></div></div><input type="hidden" id="val_11" class="nihss-val require-val"></div>
 
-            <div class="question-card" id="q-8">
-                <div class="question-title">
-                    <div class="question-number">8</div>
-                    <div><div class="question-text">Sensory</div><span class="question-sub">ความรู้สึกสัมผัส (Pin prick)</span></div>
-                </div>
-                <div class="score-options" id="group-8">
-                    <div class="score-btn" onclick="selectScore('8', 0, this, 'q-9')"><div class="score-num">0</div><div class="score-text">Normal</div></div>
-                    <div class="score-btn" onclick="selectScore('8', 1, this, 'q-9')"><div class="score-num">1</div><div class="score-text">Mild/Moderate loss</div></div>
-                    <div class="score-btn" onclick="selectScore('8', 2, this, 'q-9')"><div class="score-num">2</div><div class="score-text">Severe/Total loss</div></div>
-                </div><input type="hidden" id="val_8" class="nihss-val require-val">
+            <div style="display: flex; gap: 10px; margin-top: 30px;">
+                <button class="btn" style="background: #e2e8f0; color: var(--text-dark);" onclick="resetForm(true)"><i class="fas fa-redo"></i> ล้างข้อมูล</button>
+                <button class="btn btn-success" style="flex: 1;" onclick="openSummaryModal()"><i class="fas fa-check-double"></i> ตรวจสอบและดูสรุปผล</button>
             </div>
+        </div>
+    </div>
 
-            <div class="question-card" id="q-9">
-                <div class="question-title">
-                    <div class="question-number">9</div>
-                    <div><div class="question-text">Best Language</div><span class="question-sub">การใช้ภาษาและความเข้าใจ</span></div>
+    <div id="screen-login" class="screen">
+        <div class="login-wrapper" style="padding-top: 40px;">
+            <div class="login-card">
+                <i class="fas fa-hospital-user" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
+                <h2 style="color: var(--text-dark); margin:0;">เข้าสู่ระบบฐานข้อมูล</h2>
+                <p style="color: var(--secondary); font-size: 14px; margin-bottom: 25px;">เพื่อผูกประวัติผู้ป่วยและเก็บสถิติ</p>
+
+                <div id="form-login">
+                    <input type="tel" id="logPhone" class="form-control" placeholder="เบอร์โทรศัพท์ (Username)" maxlength="10" style="text-align: center;">
+                    <input type="password" id="logPin" class="form-control" placeholder="รหัส PIN 6 หลัก" maxlength="6" inputmode="numeric" oninput="if(this.value.length > 6) this.value = this.value.slice(0, 6);" style="text-align: center; font-size: 20px; letter-spacing: 5px;">
+                    <button class="btn btn-primary" style="width: 100%; padding: 14px;" onclick="login()">ยืนยันเข้าสู่ระบบ</button>
+                    <div style="margin-top: 25px; font-size: 14px;">
+                        <span style="color: var(--primary); cursor: pointer; font-weight: 600;" onclick="toggleAuth('register')">ลงทะเบียนเจ้าหน้าที่ใหม่</span>
+                    </div>
                 </div>
-                <div class="score-options" id="group-9">
-                    <div class="score-btn" onclick="selectScore('9', 0, this, 'q-10')"><div class="score-num">0</div><div class="score-text">No aphasia</div></div>
-                    <div class="score-btn" onclick="selectScore('9', 1, this, 'q-10')"><div class="score-num">1</div><div class="score-text">Mild/Moderate aphasia</div></div>
-                    <div class="score-btn" onclick="selectScore('9', 2, this, 'q-10')"><div class="score-num">2</div><div class="score-text">Severe aphasia</div></div>
-                    <div class="score-btn" onclick="selectScore('9', 3, this, 'q-10')"><div class="score-num">3</div><div class="score-text">Mute, global aphasia</div></div>
-                </div><input type="hidden" id="val_9" class="nihss-val require-val">
-            </div>
 
-            <div class="question-card" id="q-10">
-                <div class="question-title">
-                    <div class="question-number">10</div>
-                    <div><div class="question-text">Dysarthria</div><span class="question-sub">ความชัดเจนในการออกเสียง</span></div>
+                <div id="form-register" style="display: none; text-align: left;">
+                    <input type="tel" id="regPhone" class="form-control" placeholder="เบอร์โทรศัพท์" maxlength="10">
+                    <input type="text" id="regName" class="form-control" placeholder="ชื่อ - สกุล">
+                    <input type="password" id="regPin" class="form-control" placeholder="ตั้งรหัส PIN 6 หลัก" maxlength="6">
+                    <div style="display:flex; gap:10px; margin-bottom:15px;">
+                        <select id="regOrgType" class="form-control"><option>โรงพยาบาล</option><option>รพ.สต.</option><option>คลินิก</option></select>
+                        <input type="text" id="regOrgName" class="form-control" placeholder="ชื่อหน่วยงาน">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; padding: 14px;" onclick="register()">บันทึกลงทะเบียน</button>
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 10px; padding: 14px;" onclick="toggleAuth('login')">ยกเลิก</button>
                 </div>
-                <div class="score-options" id="group-10">
-                    <div class="score-btn" onclick="selectScore('10', 0, this, 'q-11')"><div class="score-num">0</div><div class="score-text">Normal</div></div>
-                    <div class="score-btn" onclick="selectScore('10', 1, this, 'q-11')"><div class="score-num">1</div><div class="score-text">Mild/Moderate</div></div>
-                    <div class="score-btn" onclick="selectScore('10', 2, this, 'q-11')"><div class="score-num">2</div><div class="score-text">Severe dysarthria</div></div>
-                    <div class="score-btn" onclick="selectScore('10', 'X', this, 'q-11')"><div class="score-num" style="color:var(--danger);">X</div><div class="score-text">Intubated</div></div>
-                </div><input type="hidden" id="val_10" class="nihss-val require-val">
-            </div>
 
-            <div class="question-card" id="q-11">
-                <div class="question-title">
-                    <div class="question-number">11</div>
-                    <div><div class="question-text">Extinction and Inattention</div><span class="question-sub">การละเลยการรับรู้ (Neglect)</span></div>
-                </div>
-                <div class="score-options" id="group-11">
-                    <div class="score-btn" onclick="selectScore('11', 0, this)"><div class="score-num">0</div><div class="score-text">No abnormality</div></div>
-                    <div class="score-btn" onclick="selectScore('11', 1, this)"><div class="score-num">1</div><div class="score-text">Visual/tactile inattention</div></div>
-                    <div class="score-btn" onclick="selectScore('11', 2, this)"><div class="score-num">2</div><div class="score-text">Profound inattention</div></div>
-                </div><input type="hidden" id="val_11" class="nihss-val require-val">
+                <button class="btn" style="width: 100%; margin-top: 20px; background: transparent; border: 1px solid var(--border);" onclick="navigate('assess')">ข้ามไปหน้าประเมิน</button>
             </div>
+        </div>
+    </div>
 
-            <button class="btn btn-success" onclick="openSummaryModal()" style="margin-top: 20px;"><i class="fas fa-check-double" style="font-size:20px;"></i> ตรวจสอบและสรุปผลประเมิน</button>
+    <div id="searchModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin:0; color: var(--primary-dark);"><i class="fas fa-search"></i> ค้นหาเพื่อผูกประวัติ</h3>
+                <button class="btn btn-outline" style="padding: 5px 10px; border:none;" onclick="document.getElementById('searchModal').style.display='none'"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="smart-search-box">
+                <i class="fas fa-search" style="font-size: 20px; color: var(--primary);"></i>
+                <input type="text" id="smartInput" placeholder="พิมพ์ HN หรือ ชื่อ..." oninput="handleSmartSearch()" autocomplete="off">
+                <button class="btn btn-primary" onclick="manualProceed()">ตกลง</button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+            <p style="font-size: 13px; color: var(--secondary); margin-top: 20px; text-align: center;">เมื่อค้นพบ ระบบจะดึงประวัติเก่ามาผูกกับฟอร์มที่กำลังประเมินทันที</p>
         </div>
     </div>
 
     <div id="historyModal" class="modal print-container">
         <div class="modal-content" style="max-width: 950px; text-align: left;">
             <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin:0; color: var(--primary-dark);"><i class="fas fa-folder-open"></i> แฟ้มประวัติและเปรียบเทียบคะแนน</h3>
+                <h3 style="margin:0; color: var(--primary-dark);"><i class="fas fa-folder-open"></i> แฟ้มประวัติผู้ป่วย</h3>
                 <button class="btn btn-outline" style="padding: 5px 12px; border:none;" onclick="document.getElementById('historyModal').style.display='none'"><i class="fas fa-times" style="font-size: 20px;"></i></button>
             </div>
             
-            <div class="no-print" style="margin-bottom: 15px; font-size: 13px; color: var(--text-dark); background: #e0f2fe; border-left: 4px solid #0284c7; padding: 10px; border-radius: 4px;">
-                <i class="fas fa-print"></i> เลือกติ๊กรายการด้านหน้า เพื่อกำหนดข้อมูลที่ต้องการพิมพ์
-            </div>
-
             <div class="print-only" style="text-align: center; margin-bottom: 20px;">
                 <h2 style="margin: 0; font-size: 24px;">รายงานสรุปประเมิน NIHSS</h2>
-                <h3 id="printPatientName" style="margin: 8px 0; font-size: 18px;"></h3>
-                <p style="margin: 0; color: #444; font-size: 16px;" id="printOrgName"></p>
+                <h3 id="printPatientName2" style="margin: 8px 0; font-size: 18px;"></h3>
+                <p style="margin: 0; color: #444; font-size: 16px;" id="printOrgName2"></p>
             </div>
 
             <div class="table-responsive">
                 <table id="historyTable">
                     <thead>
                         <tr>
-                            <th class="no-print">เลือก</th>
-                            <th class="col-date">วัน/เวลา</th>
-                            <th class="col-total">Total</th>
-                            <th class="col-score">1a</th><th class="col-score">1b</th><th class="col-score">1c</th><th class="col-score">2</th><th class="col-score">3</th><th class="col-score">4</th>
-                            <th class="col-score">5R</th><th class="col-score">5L</th><th class="col-score">6R</th><th class="col-score">6L</th>
-                            <th class="col-score">7</th><th class="col-score">8</th><th class="col-score">9</th><th class="col-score">10</th><th class="col-score">11</th>
-                            <th class="col-assessor">ผู้ประเมิน</th>
-                            <th class="no-print">จัดการ</th>
+                            <th class="no-print">เลือก</th><th class="col-date">วัน/เวลา</th><th class="col-total">Total</th>
+                            <th>1a</th><th>1b</th><th>1c</th><th>2</th><th>3</th><th>4</th><th>5R</th><th>5L</th><th>6R</th><th>6L</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th>
+                            <th class="col-assessor">ผู้ประเมิน</th><th class="no-print">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody id="historyTbody"></tbody>
                 </table>
             </div>
 
-            <div class="print-only signature-block">
-                <div class="signature-box">
-                    <div style="margin-bottom: 5px; font-size: 16px;">ลงชื่อ.......................................................ผู้รายงาน</div>
-                    <div style="font-size: 16px;">( <span id="printAssessorName"></span> )</div>
-                </div>
+            <div class="print-only signature-block" style="margin-top: 50px; display: flex; justify-content: flex-end;">
+                <div style="text-align: center; width: 300px;"><p style="margin-bottom: 40px; font-size: 16px;">ลงชื่อ.......................................................ผู้รายงาน</p><p style="font-size: 16px;">( <span id="printAssessorName2"></span> )</p></div>
             </div>
 
             <div class="no-print" style="display: flex; gap: 10px; margin-top: 25px; justify-content: flex-end;">
-                <button class="btn btn-outline" style="color: #0284c7; border-color: #0284c7;" onclick="shareSelectedHistory()"><i class="fab fa-line"></i> แชร์ข้อมูลที่เลือก</button>
-                <button class="btn btn-primary" onclick="printSelected()"><i class="fas fa-print"></i> พิมพ์ / บันทึก PDF</button>
+                <button class="btn btn-outline" style="color: #0284c7; border-color: #0284c7;" onclick="shareSelectedHistory()"><i class="fab fa-line"></i> แชร์ข้อมูล</button>
+                <button class="btn btn-primary" onclick="printSelected()"><i class="fas fa-print"></i> พิมพ์ / PDF</button>
             </div>
         </div>
     </div>
@@ -513,60 +425,104 @@
         let patientDirectory = [];
         let currentHistory = [];
 
-        function toggleAuth(type) {
-            document.getElementById('form-login').style.display = type === 'login' ? 'block' : 'none';
-            document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
+        // 🌟 Auto-Login Background Process (Frictionless) 🌟
+        window.onload = function() {
+            document.getElementById('app-header').style.display = 'block';
+            document.getElementById('patientBanner').style.display = 'flex';
+            
+            const savedPhone = localStorage.getItem('nihss_phone');
+            const savedPin = localStorage.getItem('nihss_pin');
+            
+            if(savedPhone && savedPin) {
+                // เรียก API ดึงข้อมูลหลังบ้านเงียบๆ (Silent Fetch) ไม่บล็อกหน้าจอ
+                fetch(API_URL, { method: 'POST', body: JSON.stringify({action: "login", phone: savedPhone, pin: savedPin}) })
+                .then(r => r.json()).then(res => {
+                    if(res.status === 'success') {
+                        currentUser = res;
+                        document.getElementById('topUsername').innerText = res.name;
+                        document.getElementById('topUsername').style.display = 'inline-block';
+                        document.getElementById('btnGoLogin').style.display = 'none';
+                        document.getElementById('btnLogout').style.display = 'inline-flex';
+                        document.getElementById('printOrgName2').innerText = res.orgType + " " + res.orgName;
+                        document.getElementById('printSummaryOrg').innerText = res.orgType + " " + res.orgName;
+                        patientDirectory = res.patients || [];
+                    } else { localStorage.clear(); } // รหัสผิดให้ลบความจำทิ้ง
+                }).catch(e => console.log('Offline/Error Silent Login'));
+            }
         }
 
         // --- Navigation ---
         function navigate(page) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            const targetScreen = document.getElementById('screen-' + page);
-            if(targetScreen) targetScreen.classList.add('active');
+            document.getElementById('screen-' + page).classList.add('active');
             
-            const header = document.getElementById('app-header');
-            if(header) {
-                if(page === 'login') {
-                    header.style.display = 'none';
-                } else {
-                    header.style.display = 'block';
-                    document.getElementById('btnNavSearch').style.display = page === 'assess' ? 'inline-block' : 'none';
-                    document.getElementById('patientBanner').style.display = page === 'assess' ? 'flex' : 'none';
-                }
+            if(page === 'login') {
+                document.getElementById('app-header').style.display = 'none';
+            } else {
+                document.getElementById('app-header').style.display = 'block';
+                document.getElementById('patientBanner').style.display = page === 'assess' ? 'flex' : 'none';
             }
-            if(page === 'search') document.getElementById('smartInput').focus();
             window.scrollTo(0,0);
         }
 
-        // --- Auth ---
+        function toggleAuth(type) {
+            document.getElementById('form-login').style.display = type === 'login' ? 'block' : 'none';
+            document.getElementById('form-register').style.display = type === 'register' ? 'block' : 'none';
+        }
+
+        // --- Auth & Storage ---
+        function login() {
+            const phone = document.getElementById('logPhone').value; const pin = document.getElementById('logPin').value;
+            if(!phone || !pin) return alert("กรุณากรอกข้อมูล");
+            document.getElementById('loadingModal').style.display = 'flex';
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({action: "login", phone: phone, pin: pin}) })
+            .then(r => r.json()).then(res => {
+                document.getElementById('loadingModal').style.display = 'none';
+                if(res.status === 'success') {
+                    currentUser = res;
+                    localStorage.setItem('nihss_phone', phone); 
+                    localStorage.setItem('nihss_pin', pin);
+                    
+                    document.getElementById('topUsername').innerText = res.name;
+                    document.getElementById('topUsername').style.display = 'inline-block';
+                    document.getElementById('btnGoLogin').style.display = 'none';
+                    document.getElementById('btnLogout').style.display = 'inline-flex';
+                    
+                    document.getElementById('printOrgName2').innerText = res.orgType + " " + res.orgName;
+                    document.getElementById('printSummaryOrg').innerText = res.orgType + " " + res.orgName;
+                    patientDirectory = res.patients || [];
+                    navigate('assess'); // กลับหน้าหลัก
+                } else alert(res.message);
+            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("เชื่อมต่อล้มเหลว"); });
+        }
+
+        function logout() { 
+            currentUser = null; 
+            localStorage.clear();
+            document.getElementById('topUsername').style.display = 'none';
+            document.getElementById('btnGoLogin').style.display = 'inline-flex';
+            document.getElementById('btnLogout').style.display = 'none';
+            alert("ออกจากระบบสำเร็จ คุณยังสามารถใช้เครื่องคิดเลขประเมินได้ปกติครับ");
+        }
+
         function register() {
             const phone = document.getElementById('regPhone').value; const pin = document.getElementById('regPin').value;
             if(!phone || pin.length !== 6) return alert('กรอกเบอร์โทร และ รหัส PIN 6 หลัก');
             document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "register", phone: phone, pin: pin, name: document.getElementById('regName').value, orgType: document.getElementById('regOrgType').value, orgName: document.getElementById('regOrgName').value })})
-            .then(r => r.json()).then(res => { document.getElementById('loadingModal').style.display = 'none'; if(res.status === 'success') { alert('สำเร็จ'); toggleAuth('login'); } else alert(res.message); })
-            .catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("เชื่อมต่อผิดพลาด"); });
+            .then(r => r.json()).then(res => { document.getElementById('loadingModal').style.display = 'none'; if(res.status === 'success') { alert('สำเร็จ'); toggleAuth('login'); } else alert(res.message); });
         }
 
-        function login() {
-            const phone = document.getElementById('logPhone').value; const pin = document.getElementById('logPin').value;
-            if(!phone || !pin) return alert("กรุณากรอกข้อมูล");
-            document.getElementById('loadingModal').style.display = 'flex';
-            fetch(API_URL, { method: 'POST', body: JSON.stringify({action: "login", phone: phone, pin: pin}) }).then(r => r.json()).then(res => {
-                document.getElementById('loadingModal').style.display = 'none';
-                if(res.status === 'success') {
-                    currentUser = res;
-                    document.getElementById('topUsername').innerText = res.name;
-                    document.getElementById('printOrgName').innerText = res.orgType + " " + res.orgName;
-                    document.getElementById('printSummaryOrg').innerText = res.orgType + " " + res.orgName;
-                    patientDirectory = res.patients || [];
-                    navigate('search');
-                } else alert(res.message);
-            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("เชื่อมต่อฐานข้อมูลล้มเหลว"); });
+        // --- Search Patient ---
+        function openSearchModal() {
+            if(!currentUser) {
+                if(confirm("กรุณาเข้าสู่ระบบก่อนค้นหาประวัติจากส่วนกลาง (ต้องการล็อกอินตอนนี้เลยหรือไม่?)")) navigate('login');
+                return;
+            }
+            document.getElementById('searchModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('smartInput').focus(), 100);
         }
-        function logout() { document.getElementById('logPin').value = ''; currentUser = null; navigate('login'); }
 
-        // --- Smart Omni-Search & Quick Mode ---
         function handleSmartSearch() {
             const val = document.getElementById('smartInput').value.trim().toUpperCase();
             const resultsBox = document.getElementById('searchResults');
@@ -574,16 +530,15 @@
             if (!val) { resultsBox.style.display = 'none'; return; }
 
             const matches = patientDirectory.filter(p => p.hn.toUpperCase().includes(val) || p.name.toUpperCase().includes(val)).slice(0, 5);
-            
             if(matches.length === 0) { 
-                resultsBox.innerHTML = `<div style="padding:15px; text-align:center; color:#94a3b8;">กด 'ค้นหา' เพื่อสร้างเป็นผู้ป่วยรายใหม่</div>`;
+                resultsBox.innerHTML = `<div style="padding:15px; text-align:center; color:#94a3b8;">กด 'ค้นหา' เพื่อผูกชื่อเป็นผู้ป่วยรายใหม่</div>`;
                 resultsBox.style.display = 'block'; return; 
             }
 
             matches.forEach(p => {
                 const div = document.createElement('div'); div.className = 'search-item';
                 div.innerHTML = `<div class="search-icon-circle"><i class="fas fa-user"></i></div><div><div style="font-weight:700; color:var(--text-dark);">${p.hn}</div><div style="font-size:13px; color:var(--secondary);">${p.name}</div></div>`;
-                div.onclick = function() { proceedToAssessment(p.hn, p.name); resultsBox.style.display = 'none'; document.getElementById('smartInput').value = ''; };
+                div.onclick = function() { attachPatient(p.hn, p.name); };
                 resultsBox.appendChild(div);
             });
             resultsBox.style.display = 'block';
@@ -593,113 +548,43 @@
             const val = document.getElementById('smartInput').value.trim();
             if(!val) return alert("กรุณาพิมพ์ข้อมูลค้นหา");
             const isNumber = /^\d+$/.test(val);
-            proceedToAssessment(isNumber ? val : 'ระบุภายหลัง', isNumber ? 'ระบุภายหลัง' : val);
-            document.getElementById('searchResults').style.display = 'none'; document.getElementById('smartInput').value = '';
+            attachPatient(isNumber ? val : 'รอระบุ', isNumber ? 'รอระบุ' : val);
         }
 
-        // ระบบ 1: เข้าระบุตัวตนปกติ
-        function proceedToAssessment(hn, name) {
-            document.getElementById('currentHn').value = hn; document.getElementById('currentName').value = name;
-            document.getElementById('finalHn').value = hn; document.getElementById('finalName').value = name; // เติมรอไว้ในหน้าสรุป
-            document.getElementById('isQuickMode').value = "false";
-            document.getElementById('bannerHnName').innerText = `HN: ${hn} | ชื่อ: ${name}`;
-            document.getElementById('printPatientName').innerText = `HN: ${hn} | ชื่อ: ${name}`;
-            document.getElementById('btnShowHistory').style.display = 'inline-block';
+        function attachPatient(hn, name) {
+            document.getElementById('searchModal').style.display = 'none';
+            document.getElementById('smartInput').value = '';
             
-            resetForm();
+            document.getElementById('currentHn').value = hn; 
+            document.getElementById('currentName').value = name;
+            document.getElementById('finalHn').value = hn; 
+            document.getElementById('finalName').value = name;
+            
+            document.getElementById('bannerHnName').innerHTML = `<i class="fas fa-user-check" style="color:var(--primary);"></i> HN: ${hn} | ${name}`;
+            document.getElementById('printPatientName2').innerText = `HN: ${hn} | ชื่อ: ${name}`;
+
             document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "getHistory", hn: hn }) }).then(r => r.json()).then(res => {
                 document.getElementById('loadingModal').style.display = 'none';
                 currentHistory = res.history || [];
                 if(currentHistory.length > 0) {
-                    const latest = currentHistory[0];
-                    document.getElementById('bannerHistoryText').innerHTML = `ประวัติล่าสุด: <strong style="color:var(--danger);">${latest.total}</strong> (ตรวจเมื่อ ${new Date(latest.date).toLocaleDateString('th-TH')})`;
-                } else {
-                    document.getElementById('bannerHistoryText').innerText = "ผู้ป่วยรายใหม่ (ยังไม่มีประวัติ)";
-                }
-                navigate('assess');
-            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; navigate('assess'); });
+                    document.getElementById('bannerHistoryText').innerHTML = `ประวัติล่าสุด: <strong style="color:var(--danger);">${currentHistory[0].total}</strong> คะแนน (เมื่อ ${new Date(currentHistory[0].date).toLocaleDateString('th-TH')})`;
+                } else { document.getElementById('bannerHistoryText').innerText = "ผู้ป่วยรายใหม่ (ไม่มีประวัติ)"; }
+            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; });
         }
 
-        // ระบบ 2: โหมดประเมินด่วน (ไม่ระบุตัวตน)
-        function startQuickAssess() {
-            document.getElementById('currentHn').value = ""; document.getElementById('currentName').value = "";
-            document.getElementById('finalHn').value = ""; document.getElementById('finalName').value = ""; 
-            document.getElementById('isQuickMode').value = "true";
-            
-            document.getElementById('bannerHnName').innerText = "⚡ โหมดประเมินด่วน";
-            document.getElementById('bannerHistoryText').innerText = "ไม่ได้ระบุตัวตนผู้ป่วย (สามารถระบุตอนบันทึกได้)";
-            document.getElementById('btnShowHistory').style.display = 'none'; // ซ่อนปุ่มประวัติ
-            
-            resetForm(); navigate('assess');
-        }
-
-        // --- History & Edit (เหมือนเดิม) ---
-        function showHistory() {
-            const tbody = document.getElementById('historyTbody'); tbody.innerHTML = '';
-            if(currentHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="20" style="text-align:center;">ไม่พบประวัติ</td></tr>'; } 
-            else {
-                currentHistory.forEach((r, index) => {
-                    const dStr = new Date(r.date).toLocaleDateString('th-TH') + ' ' + String(new Date(r.date).getHours()).padStart(2,'0') + ':' + String(new Date(r.date).getMinutes()).padStart(2,'0');
-                    const checked = index === 0 ? "checked" : ""; 
-                    const canEdit = r.assessor === currentUser.name;
-                    const editBtn = canEdit ? `<button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadEditData(${index})"><i class="fas fa-pen"></i> แก้ไข</button>` : '-';
-                    tbody.innerHTML += `<tr class="history-row">
-                        <td class="no-print"><input type="checkbox" class="print-checkbox" value="${index}" ${checked} style="transform: scale(1.3); cursor:pointer;"></td>
-                        <td class="col-date">${dStr}</td><td class="col-total">${r.total}</td>
-                        <td class="col-score">${r.s1a}</td><td class="col-score">${r.s1b}</td><td class="col-score">${r.s1c}</td><td class="col-score">${r.s2}</td><td class="col-score">${r.s3}</td><td class="col-score">${r.s4}</td>
-                        <td class="col-score">${r.s5r}</td><td class="col-score">${r.s5l}</td><td class="col-score">${r.s6r}</td><td class="col-score">${r.s6l}</td>
-                        <td class="col-score">${r.s7}</td><td class="col-score">${r.s8}</td><td class="col-score">${r.s9}</td><td class="col-score">${r.s10}</td><td class="col-score">${r.s11}</td>
-                        <td class="col-assessor">${r.assessor}</td><td class="no-print">${editBtn}</td>
-                    </tr>`;
-                });
-            }
-            document.getElementById('historyModal').style.display = 'flex';
-        }
-
-        function loadEditData(index) {
-            const data = currentHistory[index];
-            if(data.assessor !== currentUser.name) return alert("คุณไม่มีสิทธิ์แก้ไขรายการของผู้อื่น");
-            selectScore('1a', data.s1a); selectScore('1b', data.s1b); selectScore('1c', data.s1c);
-            selectScore('2', data.s2); selectScore('3', data.s3); selectScore('4', data.s4);
-            selectScoreDual('5R', data.s5r); selectScoreDual('5L', data.s5l);
-            selectScoreDual('6R', data.s6r); selectScoreDual('6L', data.s6l);
-            selectScore('7', data.s7); selectScore('8', data.s8); selectScore('9', data.s9); selectScore('10', data.s10); selectScore('11', data.s11);
-            document.getElementById('editTimestamp').value = data.date;
-            document.getElementById('editAlert').style.display = 'block';
-            document.getElementById('historyModal').style.display = 'none';
-            window.scrollTo(0,0);
-        }
-
-        function printSelected() {
-            const rows = document.querySelectorAll('.history-row'); const checkboxes = document.querySelectorAll('.print-checkbox');
-            let hasSelection = false;
-            checkboxes.forEach((cb, i) => { if(!cb.checked) rows[i].classList.add('no-print'); else hasSelection = true; });
-            if(!hasSelection) { rows.forEach(r => r.classList.remove('no-print')); return alert("กรุณาเลือกประวัติอย่างน้อย 1 รายการเพื่อพิมพ์"); }
-            document.getElementById('printAssessorName').innerText = currentUser.name;
-            window.print();
-            setTimeout(() => { rows.forEach(r => r.classList.remove('no-print')); }, 500);
-        }
-
-        function shareSelectedHistory() {
-            const checkboxes = document.querySelectorAll('.print-checkbox:checked');
-            if(checkboxes.length === 0) return alert("เลือกประวัติอย่างน้อย 1 รายการเพื่อแชร์");
-            let text = `รายงานประวัติ NIHSS\nผู้ป่วย: ${document.getElementById('currentName').value} (HN: ${document.getElementById('currentHn').value})\n\n`;
-            checkboxes.forEach(cb => {
-                const d = currentHistory[cb.value];
-                text += `📌 ตรวจเมื่อ: ${new Date(d.date).toLocaleString('th-TH')}\nคะแนนรวม: ${d.total} คะแนน\nประเมินโดย: ${d.assessor}\n---\n`;
-            });
-            if (navigator.share) { navigator.share({ title: 'ประวัติ NIHSS', text: text }).catch(console.error); } 
-            else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
-        }
-
-        // --- Form Functions & Auto-Scroll ---
-        function resetForm() {
+        // --- Form Interaction & Auto-Scroll ---
+        function resetForm(confirmFirst = false) {
+            if(confirmFirst && !confirm("ต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่หรือไม่?")) return;
             document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.nihss-val').forEach(i => i.value = "");
-            document.getElementById('editTimestamp').value = ""; 
-            document.getElementById('editAlert').style.display = 'none';
-            calculateTotal();
+            
+            document.getElementById('currentHn').value = ""; document.getElementById('currentName').value = "";
+            document.getElementById('bannerHnName').innerHTML = `<i class="fas fa-user-injured" style="color: var(--primary);"></i> ไม่ระบุตัวตน (ประเมินด่วน)`;
+            document.getElementById('bannerHistoryText').innerText = "ไม่ได้ดึงประวัติย้อนหลัง";
+            
+            document.getElementById('editTimestamp').value = ""; document.getElementById('editAlert').style.display = 'none';
+            calculateTotal(); window.scrollTo(0,0);
         }
 
         function selectScore(group, value, elem, nextGroupId) {
@@ -709,13 +594,11 @@
             
             if(elem) {
                 elem.classList.add('active');
-                // ระบบ Auto-Scroll (หน่วงเวลาเล็กน้อยให้เห็นปุ่มเขียว)
                 if(nextGroupId) {
                     setTimeout(() => {
                         const nextEl = document.getElementById(nextGroupId);
                         if(nextEl) {
-                            // เลื่อนจอไปที่ข้อถัดไป หักความสูงของแถบบนออก 150px
-                            const y = nextEl.getBoundingClientRect().top + window.pageYOffset - 150;
+                            const y = nextEl.getBoundingClientRect().top + window.pageYOffset - 130;
                             window.scrollTo({top: y, behavior: 'smooth'});
                         }
                     }, 350); 
@@ -735,58 +618,44 @@
 
         function calculateTotal() {
             let total = 0; 
-            document.querySelectorAll('.nihss-val').forEach(i => { 
-                if(i.value !== "" && String(i.value).toUpperCase() !== "X") { total += parseInt(i.value) || 0; }
-            });
-            document.getElementById('display-total').innerText = total; 
-            return total;
+            document.querySelectorAll('.nihss-val').forEach(i => { if(i.value !== "" && String(i.value).toUpperCase() !== "X") total += parseInt(i.value) || 0; });
+            document.getElementById('display-total').innerText = total; return total;
         }
 
-        // --- ระบบเปิดหน้าสรุปผล (ทดแทนการบันทึกทันที) ---
+        // --- Summary & Save Logic ---
         function openSummaryModal() {
             let isValid = true; document.querySelectorAll('.require-val').forEach(i => { if(i.value === "") isValid = false; });
-            if(!isValid) return alert('กรุณาประเมินให้ครบทั้ง 11 หมวดก่อนบันทึก (กล่องสีเขียวต้องขึ้นครบทุกข้อ)');
+            if(!isValid) return alert('กรุณาประเมินให้ครบทั้ง 11 หมวด (กล่องจะต้องมีสีเขียวครบทุกข้อ)');
 
-            const isQuick = document.getElementById('isQuickMode').value === "true";
-            
+            const hn = document.getElementById('currentHn').value;
+            const name = document.getElementById('currentName').value;
+            const isAnonymous = (!hn || hn === "รอระบุ" || !name);
+
             document.getElementById('summaryScoreDisplay').innerText = calculateTotal();
-            
-            // เตรียมหน้า Print ด่วน
-            document.getElementById('printSummaryPatient').innerText = isQuick ? "ไม่ระบุตัวตน (ประเมินด่วน)" : `HN: ${document.getElementById('currentHn').value} | ชื่อ: ${document.getElementById('currentName').value}`;
-            document.getElementById('printSummaryAssessor').innerText = currentUser.name;
+            document.getElementById('printSummaryPatient').innerText = isAnonymous ? "ไม่ระบุตัวตน (ประเมินด่วน)" : `HN: ${hn} | ชื่อ: ${name}`;
+            document.getElementById('printSummaryAssessor').innerText = currentUser ? currentUser.name : "ผู้ใช้งานทั่วไป (ไม่ได้เข้าสู่ระบบ)";
             document.getElementById('printSummaryTime').innerText = new Date().toLocaleString('th-TH');
             
-            // สร้างตารางรายละเอียดแบบด่วน
             let detailHtml = `<table><tr><th>1a</th><th>1b</th><th>1c</th><th>2</th><th>3</th><th>4</th><th>5R</th><th>5L</th><th>6R</th><th>6L</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr><tr>`;
             document.querySelectorAll('.nihss-val').forEach(i => { detailHtml += `<td>${i.value || '-'}</td>`; });
             detailHtml += `</tr></table>`;
             document.getElementById('printSummaryDetails').innerHTML = detailHtml;
 
+            if(currentUser) {
+                document.getElementById('dbSaveSection').style.display = 'block';
+                document.getElementById('loginPromptSection').style.display = 'none';
+                if(!isAnonymous) { document.getElementById('finalHn').value = hn; document.getElementById('finalName').value = name; }
+            } else {
+                document.getElementById('dbSaveSection').style.display = 'none';
+                document.getElementById('loginPromptSection').style.display = 'block';
+            }
+
             document.getElementById('summaryModal').style.display = 'flex';
         }
 
-        // --- พิมพ์ / แชร์ / บันทึก จากหน้า Summary ---
-        function printCurrentAssessment() {
-            window.print();
-        }
-
-        function shareCurrentScore() {
-            const score = document.getElementById('summaryScoreDisplay').innerText;
-            const isQuick = document.getElementById('isQuickMode').value === "true";
-            const patientInfo = isQuick ? "ไม่ระบุตัวตน (ประเมินด่วน)" : `${document.getElementById('finalName').value} (HN: ${document.getElementById('finalHn').value})`;
-            
-            const text = `แจ้งผลประเมิน NIHSS\nผู้ป่วย: ${patientInfo}\nคะแนนรวม: ${score} คะแนน\nผู้ประเมิน: ${currentUser.name}\nเวลา: ${new Date().toLocaleString('th-TH')}`;
-            if (navigator.share) { navigator.share({ title: 'ผลประเมิน NIHSS', text: text }).catch(console.error); } 
-            else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
-        }
-
         function saveToDatabase() {
-            const hn = document.getElementById('finalHn').value;
-            const name = document.getElementById('finalName').value;
-            
-            if(!hn || !name || hn === "ระบุภายหลัง" || name === "ระบุภายหลัง") {
-                return alert("กรุณาระบุ HN และชื่อผู้ป่วยให้ครบถ้วนก่อนกดบันทึกลงฐานข้อมูลครับ");
-            }
+            const hn = document.getElementById('finalHn').value; const name = document.getElementById('finalName').value;
+            if(!hn || !name) return alert("กรุณาระบุ HN และชื่อผู้ป่วยให้ครบถ้วนก่อนบันทึก");
 
             const data = {
                 hn: hn, patientName: name,
@@ -810,16 +679,79 @@
                 document.getElementById('loadingModal').style.display = 'none';
                 if(res.status === 'success') {
                     if(!patientDirectory.find(p => p.hn === hn)) patientDirectory.push({hn: hn, name: name});
-                    alert("บันทึกข้อมูลเข้าระบบเรียบร้อยแล้ว!");
-                    closeSuccessAndGoHome();
+                    document.getElementById('successScore').innerText = data.totalScore;
+                    document.getElementById('successModal').style.display = 'flex';
                 } else alert(res.message);
-            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("บันทึกข้อมูลล้มเหลว กรุณาลองใหม่อีกครั้ง"); });
+            }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("บันทึกล้มเหลว"); });
         }
 
-        function closeSummaryAndGoHome() {
-            document.getElementById('summaryModal').style.display = 'none';
-            document.getElementById('smartInput').value = '';
-            navigate('search');
+        // --- Sharing, History & Print ---
+        function shareCurrentAssessment() {
+            const score = document.getElementById('summaryScoreDisplay').innerText;
+            const name = document.getElementById('finalName').value || "ไม่ระบุตัวตน";
+            const text = `แจ้งผลประเมิน NIHSS\nผู้ป่วย: ${name}\nคะแนนรวม: ${score} คะแนน\nเวลา: ${new Date().toLocaleString('th-TH')}`;
+            if (navigator.share) { navigator.share({ title: 'ผลประเมิน NIHSS', text: text }).catch(e=>{}); } 
+            else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
+        }
+        function printCurrentAssessment() { window.print(); }
+        function closeSuccessAndGoHome() { document.getElementById('successModal').style.display = 'none'; resetForm(); }
+
+        function showHistory() {
+            if(!currentUser) return alert("กรุณาเข้าสู่ระบบก่อนดูประวัติ");
+            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วย (กดปุ่มแว่นขยาย) ก่อนดูแฟ้มประวัติ");
+            
+            const tbody = document.getElementById('historyTbody'); tbody.innerHTML = '';
+            if(currentHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="20">ไม่พบประวัติ</td></tr>'; } 
+            else {
+                currentHistory.forEach((r, index) => {
+                    const dStr = new Date(r.date).toLocaleDateString('th-TH') + ' ' + String(new Date(r.date).getHours()).padStart(2,'0') + ':' + String(new Date(r.date).getMinutes()).padStart(2,'0');
+                    const editBtn = (r.assessor === currentUser.name) ? `<button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadEditData(${index})"><i class="fas fa-pen"></i></button>` : '-';
+                    tbody.innerHTML += `<tr class="history-row">
+                        <td class="no-print"><input type="checkbox" class="print-checkbox" value="${index}" ${index===0?"checked":""} style="transform:scale(1.3);"></td>
+                        <td class="col-date">${dStr}</td><td class="col-total">${r.total}</td>
+                        <td>${r.s1a}</td><td>${r.s1b}</td><td>${r.s1c}</td><td>${r.s2}</td><td>${r.s3}</td><td>${r.s4}</td>
+                        <td>${r.s5r}</td><td>${r.s5l}</td><td>${r.s6r}</td><td>${r.s6l}</td>
+                        <td>${r.s7}</td><td>${r.s8}</td><td>${r.s9}</td><td>${r.s10}</td><td>${r.s11}</td>
+                        <td class="col-assessor">${r.assessor}</td><td class="no-print">${editBtn}</td>
+                    </tr>`;
+                });
+            }
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+
+        function loadEditData(index) {
+            const data = currentHistory[index];
+            selectScore('1a', data.s1a); selectScore('1b', data.s1b); selectScore('1c', data.s1c);
+            selectScore('2', data.s2); selectScore('3', data.s3); selectScore('4', data.s4);
+            selectScoreDual('5R', data.s5r); selectScoreDual('5L', data.s5l);
+            selectScoreDual('6R', data.s6r); selectScoreDual('6L', data.s6l);
+            selectScore('7', data.s7); selectScore('8', data.s8); selectScore('9', data.s9); selectScore('10', data.s10); selectScore('11', data.s11);
+            document.getElementById('editTimestamp').value = data.date;
+            document.getElementById('editAlert').style.display = 'block';
+            document.getElementById('historyModal').style.display = 'none';
+            window.scrollTo(0,0);
+        }
+
+        function printSelected() {
+            const rows = document.querySelectorAll('.history-row'); const checkboxes = document.querySelectorAll('.print-checkbox');
+            let hasSelection = false;
+            checkboxes.forEach((cb, i) => { if(!cb.checked) rows[i].classList.add('no-print'); else hasSelection = true; });
+            if(!hasSelection) { rows.forEach(r => r.classList.remove('no-print')); return alert("กรุณาเลือกประวัติอย่างน้อย 1 รายการ"); }
+            document.getElementById('printAssessorName2').innerText = currentUser.name;
+            window.print();
+            setTimeout(() => { rows.forEach(r => r.classList.remove('no-print')); }, 500);
+        }
+
+        function shareSelectedHistory() {
+            const checkboxes = document.querySelectorAll('.print-checkbox:checked');
+            if(checkboxes.length === 0) return alert("เลือกประวัติอย่างน้อย 1 รายการ");
+            let text = `รายงานประวัติ NIHSS\nผู้ป่วย: ${document.getElementById('currentName').value}\n\n`;
+            checkboxes.forEach(cb => {
+                const d = currentHistory[cb.value];
+                text += `📌 ตรวจเมื่อ: ${new Date(d.date).toLocaleString('th-TH')}\nคะแนน: ${d.total} | ประเมินโดย: ${d.assessor}\n---\n`;
+            });
+            if (navigator.share) { navigator.share({ title: 'ประวัติ NIHSS', text: text }).catch(e=>{}); } 
+            else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
         }
     </script>
 </body>
