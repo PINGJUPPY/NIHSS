@@ -1,0 +1,16 @@
+{
+  "name": "NIHSS Stroke Scale",
+  "short_name": "NIHSS App",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#0f766e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063206.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
