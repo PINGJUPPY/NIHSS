@@ -29,7 +29,7 @@
         .topbar-brand { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
         .topbar-actions { display: flex; gap: 10px; align-items: center;}
         
-        .patient-banner { background: var(--bg-surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: none; justify-content: space-between; align-items: center; }
+        .patient-banner { background: var(--bg-surface); padding: 12px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .patient-info h2 { margin: 0; color: var(--primary-dark); font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px;}
         .patient-info p { margin: 2px 0 0 0; color: var(--secondary); font-size: 13px; }
 
@@ -44,7 +44,7 @@
         .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-dark); text-align: left; }
         .form-control { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Sarabun'; font-size: 16px; box-sizing: border-box; transition: 0.2s;}
         .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1); }
-        .btn { padding: 10px 16px; border-radius: 8px; font-family: 'Sarabun'; font-size: 15px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; justify-content: center; transition: 0.2s; }
+        .btn { padding: 10px 16px; border-radius: 8px; font-family: 'Sarabun'; font-size: 14px; font-weight: 600; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; justify-content: center; transition: 0.2s; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--success); color: white; width: 100%; padding: 16px; font-size: 18px; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2); }
         .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-dark); }
@@ -82,20 +82,29 @@
         table.history-table th, table.history-table td { padding: 10px 4px; border: 1px solid var(--border); }
         table.history-table th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
 
-        /* 📄 Official Medical Print Report CSS (Native Print Engine) 📄 */
-        #officialPrintLayout { display: none; }
+        /* 📄 Official Medical Print Report CSS (แก้ปัญหาหน้าว่างแบบ 100%) 📄 */
+        #officialPrintLayout { display: none; } /* ซ่อนตอนใช้งานปกติ */
         
         @media print {
-            /* ซ่อนทุกอย่างบนหน้าจอปกติ */
-            body * { visibility: hidden; }
-            /* โชว์เฉพาะส่วนของ Layout ปริ้นท์ */
-            #officialPrintLayout, #officialPrintLayout * { visibility: visible; }
+            /* 1. รีเซ็ตความสูงและระยะขอบของหน้าเว็บทั้งหมด */
+            html, body {
+                height: auto !important;
+                min-height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+            }
+            
+            /* 2. ลบทุกอย่างออกจากสารบบหน้ากระดาษ (ลบความสูงทิ้งทั้งหมด) */
+            body > *:not(#officialPrintLayout) {
+                display: none !important;
+            }
+            
+            /* 3. แสดงเฉพาะ Layout สำหรับ Print เท่านั้น */
             #officialPrintLayout {
                 display: block !important;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
+                position: relative !important;
+                width: 100% !important;
                 font-family: 'Sarabun', sans-serif;
                 color: #000;
             }
@@ -157,11 +166,15 @@
             </div>
             
             <div style="margin-bottom: 25px;">
-                <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px;" onclick="window.print()"><i class="fas fa-file-pdf"></i> บันทึก PDF / พิมพ์ใบสรุป</button>
+                <button class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px; background:#0f766e;" onclick="window.print()">
+                    <i class="fas fa-print"></i> พิมพ์ / บันทึกเป็น PDF
+                </button>
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-outline" style="flex:1; color:#0284c7; border-color:#0284c7;" onclick="shareCurrentAssessment()"><i class="fab fa-line"></i> คัดลอกข้อความ (ส่งไลน์)</button>
+                    <button class="btn btn-outline" style="flex:1; color:#0284c7; border-color:#0284c7;" onclick="shareCurrentAssessment()"><i class="fab fa-line"></i> คัดลอกข้อความ (แชร์ไลน์)</button>
                 </div>
-                <p style="font-size: 12px; color: var(--secondary); margin-top: 10px;"><i class="fas fa-info-circle"></i> ทริค: เลือก Destination เป็น "Save as PDF" เพื่อบันทึกไฟล์ลงเครื่อง</p>
+                <p style="font-size: 12px; color: var(--secondary); margin-top: 12px;">
+                    <i class="fas fa-lightbulb" style="color: #f59e0b;"></i> ทริค: เลือก Destination เป็น <strong>"Save as PDF"</strong> ในหน้าต่าง Print เพื่อบันทึกไฟล์ลงเครื่อง (ไม่ต้องใช้อินเทอร์เน็ต)
+                </p>
             </div>
 
             <div style="border-top: 1px solid var(--border); padding-top: 20px; text-align: left;" id="dbSaveSection">
@@ -188,8 +201,8 @@
 
     <div id="officialPrintLayout">
         <div class="report-header">
-            <h1>แบบประเมินผู้ป่วยโรคหลอดเลือดสมอง (NIHSS)</h1>
-            <p id="printLayoutOrg"></p>
+            <h1 style="margin:0; font-size: 20pt;">แบบประเมินผู้ป่วยโรคหลอดเลือดสมอง (NIHSS)</h1>
+            <p id="printLayoutOrg" style="margin:5px 0 0 0;"></p>
         </div>
         <div class="report-info">
             <div>
@@ -201,7 +214,7 @@
                 <p><strong>วัน/เวลา:</strong> <span id="printLayoutTime"></span></p>
             </div>
         </div>
-        <div class="total-box">คะแนนรวม: <span id="printLayoutTotal" style="color: #dc2626 !important;">0</span> / 42</div>
+        <div class="total-box">คะแนนรวม (Total Score): <span id="printLayoutTotal" style="color: #dc2626 !important;">0</span> / 42</div>
         
         <table class="report-table">
             <thead>
@@ -240,8 +253,10 @@
                     <div style="font-size: 10px; color: var(--secondary); text-transform: uppercase;">Total</div>
                     <div id="display-total" style="font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1;">0</div>
                 </div>
-                <button class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;" onclick="openSearchModal()"><i class="fas fa-id-card" style="font-size: 16px;"></i></button>
-                <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()"><i class="fas fa-folder-open"></i></button>
+                <button class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;" onclick="openSearchModal()" title="ระบุตัวผู้ป่วย">
+                    <i class="fas fa-id-card" style="font-size: 16px;"></i><span style="margin-left: 5px; display: none; @media(min-width: 400px){display: inline;}">ระบุผู้ป่วย</span>
+                </button>
+                <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()" title="ดูแฟ้มประวัติ"><i class="fas fa-folder-open"></i></button>
             </div>
         </div>
     </div>
@@ -367,7 +382,7 @@
         let patientDirectory = [];
         let currentHistory = [];
 
-        // Dictionary สำหรับดึงข้อความไปทำ PDF หรือ Print
+        // Dictionary สำหรับดึงข้อความไปทำ Print
         const nihssDict = {
             '1a': {title:'1a. Level of Consciousness', opt:{'0':'0 - Alert','1':'1 - Drowsy','2':'2 - Stuporous','3':'3 - Coma'}},
             '1b': {title:'1b. LOC Questions', opt:{'0':'0 - Both correct','1':'1 - One correct','2':'2 - None correct'}},
@@ -577,7 +592,7 @@
 
             document.getElementById('summaryScoreDisplay').innerText = calculateTotal();
 
-            // เตรียมข้อมูลให้ Print ธรรมดา (Medical Report Format)
+            // เตรียมข้อมูลให้ Print ธรรมดา
             document.getElementById('printLayoutOrg').innerText = currentUser ? (currentUser.orgType + " " + currentUser.orgName) : "โรงพยาบาลสะเดา จ.สงขลา";
             document.getElementById('printLayoutName').innerText = isAnonymous ? "ไม่ได้ระบุในระบบ" : name;
             document.getElementById('printLayoutHn').innerText = isAnonymous ? "-" : hn;
@@ -598,7 +613,6 @@
             });
             document.getElementById('printLayoutBody').innerHTML = trs;
 
-            // ตรวจสอบล็อกอิน เพื่อแสดงฟอร์มเซฟเข้า Database
             if(currentUser || !navigator.onLine) {
                 document.getElementById('dbSaveSection').style.display = 'block';
                 document.getElementById('loginPromptSection').style.display = 'none';
@@ -684,42 +698,6 @@
             else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
         }
         function closeSuccessAndGoHome() { document.getElementById('successModal').style.display = 'none'; resetForm(); }
-
-        function showHistory() {
-            if(!currentUser) return alert("กรุณาเข้าสู่ระบบก่อนดูประวัติ");
-            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วย (กดปุ่มรูปบัตรประจำตัว) ก่อนดูแฟ้มประวัติ");
-            
-            const tbody = document.getElementById('historyTbody'); tbody.innerHTML = '';
-            if(currentHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="20">ไม่พบประวัติ</td></tr>'; } 
-            else {
-                currentHistory.forEach((r, index) => {
-                    const dStr = new Date(r.date).toLocaleDateString('th-TH') + ' ' + String(new Date(r.date).getHours()).padStart(2,'0') + ':' + String(new Date(r.date).getMinutes()).padStart(2,'0');
-                    const editBtn = (r.assessor === currentUser.name) ? `<button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadEditData(${index})"><i class="fas fa-pen"></i></button>` : '-';
-                    tbody.innerHTML += `<tr class="history-row">
-                        <td class="no-print"><input type="checkbox" class="print-checkbox" value="${index}" ${index===0?"checked":""} style="transform:scale(1.3);"></td>
-                        <td class="col-date">${dStr}</td><td class="col-total">${r.total}</td>
-                        <td>${r.s1a}</td><td>${r.s1b}</td><td>${r.s1c}</td><td>${r.s2}</td><td>${r.s3}</td><td>${r.s4}</td>
-                        <td>${r.s5r}</td><td>${r.s5l}</td><td>${r.s6r}</td><td>${r.s6l}</td>
-                        <td>${r.s7}</td><td>${r.s8}</td><td>${r.s9}</td><td>${r.s10}</td><td>${r.s11}</td>
-                        <td class="col-assessor">${r.assessor}</td><td class="no-print">${editBtn}</td>
-                    </tr>`;
-                });
-            }
-            document.getElementById('historyModal').style.display = 'flex';
-        }
-
-        function loadEditData(index) {
-            const data = currentHistory[index];
-            selectScore('1a', data.s1a); selectScore('1b', data.s1b); selectScore('1c', data.s1c);
-            selectScore('2', data.s2); selectScore('3', data.s3); selectScore('4', data.s4);
-            selectScoreDual('5R', data.s5r); selectScoreDual('5L', data.s5l);
-            selectScoreDual('6R', data.s6r); selectScoreDual('6L', data.s6l);
-            selectScore('7', data.s7); selectScore('8', data.s8); selectScore('9', data.s9); selectScore('10', data.s10); selectScore('11', data.s11);
-            document.getElementById('editTimestamp').value = data.date;
-            document.getElementById('editAlert').style.display = 'block';
-            document.getElementById('historyModal').style.display = 'none';
-            window.scrollTo(0,0);
-        }
     </script>
 </body>
 </html>
