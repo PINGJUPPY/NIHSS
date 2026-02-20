@@ -199,14 +199,12 @@
             </div>
         </div>
         <div class="total-box">คะแนนรวม: <span id="printLayoutTotal" style="color: #dc2626;">0</span> / 42</div>
-        
         <table class="report-table">
-            <thead><tr><th style="width:45%;">หมวดการประเมิน (Category)</th><th>ผลการประเมิน (Result)</th></tr></thead>
+            <thead><tr><th style="width:40%;">หมวดการประเมิน (Category)</th><th>ผลการประเมิน (Result)</th></tr></thead>
             <tbody id="printLayoutBody"></tbody>
         </table>
-        
         <div class="signature-box">
-            <div class="signature-line">
+            <div style="text-align: center; width: 250px;">
                 <p>ลงชื่อ.......................................................ผู้รายงาน</p>
                 <p>( <span id="printLayoutSign">...................................</span> )</p>
             </div>
@@ -380,7 +378,7 @@
             '11': {title:'11. Extinction/Inattention', opt:{'0':'0 - No abnormality','1':'1 - Visual/tactile inattention','2':'2 - Profound inattention'}}
         };
 
-        // --- PWA & Offline Setup ---
+        // --- PWA Setup ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => { navigator.serviceWorker.register('service-worker.js').catch(e=>{}); });
         }
@@ -563,7 +561,7 @@
             document.getElementById('display-total').innerText = total; return total;
         }
 
-        // --- Summary, Save & Native Print ---
+        // --- Summary & Print ---
         function openSummaryModal() {
             let isValid = true; document.querySelectorAll('.require-val').forEach(i => { if(i.value === "") isValid = false; });
             if(!isValid) return alert('กรุณาประเมินให้ครบทั้ง 11 หมวด (ปุ่มต้องเปลี่ยนสีครบทุกข้อ)');
@@ -573,7 +571,7 @@
 
             document.getElementById('summaryScoreDisplay').innerText = calculateTotal();
 
-            // เตรียมข้อมูลให้ PDF วาดตารางซ่อนไว้ (สำหรับกรณีสั่งพิมพ์ผ่าน Browser)
+            // เตรียมข้อมูลให้ Print ธรรมดา
             document.getElementById('printLayoutOrg').innerText = currentUser ? (currentUser.orgType + " " + currentUser.orgName) : "โรงพยาบาลสะเดา จ.สงขลา";
             document.getElementById('printLayoutName').innerText = isAnonymous ? "ไม่ได้ระบุในระบบ" : name;
             document.getElementById('printLayoutHn').innerText = isAnonymous ? "-" : hn;
@@ -594,7 +592,6 @@
             });
             document.getElementById('printLayoutBody').innerHTML = trs;
 
-            // Database Section Check
             if(currentUser || !navigator.onLine) {
                 document.getElementById('dbSaveSection').style.display = 'block';
                 document.getElementById('loginPromptSection').style.display = 'none';
@@ -606,21 +603,26 @@
             document.getElementById('summaryModal').style.display = 'flex';
         }
 
-        // 🌟 ฟังก์ชันสร้างไฟล์ PDF มาตรฐาน (Native Vector + AutoTable) 🌟
+        // 🌟 แก้ไข: ฟังก์ชันสร้างไฟล์ Vector PDF 🌟
         async function generateVectorPDF() {
             document.getElementById('summaryModal').style.display = 'none';
-            document.getElementById('loadingText').innerText = "กำลังสร้างไฟล์ PDF มาตรฐาน...";
+            document.getElementById('loadingText').innerText = "กำลังดึงฟอนต์และสร้าง PDF...";
             document.getElementById('loadingModal').style.display = 'flex';
 
             try {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
 
-                // ดึง Font ภาษาไทย Sarabun 
-                const fontUrl = 'https://fonts.gstatic.com/s/sarabun/v14/DtVjJx26TKEr37c9aAFJn2QN.ttf';
+                // เปลี่ยนมาใช้ JSDelivr เพื่อเลี่ยงการโดนบล็อก CORS จากเบราว์เซอร์
+                const fontUrl = 'https://cdn.jsdelivr.net/gh/googlefonts/sarabun@master/fonts/ttf/Sarabun-Regular.ttf';
                 const response = await fetch(fontUrl);
+                
+                if (!response.ok) throw new Error("CORS Block หรือเน็ตมีปัญหา");
+                
                 const buffer = await response.arrayBuffer();
-                let binary = ''; const bytes = new Uint8Array(buffer); const len = bytes.byteLength;
+                let binary = ''; 
+                const bytes = new Uint8Array(buffer); 
+                const len = bytes.byteLength;
                 for (let i = 0; i < len; i++) { binary += String.fromCharCode(bytes[i]); }
                 const fontBase64 = window.btoa(binary);
 
@@ -695,7 +697,7 @@
             } catch (error) {
                 console.error(error);
                 document.getElementById('loadingModal').style.display = 'none';
-                alert("เกิดข้อผิดพลาดในการโหลด Font หรือสร้าง PDF กรุณาลองใหม่เมื่อมีอินเทอร์เน็ตแรงขึ้นครับ");
+                alert("เกิดข้อผิดพลาดในการโหลด Font ภาษาไทย (CORS Block)\nกรุณาใช้ปุ่ม 'พิมพ์ใบสรุป' สีขาวแทนชั่วคราวครับ");
             }
         }
 
@@ -773,6 +775,42 @@
             else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
         }
         function closeSuccessAndGoHome() { document.getElementById('successModal').style.display = 'none'; resetForm(); }
+
+        function showHistory() {
+            if(!currentUser) return alert("กรุณาเข้าสู่ระบบก่อนดูประวัติ");
+            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วยก่อนดูแฟ้มประวัติ");
+            
+            const tbody = document.getElementById('historyTbody'); tbody.innerHTML = '';
+            if(currentHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="20">ไม่พบประวัติ</td></tr>'; } 
+            else {
+                currentHistory.forEach((r, index) => {
+                    const dStr = new Date(r.date).toLocaleDateString('th-TH') + ' ' + String(new Date(r.date).getHours()).padStart(2,'0') + ':' + String(new Date(r.date).getMinutes()).padStart(2,'0');
+                    const editBtn = (r.assessor === currentUser.name) ? `<button class="btn btn-outline" style="padding:4px 8px; font-size:11px;" onclick="loadEditData(${index})"><i class="fas fa-pen"></i></button>` : '-';
+                    tbody.innerHTML += `<tr class="history-row">
+                        <td class="no-print"><input type="checkbox" class="print-checkbox" value="${index}" ${index===0?"checked":""} style="transform:scale(1.3);"></td>
+                        <td class="col-date">${dStr}</td><td class="col-total">${r.total}</td>
+                        <td>${r.s1a}</td><td>${r.s1b}</td><td>${r.s1c}</td><td>${r.s2}</td><td>${r.s3}</td><td>${r.s4}</td>
+                        <td>${r.s5r}</td><td>${r.s5l}</td><td>${r.s6r}</td><td>${r.s6l}</td>
+                        <td>${r.s7}</td><td>${r.s8}</td><td>${r.s9}</td><td>${r.s10}</td><td>${r.s11}</td>
+                        <td class="col-assessor">${r.assessor}</td><td class="no-print">${editBtn}</td>
+                    </tr>`;
+                });
+            }
+            document.getElementById('historyModal').style.display = 'flex';
+        }
+
+        function loadEditData(index) {
+            const data = currentHistory[index];
+            selectScore('1a', data.s1a); selectScore('1b', data.s1b); selectScore('1c', data.s1c);
+            selectScore('2', data.s2); selectScore('3', data.s3); selectScore('4', data.s4);
+            selectScoreDual('5R', data.s5r); selectScoreDual('5L', data.s5l);
+            selectScoreDual('6R', data.s6r); selectScoreDual('6L', data.s6l);
+            selectScore('7', data.s7); selectScore('8', data.s8); selectScore('9', data.s9); selectScore('10', data.s10); selectScore('11', data.s11);
+            document.getElementById('editTimestamp').value = data.date;
+            document.getElementById('editAlert').style.display = 'block';
+            document.getElementById('historyModal').style.display = 'none';
+            window.scrollTo(0,0);
+        }
     </script>
 </body>
 </html>
