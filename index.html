@@ -84,7 +84,7 @@
         th, td { padding: 10px 4px; border: 1px solid var(--border); }
         th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
 
-        /* 📄 CSS สำหรับปริ้นท์ (บีบอัดให้ลง A4 1 หน้าเป๊ะๆ) */
+        /* 📄 CSS สำหรับปริ้นท์ (จัด A4 1 หน้าเป๊ะๆ) */
         #officialPrintLayout { display: none; }
         @media print {
             body { background: white; margin: 0; padding: 0; }
@@ -97,29 +97,23 @@
                 color: #000;
             }
             
-            /* ลดระยะห่างด้านบนและหัวข้อ */
             .report-header { text-align: center; margin-bottom: 10px; border-bottom: 2px solid #000; padding-bottom: 5px; }
             .report-header h1 { margin: 0; font-size: 20px; }
             .report-header p { margin: 2px 0 0 0; font-size: 13px; }
             
-            /* จัดข้อมูลคนไข้ให้กระชับ */
             .report-info { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
             .report-info p { margin: 2px 0; }
             
-            /* กล่องคะแนนรวมเล็กลงนิดหน่อย */
             .total-box { border: 2px solid #000; padding: 5px; text-align: center; font-size: 16px; font-weight: bold; width: 180px; margin: 0 auto 10px auto; }
             
-            /* ตารางบีบ padding ให้แคบลง เพื่อไม่ให้กินพื้นที่แนวตั้ง */
             .report-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
             .report-table th, .report-table td { border: 1px solid #000; padding: 4px 8px; text-align: left; font-size: 12px; }
             .report-table th { background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-weight: bold;}
             
-            /* ลายเซ็นต์จัดชิดขวา ดึงขึ้นมาให้ติดตาราง */
             .signature-box { display: flex; justify-content: flex-end; margin-top: 20px; page-break-inside: avoid; }
             .signature-line { text-align: center; width: 220px; font-size: 13px; }
             .signature-line p { margin: 5px 0; }
             
-            /* เน้นสีแดงสำหรับข้อที่ผิดปกติ */
             .val-abnormal { color: #dc2626 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             
             @page { margin: 10mm; size: A4 portrait; }
@@ -185,8 +179,8 @@
 
     <div id="officialPrintLayout">
         <div class="report-header">
-            <h1 style="margin:0; font-size: 20px;">แบบประเมินผู้ป่วยโรคหลอดเลือดสมอง (NIHSS)</h1>
-            <p id="printLayoutOrg" style="margin:2px 0 0 0;"></p>
+            <h1 style="margin:0; font-size: 24px;">แบบประเมินผู้ป่วยโรคหลอดเลือดสมอง (NIHSS)</h1>
+            <p id="printLayoutOrg" style="margin:5px 0 0 0;"></p>
         </div>
         <div class="report-info">
             <div>
@@ -416,10 +410,15 @@
 
         // --- Navigation ---
         function navigate(page) {
+            // เช็คว่ากดไปที่อื่นให้เอา class active ออกให้หมดก่อน
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('screen-' + page).classList.add('active');
+            
+            const targetScreen = document.getElementById('screen-' + page);
+            if(targetScreen) targetScreen.classList.add('active'); // เพิ่มความปลอดภัย กัน Error classList
+            
             if(page === 'login') document.getElementById('app-header').style.display = 'none';
             else document.getElementById('app-header').style.display = 'block';
+            
             window.scrollTo(0,0);
         }
 
@@ -603,27 +602,26 @@
             document.getElementById('summaryModal').style.display = 'flex';
         }
 
-        // 🌟 แก้ไข: ฟังก์ชันสร้างไฟล์ Vector PDF 🌟
+        // 🌟 ฟังก์ชันสร้างไฟล์ Vector PDF (แก้ไขลิงก์ฟอนต์ ป้องกัน CORS 100%) 🌟
         async function generateVectorPDF() {
             document.getElementById('summaryModal').style.display = 'none';
-            document.getElementById('loadingText').innerText = "กำลังดึงฟอนต์และสร้าง PDF...";
+            document.getElementById('loadingText').innerText = "กำลังสร้างไฟล์ PDF...";
             document.getElementById('loadingModal').style.display = 'flex';
 
             try {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
 
-                // เปลี่ยนมาใช้ JSDelivr เพื่อเลี่ยงการโดนบล็อก CORS จากเบราว์เซอร์
-                const fontUrl = 'https://cdn.jsdelivr.net/gh/googlefonts/sarabun@master/fonts/ttf/Sarabun-Regular.ttf';
+                // ใช้ URL ดึงตรงจาก Google Fonts Gstatic (ปลอดภัยจากการบล็อก 100%)
+                const fontUrl = 'https://fonts.gstatic.com/s/sarabun/v14/DtVjJx26TKEr37c9aAFJn2QN.ttf';
                 const response = await fetch(fontUrl);
                 
-                if (!response.ok) throw new Error("CORS Block หรือเน็ตมีปัญหา");
+                if (!response.ok) throw new Error("ดึงไฟล์ฟอนต์ไม่สำเร็จ");
                 
                 const buffer = await response.arrayBuffer();
                 let binary = ''; 
                 const bytes = new Uint8Array(buffer); 
-                const len = bytes.byteLength;
-                for (let i = 0; i < len; i++) { binary += String.fromCharCode(bytes[i]); }
+                for (let i = 0; i < bytes.byteLength; i++) { binary += String.fromCharCode(bytes[i]); }
                 const fontBase64 = window.btoa(binary);
 
                 doc.addFileToVFS('Sarabun.ttf', fontBase64);
@@ -697,7 +695,7 @@
             } catch (error) {
                 console.error(error);
                 document.getElementById('loadingModal').style.display = 'none';
-                alert("เกิดข้อผิดพลาดในการโหลด Font ภาษาไทย (CORS Block)\nกรุณาใช้ปุ่ม 'พิมพ์ใบสรุป' สีขาวแทนชั่วคราวครับ");
+                alert("อินเทอร์เน็ตไม่เสถียร ทำให้โหลดฟอนต์ทำ PDF ไม่สำเร็จ\n\n💡 คำแนะนำ: กรุณาใช้ปุ่ม 'พิมพ์ใบสรุป' (สีขาว) หรือกด Ctrl+P เพื่อบันทึกเป็น PDF แทนชั่วคราวครับ");
             }
         }
 
@@ -778,7 +776,7 @@
 
         function showHistory() {
             if(!currentUser) return alert("กรุณาเข้าสู่ระบบก่อนดูประวัติ");
-            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วยก่อนดูแฟ้มประวัติ");
+            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วย (กดปุ่มรูปบัตรประจำตัว) ก่อนดูแฟ้มประวัติ");
             
             const tbody = document.getElementById('historyTbody'); tbody.innerHTML = '';
             if(currentHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="20">ไม่พบประวัติ</td></tr>'; } 
