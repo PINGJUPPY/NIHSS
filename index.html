@@ -12,7 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
     <style>
         :root { --primary: #0f766e; --primary-dark: #115e59; --secondary: #64748b; --success: #10b981; --danger: #ef4444; --bg-body: #f1f5f9; --bg-surface: #ffffff; --text-dark: #1e293b; --border: #e2e8f0; }
@@ -72,6 +73,9 @@
         .score-options.vertical { grid-template-columns: 1fr; } 
         .score-options.vertical .score-btn { flex-direction: row; padding: 10px 15px; text-align: left; }
         .score-options.vertical .score-num { width: 30px; height: 30px; font-size: 15px; margin-bottom: 0; margin-right: 12px; }
+        .section-divider { display: flex; align-items: center; margin: 40px 0 20px 0; }
+        .section-divider::before, .section-divider::after { content: ""; flex: 1; height: 2px; background: var(--border); }
+        .section-divider span { padding: 0 15px; color: var(--primary); font-weight: 700; font-size: 16px; background: var(--bg-body); }
 
         /* Modals */
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.7); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -80,48 +84,19 @@
         th, td { padding: 10px 4px; border: 1px solid var(--border); }
         th { background: #f8fafc; font-weight: 600; color: var(--secondary); }
 
-        /* 📄 Official Medical Print Report CSS (แก้ปัญหาหน้าว่าง) */
-        #officialPrintLayout {
-            /* สำคัญ: ซ่อนอยู่นอกจอแทนการใช้ display:none เพื่อให้ html2canvas จับภาพได้เสมอ */
-            position: absolute;
-            top: -9999px;
-            left: -9999px;
-            width: 800px; /* บังคับกว้างเท่า A4 เสมอ แม้เปิดในมือถือ */
-            background: #ffffff;
-            padding: 40px;
-            font-family: 'Sarabun', sans-serif;
-            color: #000000;
-            z-index: -1;
-            box-sizing: border-box;
-        }
-
-        .report-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
-        .report-header h1 { margin: 0; font-size: 24px; color: #000; }
-        .report-header p { margin: 5px 0 0 0; font-size: 16px; color: #333; }
-        .report-info { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 20px; font-size: 15px; }
-        .report-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .report-table th, .report-table td { border: 1px solid #64748b; padding: 10px 12px; text-align: left; font-size: 15px; color: #000; }
-        .report-table th { background: #f1f5f9; width: 45%; font-weight: 700; }
-        
-        /* สไตล์สำหรับเน้นข้อที่ผิดปกติ (คะแนน > 0) */
-        .val-abnormal { color: #dc2626; font-weight: bold; background: #fef2f2; padding: 2px 8px; border-radius: 4px; border: 1px solid #fecaca; }
-        .val-normal { color: #0f766e; }
-        
-        .total-box { border: 3px solid #000; border-radius: 8px; padding: 10px; text-align: center; font-size: 20px; font-weight: bold; width: 220px; margin: 0 auto 30px auto; background: #f8fafc; }
-        .signature-box { display: flex; justify-content: flex-end; margin-top: 40px; }
-        .signature-line { text-align: center; width: 280px; }
-
         /* CSS สำหรับตอนสั่ง Print ธรรมดา (ไม่ใช่ PDF) */
+        #officialPrintLayout { display: none; }
         @media print {
             body { background: white; margin: 0; }
             body > *:not(#officialPrintLayout) { display: none !important; }
-            #officialPrintLayout { 
-                position: static !important; 
-                top: 0 !important; left: 0 !important; 
-                width: 100% !important; 
-                display: block !important; 
-                padding: 0 !important;
-            }
+            #officialPrintLayout { display: block !important; padding: 20px; font-family: 'Sarabun'; }
+            .report-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            .report-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; }
+            .report-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            .report-table th, .report-table td { border: 1px solid #000; padding: 8px 12px; text-align: left; font-size: 14px; }
+            .total-box { border: 2px solid #000; padding: 10px; text-align: center; font-size: 20px; font-weight: bold; width: 200px; margin: 0 auto 30px auto; }
+            .signature-box { display: flex; justify-content: flex-end; margin-top: 40px; }
+            .val-abnormal { color: #dc2626; font-weight: bold; }
             @page { margin: 15mm; size: A4 portrait; }
         }
         @media (max-width: 768px) { .dual-container { grid-template-columns: 1fr; } }
@@ -157,8 +132,8 @@
             </div>
             
             <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                <button class="btn btn-outline" style="flex:1; color:#0284c7; border-color:#0284c7;" onclick="shareCurrentAssessment()"><i class="fab fa-line"></i> แชร์ไลน์</button>
-                <button class="btn btn-primary" style="flex:1.5; background:#0f766e;" onclick="generatePDFReport()"><i class="fas fa-file-pdf"></i> สร้าง PDF รีพอร์ต</button>
+                <button class="btn btn-primary" style="flex:1.5; background:#0f766e;" onclick="generateVectorPDF()"><i class="fas fa-file-pdf"></i> ดาวน์โหลด PDF</button>
+                <button class="btn btn-outline" style="flex:1;" onclick="window.print()"><i class="fas fa-print"></i> พิมพ์ใบสรุป</button>
             </div>
 
             <div style="border-top: 1px solid var(--border); padding-top: 20px; text-align: left;" id="dbSaveSection">
@@ -185,32 +160,28 @@
 
     <div id="officialPrintLayout">
         <div class="report-header">
-            <h1>แบบประเมินผู้ป่วยโรคหลอดเลือดสมอง (NIHSS)</h1>
-            <p id="pdfOrgName">โรงพยาบาลสะเดา จ.สงขลา</p>
+            <h1 style="margin:0; font-size: 24px;">แบบประเมินผู้ป่วยโรคหลอดเลือดสมอง (NIHSS)</h1>
+            <p id="printLayoutOrg" style="margin:5px 0 0 0;"></p>
         </div>
         <div class="report-info">
             <div>
-                <p><strong>ชื่อ-สกุล:</strong> <span id="pdfPatientName">ไม่ระบุ</span></p>
-                <p><strong>HN:</strong> <span id="pdfHN">ไม่ระบุ</span></p>
+                <p><strong>ผู้ป่วย:</strong> <span id="printLayoutName"></span></p>
+                <p><strong>HN:</strong> <span id="printLayoutHn"></span></p>
             </div>
             <div style="text-align: right;">
-                <p><strong>วันที่/เวลาประเมิน:</strong> <span id="pdfTime"></span></p>
-                <p><strong>ผู้ประเมิน:</strong> <span id="pdfAssessor"></span></p>
+                <p><strong>ผู้ประเมิน:</strong> <span id="printLayoutAssessor"></span></p>
+                <p><strong>วัน/เวลา:</strong> <span id="printLayoutTime"></span></p>
             </div>
         </div>
-
-        <div class="total-box">คะแนนรวม: <span id="pdfTotalScore" style="font-size: 28px; color: #dc2626;">0</span> / 42</div>
-
+        <div class="total-box">คะแนนรวม: <span id="printLayoutTotal" style="color: #dc2626;">0</span> / 42</div>
         <table class="report-table">
-            <thead><tr><th>หัวข้อการประเมิน (Category)</th><th>ผลการประเมิน (Score Result)</th></tr></thead>
-            <tbody id="pdfTableBody">
-                </tbody>
+            <thead><tr><th style="width:40%;">หมวดการประเมิน (Category)</th><th>ผลการประเมิน (Result)</th></tr></thead>
+            <tbody id="printLayoutBody"></tbody>
         </table>
-
         <div class="signature-box">
-            <div class="signature-line">
+            <div style="text-align: center; width: 250px;">
                 <p>ลงชื่อ.......................................................ผู้รายงาน</p>
-                <p style="margin-top: 10px;">( <span id="pdfAssessorSign">................................</span> )</p>
+                <p>( <span id="printLayoutSign">...................................</span> )</p>
             </div>
         </div>
     </div>
@@ -224,7 +195,6 @@
                 <button class="btn btn-danger" onclick="logout()" id="btnLogout" style="display:none; height: 32px; padding: 0 12px;"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
-        
         <div id="patientBanner" class="patient-banner" style="display: flex;">
             <div>
                 <h2 id="bannerHnName"><i class="fas fa-user-injured" style="color: var(--primary);"></i> ประเมินด่วน (ไม่ระบุตัวตน)</h2>
@@ -232,26 +202,19 @@
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="text-align: right;">
-                    <div style="font-size: 10px; color: var(--secondary); text-transform: uppercase;">Total Score</div>
+                    <div style="font-size: 10px; color: var(--secondary); text-transform: uppercase;">Total</div>
                     <div id="display-total" style="font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1;">0</div>
                 </div>
-                <button class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;" onclick="openSearchModal()" title="ระบุตัวผู้ป่วย">
-                    <i class="fas fa-id-card" style="font-size: 16px;"></i><span style="margin-left: 5px; display: none; @media(min-width: 400px){display: inline;}">ระบุผู้ป่วย</span>
-                </button>
-                <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()" title="ดูแฟ้มประวัติ"><i class="fas fa-folder-open"></i></button>
+                <button class="btn btn-primary" style="padding: 8px 12px; font-size: 13px;" onclick="openSearchModal()"><i class="fas fa-id-card" style="font-size: 16px;"></i></button>
+                <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;" onclick="showHistory()"><i class="fas fa-folder-open"></i></button>
             </div>
         </div>
     </div>
 
     <div id="screen-assess" class="screen active">
         <div class="container">
-            <input type="hidden" id="currentHn" value="">
-            <input type="hidden" id="currentName" value="">
-            <input type="hidden" id="editTimestamp" value="">
-            
-            <div id="editAlert" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 14px; font-weight: 600;">
-                <i class="fas fa-pen"></i> โหมดแก้ไขข้อมูลประวัติย้อนหลัง
-            </div>
+            <input type="hidden" id="currentHn" value=""><input type="hidden" id="currentName" value=""><input type="hidden" id="editTimestamp" value="">
+            <div id="editAlert" style="display: none; background: #fffbeb; border: 1px solid #f59e0b; color: #b45309; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 14px; font-weight: 600;">โหมดแก้ไขข้อมูลประวัติย้อนหลัง</div>
 
             <div class="section-divider" style="margin-top: 10px;"><span>1. LOC & Visual</span></div>
 
@@ -314,7 +277,6 @@
                     <button class="btn btn-primary" style="width: 100%; padding: 14px;" onclick="register()">บันทึกลงทะเบียน</button>
                     <button class="btn btn-outline" style="width: 100%; margin-top: 10px; padding: 14px;" onclick="toggleAuth('login')">ยกเลิก</button>
                 </div>
-
                 <button class="btn" style="width: 100%; margin-top: 20px; background: transparent; border: 1px solid var(--border); color: var(--text-dark);" onclick="navigate('assess')">กลับไปหน้าประเมิน</button>
             </div>
         </div>
@@ -345,13 +307,12 @@
         </div>
     </div>
 
-    <div id="historyModal" class="modal print-container">
+    <div id="historyModal" class="modal">
         <div class="modal-content" style="max-width: 950px; text-align: left;">
             <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h3 style="margin:0; color: var(--primary-dark);"><i class="fas fa-folder-open"></i> แฟ้มประวัติผู้ป่วย</h3>
                 <button class="btn btn-outline" style="padding: 5px 12px; border:none;" onclick="document.getElementById('historyModal').style.display='none'"><i class="fas fa-times" style="font-size: 20px;"></i></button>
             </div>
-            
             <div class="table-responsive">
                 <table id="historyTable">
                     <thead>
@@ -364,10 +325,6 @@
                     <tbody id="historyTbody"></tbody>
                 </table>
             </div>
-
-            <div class="no-print" style="display: flex; gap: 10px; margin-top: 25px; justify-content: flex-end;">
-                <button class="btn btn-outline" style="color: #0284c7; border-color: #0284c7;" onclick="shareSelectedHistory()"><i class="fab fa-line"></i> แชร์ข้อมูล</button>
-            </div>
         </div>
     </div>
 
@@ -377,7 +334,7 @@
         let patientDirectory = [];
         let currentHistory = [];
 
-        // Dictionary สำหรับแปลงเลขคะแนนเป็นข้อความในเอกสาร PDF
+        // Dictionary สำหรับดึงข้อความไปทำ Vector PDF
         const nihssDict = {
             '1a': {title:'1a. Level of Consciousness', opt:{'0':'0 - Alert','1':'1 - Drowsy','2':'2 - Stuporous','3':'3 - Coma'}},
             '1b': {title:'1b. LOC Questions', opt:{'0':'0 - Both correct','1':'1 - One correct','2':'2 - None correct'}},
@@ -396,21 +353,13 @@
             '11': {title:'11. Extinction/Inattention', opt:{'0':'0 - No abnormality','1':'1 - Visual/tactile inattention','2':'2 - Profound inattention'}}
         };
 
-        // --- PWA & Offline Worker Registration ---
+        // --- PWA & Offline Setup ---
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW Registration failed', err));
-            });
+            window.addEventListener('load', () => { navigator.serviceWorker.register('service-worker.js').catch(e=>{}); });
         }
-
-        // เช็คเน็ต
         window.addEventListener('offline', () => { document.getElementById('offlineBanner').style.display = 'block'; });
-        window.addEventListener('online', () => { 
-            document.getElementById('offlineBanner').style.display = 'none'; 
-            syncOfflineData(); 
-        });
+        window.addEventListener('online', () => { document.getElementById('offlineBanner').style.display = 'none'; syncOfflineData(); });
 
-        // 🌟 Auto-Login Background Process (Frictionless) 🌟
         window.onload = function() {
             if(!navigator.onLine) document.getElementById('offlineBanner').style.display = 'block';
             
@@ -425,7 +374,6 @@
             }
 
             if(savedPhone && savedPin && navigator.onLine) {
-                // เรียก API ดึงข้อมูลหลังบ้านเงียบๆ (Silent Fetch)
                 fetch(API_URL, { method: 'POST', body: JSON.stringify({action: "login", phone: savedPhone, pin: savedPin}) })
                 .then(r => r.json()).then(res => {
                     if(res.status === 'success') {
@@ -434,9 +382,8 @@
                         document.getElementById('topUsername').style.display = 'inline-block';
                         document.getElementById('btnGoLogin').style.display = 'none';
                         document.getElementById('btnLogout').style.display = 'inline-flex';
-                        document.getElementById('pdfOrgName').innerText = res.orgType + " " + res.orgName;
                         patientDirectory = res.patients || [];
-                        syncOfflineData(); // ล็อกอินเสร็จ ตรวจสอบคิวที่ค้างไว้
+                        syncOfflineData();
                     } else { localStorage.removeItem('nihss_pin'); } 
                 }).catch(e => console.log('Offline/Error Silent Login'));
             }
@@ -446,11 +393,8 @@
         function navigate(page) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen-' + page).classList.add('active');
-            if(page === 'login') {
-                document.getElementById('app-header').style.display = 'none';
-            } else {
-                document.getElementById('app-header').style.display = 'block';
-            }
+            if(page === 'login') document.getElementById('app-header').style.display = 'none';
+            else document.getElementById('app-header').style.display = 'block';
             window.scrollTo(0,0);
         }
 
@@ -469,7 +413,7 @@
         function login() {
             const phone = document.getElementById('logPhone').value; const pin = document.getElementById('logPin').value;
             if(!phone || !pin) return alert("กรุณากรอกข้อมูล");
-            if(!navigator.onLine) return alert("การเข้าสู่ระบบครั้งแรก ต้องใช้สัญญาณอินเทอร์เน็ตครับ");
+            if(!navigator.onLine) return alert("การเข้าสู่ระบบครั้งแรก ต้องใช้อินเทอร์เน็ต");
 
             document.getElementById('loadingText').innerText = "กำลังเข้าสู่ระบบ...";
             document.getElementById('loadingModal').style.display = 'flex';
@@ -478,25 +422,19 @@
                 document.getElementById('loadingModal').style.display = 'none';
                 if(res.status === 'success') {
                     currentUser = res;
-                    localStorage.setItem('nihss_phone', phone); 
-                    localStorage.setItem('nihss_pin', pin);
-                    localStorage.setItem('nihss_name', res.name);
+                    localStorage.setItem('nihss_phone', phone); localStorage.setItem('nihss_pin', pin); localStorage.setItem('nihss_name', res.name);
                     
                     document.getElementById('topUsername').innerText = res.name;
                     document.getElementById('topUsername').style.display = 'inline-block';
                     document.getElementById('btnGoLogin').style.display = 'none';
                     document.getElementById('btnLogout').style.display = 'inline-flex';
-                    document.getElementById('pdfOrgName').innerText = res.orgType + " " + res.orgName;
                     patientDirectory = res.patients || [];
                     navigate('assess');
                 } else alert(res.message);
             }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; alert("เชื่อมต่อล้มเหลว"); });
         }
 
-        function logout() { 
-            currentUser = null; localStorage.clear(); location.reload(); 
-        }
-
+        function logout() { currentUser = null; localStorage.clear(); location.reload(); }
         function register() {
             const phone = document.getElementById('regPhone').value; const pin = document.getElementById('regPin').value;
             if(!phone || pin.length !== 6) return alert('กรอกเบอร์โทร และ รหัส PIN 6 หลัก');
@@ -506,7 +444,7 @@
             .then(r => r.json()).then(res => { document.getElementById('loadingModal').style.display = 'none'; if(res.status === 'success') { alert('สำเร็จ'); toggleAuth('login'); } else alert(res.message); });
         }
 
-        // --- Search Patient (2 ช่อง) ---
+        // --- Search Patient ---
         function openSearchModal() {
             if(!currentUser && navigator.onLine) {
                 if(confirm("แนะนำให้เข้าสู่ระบบก่อน เพื่อผูกประวัติคนไข้เข้าฐานข้อมูล รพ.\nต้องการล็อกอินตอนนี้เลยหรือไม่?")) { navigate('login'); return; }
@@ -522,69 +460,47 @@
             const dropdown = document.getElementById(type === 'hn' ? 'dropdownHn' : 'dropdownName');
             dropdown.innerHTML = '';
             if(!val || !patientDirectory) { dropdown.style.display = 'none'; return; }
-
             const matches = patientDirectory.filter(p => (type === 'hn' ? p.hn.toUpperCase().includes(val) : p.name.toUpperCase().includes(val))).slice(0, 5);
             if(matches.length === 0) { dropdown.style.display = 'none'; return; }
-
             matches.forEach(p => {
-                const div = document.createElement('div');
-                div.className = 'autocomplete-item';
+                const div = document.createElement('div'); div.className = 'autocomplete-item';
                 div.innerHTML = `<strong>${p.hn}</strong> - ${p.name}`;
-                div.onclick = () => {
-                    document.getElementById('searchHn').value = p.hn;
-                    document.getElementById('searchName').value = p.name;
-                    closeAllDropdowns();
-                };
+                div.onclick = () => { document.getElementById('searchHn').value = p.hn; document.getElementById('searchName').value = p.name; closeAllDropdowns(); };
                 dropdown.appendChild(div);
             });
             dropdown.style.display = 'block';
         }
-
         function closeAllDropdowns() { document.getElementById('dropdownHn').style.display = 'none'; document.getElementById('dropdownName').style.display = 'none'; }
         document.addEventListener('click', function (e) { if (!e.target.matches('.form-control')) closeAllDropdowns(); });
 
         function manualProceed() {
-            const hn = document.getElementById('searchHn').value.trim();
-            const name = document.getElementById('searchName').value.trim();
+            const hn = document.getElementById('searchHn').value.trim(); const name = document.getElementById('searchName').value.trim();
             if(!hn || !name) return alert("กรุณาระบุ HN และชื่อ-สกุลให้ครบถ้วน");
-            attachPatient(hn, name);
-        }
-
-        function attachPatient(hn, name) {
             document.getElementById('searchModal').style.display = 'none';
-            document.getElementById('currentHn').value = hn; 
-            document.getElementById('currentName').value = name;
-            document.getElementById('finalHn').value = hn; 
-            document.getElementById('finalName').value = name;
-            
+            document.getElementById('currentHn').value = hn; document.getElementById('currentName').value = name;
+            document.getElementById('finalHn').value = hn; document.getElementById('finalName').value = name;
             document.getElementById('bannerHnName').innerHTML = `<i class="fas fa-user-check" style="color:var(--primary);"></i> HN: ${hn} | ${name}`;
             
-            if(!navigator.onLine) {
-                document.getElementById('bannerHistoryText').innerText = "ออฟไลน์: ไม่สามารถดึงประวัติเก่าได้";
-                return;
-            }
+            if(!navigator.onLine) { document.getElementById('bannerHistoryText').innerText = "ออฟไลน์: ไม่สามารถดึงประวัติเก่าได้"; return; }
 
             document.getElementById('loadingText').innerText = "กำลังดึงแฟ้มประวัติ...";
             document.getElementById('loadingModal').style.display = 'flex';
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "getHistory", hn: hn }) }).then(r => r.json()).then(res => {
                 document.getElementById('loadingModal').style.display = 'none';
                 currentHistory = res.history || [];
-                if(currentHistory.length > 0) {
-                    document.getElementById('bannerHistoryText').innerHTML = `ประวัติล่าสุด: <strong style="color:var(--danger);">${currentHistory[0].total}</strong> คะแนน (เมื่อ ${new Date(currentHistory[0].date).toLocaleDateString('th-TH')})`;
+                if(currentHistory.length > 0) { document.getElementById('bannerHistoryText').innerHTML = `ประวัติล่าสุด: <strong style="color:var(--danger);">${currentHistory[0].total}</strong> คะแนน (เมื่อ ${new Date(currentHistory[0].date).toLocaleDateString('th-TH')})`;
                 } else { document.getElementById('bannerHistoryText').innerText = "ผู้ป่วยรายใหม่ (ไม่มีประวัติ)"; }
             }).catch(err => { document.getElementById('loadingModal').style.display = 'none'; });
         }
 
-        // --- Form Interaction & Auto-Scroll ---
+        // --- Form Interaction ---
         function resetForm(confirmFirst = false) {
             if(confirmFirst && !confirm("ต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่หรือไม่?")) return;
             document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.nihss-val').forEach(i => i.value = "");
-            
             document.getElementById('currentHn').value = ""; document.getElementById('currentName').value = "";
             document.getElementById('bannerHnName').innerHTML = `<i class="fas fa-user-injured" style="color: var(--primary);"></i> ไม่ระบุตัวตน (ประเมินด่วน)`;
             document.getElementById('bannerHistoryText').innerText = "ยังไม่ได้ดึงประวัติผู้ป่วย";
-            
             document.getElementById('editTimestamp').value = ""; document.getElementById('editAlert').style.display = 'none';
             calculateTotal(); window.scrollTo(0,0);
         }
@@ -593,7 +509,6 @@
             const container = document.getElementById(`group-${group}`);
             if(!container) return;
             container.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
-            
             if(elem) {
                 elem.classList.add('active');
                 if(nextGroupId) {
@@ -621,24 +536,24 @@
             document.getElementById('display-total').innerText = total; return total;
         }
 
-        // --- Summary & PDF Engine ---
+        // --- Summary, PDF, and Save ---
         function openSummaryModal() {
             let isValid = true; document.querySelectorAll('.require-val').forEach(i => { if(i.value === "") isValid = false; });
             if(!isValid) return alert('กรุณาประเมินให้ครบทั้ง 11 หมวด (ปุ่มต้องเปลี่ยนสีครบทุกข้อ)');
 
-            const hn = document.getElementById('currentHn').value;
-            const name = document.getElementById('currentName').value;
+            const hn = document.getElementById('currentHn').value; const name = document.getElementById('currentName').value;
             const isAnonymous = (!hn || !name);
 
             document.getElementById('summaryScoreDisplay').innerText = calculateTotal();
-            
-            // 📝 เตรียมข้อมูลสำหรับ PDF Medical Report
-            document.getElementById('pdfTotalScore').innerText = calculateTotal();
-            document.getElementById('pdfPatientName').innerText = isAnonymous ? "ไม่ได้ระบุในระบบ" : name;
-            document.getElementById('pdfHN').innerText = isAnonymous ? "-" : hn;
-            document.getElementById('pdfTime').innerText = new Date().toLocaleString('th-TH');
-            document.getElementById('pdfAssessor').innerText = currentUser ? currentUser.name : "ไม่ได้เข้าสู่ระบบ";
-            document.getElementById('pdfAssessorSign').innerText = currentUser ? currentUser.name : "................................";
+
+            // เตรียมข้อมูลให้ PDF วาดตารางซ่อนไว้
+            document.getElementById('printLayoutOrg').innerText = currentUser ? (currentUser.orgType + " " + currentUser.orgName) : "โรงพยาบาลสะเดา จ.สงขลา";
+            document.getElementById('printLayoutName').innerText = isAnonymous ? "ไม่ได้ระบุในระบบ" : name;
+            document.getElementById('printLayoutHn').innerText = isAnonymous ? "-" : hn;
+            document.getElementById('printLayoutTime').innerText = new Date().toLocaleString('th-TH');
+            document.getElementById('printLayoutAssessor').innerText = currentUser ? currentUser.name : "ไม่ได้เข้าสู่ระบบ";
+            document.getElementById('printLayoutSign').innerText = currentUser ? currentUser.name : "...................................";
+            document.getElementById('printLayoutTotal').innerText = calculateTotal();
 
             const fields = ['1a','1b','1c','2','3','4','5R','5L','6R','6L','7','8','9','10','11'];
             let trs = "";
@@ -646,16 +561,13 @@
                 const val = document.getElementById('val_'+f).value;
                 const info = nihssDict[f];
                 const textDesc = info.opt[val] || val;
-                
-                // ถือว่าผิดปกติถ้าไม่ใช่ 0 และไม่ใช่ X (เช่น ตาบอด/ถูกตัดแขน)
                 const isAbnormal = (val !== "0" && val !== "X" && val !== "x" && val !== "");
-                const styleClass = isAbnormal ? "val-abnormal" : "val-normal";
-                
+                const styleClass = isAbnormal ? "val-abnormal" : "";
                 trs += `<tr><td>${info.title}</td><td><span class="${styleClass}">${textDesc}</span></td></tr>`;
             });
-            document.getElementById('pdfTableBody').innerHTML = trs;
+            document.getElementById('printLayoutBody').innerHTML = trs;
 
-            // จัดการหน้าจอ Save Database
+            // Database Section Check
             if(currentUser || !navigator.onLine) {
                 document.getElementById('dbSaveSection').style.display = 'block';
                 document.getElementById('loginPromptSection').style.display = 'none';
@@ -664,35 +576,111 @@
                 document.getElementById('dbSaveSection').style.display = 'none';
                 document.getElementById('loginPromptSection').style.display = 'block';
             }
-
             document.getElementById('summaryModal').style.display = 'flex';
         }
 
-        // 🌟 ฟังก์ชันสร้างไฟล์ PDF ด้วย html2pdf.js (แก้หน้าว่าง) 🌟
-        function generatePDFReport() {
+        // 🌟 ฟังก์ชันสร้างไฟล์ PDF มาตรฐาน (Native Vector + AutoTable) 🌟
+        async function generateVectorPDF() {
             document.getElementById('summaryModal').style.display = 'none';
-            document.getElementById('loadingText').innerText = "กำลังสร้างไฟล์ PDF กรุณารอสักครู่...";
+            document.getElementById('loadingText').innerText = "กำลังสร้างไฟล์ PDF มาตรฐาน...";
             document.getElementById('loadingModal').style.display = 'flex';
 
-            const element = document.getElementById('officialPrintLayout');
-            
-            // ใช้ setTimeout เพื่อให้บราวเซอร์มีเวลา Render ภาพก่อนสั่ง snapshot
-            setTimeout(() => {
-                const opt = {
-                    margin:       10,
-                    filename:     `NIHSS_Report_${document.getElementById('finalHn').value || 'Anonymous'}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
 
-                html2pdf().set(opt).from(element).save().then(() => {
-                    document.getElementById('loadingModal').style.display = 'none';
+                // 1. ดึง Font ภาษาไทย Sarabun (จาก Google Fonts CDN)
+                const fontUrl = 'https://fonts.gstatic.com/s/sarabun/v14/DtVjJx26TKEr37c9aAFJn2QN.ttf';
+                const response = await fetch(fontUrl);
+                const buffer = await response.arrayBuffer();
+                // แปลง buffer เป็น Base64
+                let binary = ''; const bytes = new Uint8Array(buffer); const len = bytes.byteLength;
+                for (let i = 0; i < len; i++) { binary += String.fromCharCode(bytes[i]); }
+                const fontBase64 = window.btoa(binary);
+
+                // ใส่ Font เข้า jsPDF
+                doc.addFileToVFS('Sarabun.ttf', fontBase64);
+                doc.addFont('Sarabun.ttf', 'Sarabun', 'normal');
+                doc.setFont('Sarabun');
+
+                // 2. พิมพ์หัวกระดาษ
+                doc.setFontSize(20);
+                doc.text("รายงานผลประเมินโรคหลอดเลือดสมอง (NIHSS)", 105, 20, { align: "center" });
+                doc.setFontSize(14);
+                const orgName = currentUser ? (currentUser.orgType + " " + currentUser.orgName) : "โรงพยาบาลสะเดา จ.สงขลา";
+                doc.text(orgName, 105, 28, { align: "center" });
+
+                // 3. ข้อมูลผู้ป่วย
+                doc.setFontSize(12);
+                const hn = document.getElementById('finalHn').value || document.getElementById('currentHn').value || "-";
+                const name = document.getElementById('finalName').value || document.getElementById('currentName').value || "ไม่ระบุตัวตน (ประเมินด่วน)";
+                const assessor = currentUser ? currentUser.name : "ไม่ได้เข้าสู่ระบบ";
+                const timeStr = new Date().toLocaleString('th-TH');
+                const totalScore = document.getElementById('summaryScoreDisplay').innerText;
+
+                doc.text(`ผู้ป่วย: ${name}`, 15, 40);
+                doc.text(`HN: ${hn}`, 15, 48);
+                doc.text(`ผู้ประเมิน: ${assessor}`, 130, 40);
+                doc.text(`วัน/เวลา: ${timeStr}`, 130, 48);
+
+                // 4. คะแนนรวม
+                doc.setFontSize(16);
+                doc.setTextColor(220, 38, 38); // สีแดง
+                doc.text(`คะแนนรวม (Total Score): ${totalScore} / 42`, 105, 60, { align: "center" });
+                doc.setTextColor(0, 0, 0);
+
+                // 5. เตรียมข้อมูลวาดตาราง AutoTable
+                const tableData = [];
+                const fields = ['1a','1b','1c','2','3','4','5R','5L','6R','6L','7','8','9','10','11'];
+                fields.forEach(f => {
+                    const val = document.getElementById('val_'+f).value;
+                    const info = nihssDict[f];
+                    const textDesc = info.opt[val] || val;
+                    tableData.push([info.title, textDesc, val]);
                 });
-            }, 500); 
+
+                doc.autoTable({
+                    startY: 68,
+                    head: [['หมวดการประเมิน (Category)', 'ผลการประเมิน (Result)', 'คะแนน']],
+                    body: tableData,
+                    styles: { font: 'Sarabun', fontSize: 11, cellPadding: 4, textColor: [0,0,0], lineColor: [200, 200, 200], lineWidth: 0.1 },
+                    headStyles: { fillColor: [15, 118, 110], textColor: [255,255,255], fontStyle: 'bold' },
+                    columnStyles: { 
+                        0: { cellWidth: 80 }, 
+                        1: { cellWidth: 'auto' }, 
+                        2: { cellWidth: 20, halign: 'center', fontStyle: 'bold' } 
+                    },
+                    didParseCell: function(data) {
+                        // ไฮไลต์คะแนนผิดปกติเป็นสีแดง
+                        if (data.section === 'body' && data.column.index === 2) {
+                            let v = data.cell.raw;
+                            if (v !== "0" && v.toUpperCase() !== "X" && v !== "") {
+                                data.cell.styles.textColor = [220, 38, 38]; 
+                            } else if (v === "0") {
+                                data.cell.styles.textColor = [15, 118, 110];
+                            }
+                        }
+                    }
+                });
+
+                // 6. ลายเซ็น
+                const finalY = doc.lastAutoTable.finalY + 30;
+                doc.setFontSize(12);
+                doc.text("ลงชื่อ.......................................................ผู้รายงาน", 130, finalY);
+                doc.text(`( ${assessor} )`, 155, finalY + 10, { align: "center" });
+
+                // 7. บันทึกไฟล์
+                doc.save(`NIHSS_${hn}_${Date.now()}.pdf`);
+                document.getElementById('loadingModal').style.display = 'none';
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loadingModal').style.display = 'none';
+                alert("เกิดข้อผิดพลาดในการโหลด Font หรือสร้าง PDF กรุณาลองใหม่เมื่อมีอินเทอร์เน็ตแรงขึ้นครับ");
+            }
         }
 
-        // --- ระบบบันทึก & Offline Sync ---
+        // --- ระบบบันทึก ---
         function saveToDatabase() {
             const hn = document.getElementById('finalHn').value; const name = document.getElementById('finalName').value;
             if(!hn || !name) return alert("กรุณาระบุ HN และชื่อผู้ป่วยให้ครบถ้วนก่อนบันทึก");
@@ -713,7 +701,6 @@
 
             document.getElementById('summaryModal').style.display = 'none';
 
-            // จัดการ Offline Saving
             if(!navigator.onLine) {
                 let queue = JSON.parse(localStorage.getItem('nihss_offline_queue') || '[]');
                 queue.push(payload);
@@ -731,6 +718,7 @@
             fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r => r.json()).then(res => {
                 document.getElementById('loadingModal').style.display = 'none';
                 if(res.status === 'success') {
+                    if(!patientDirectory.find(p => p.hn === hn)) patientDirectory.push({hn: hn, name: name});
                     document.getElementById('successTitle').innerText = "บันทึกสำเร็จ!";
                     document.getElementById('successDesc').innerText = "ข้อมูลถูกจัดเก็บเข้าระบบเรียบร้อยแล้ว";
                     document.getElementById('successScore').innerText = data.totalScore;
@@ -743,7 +731,6 @@
             });
         }
 
-        // ฟังก์ชันส่งคิวออฟไลน์ที่ค้างอยู่
         function syncOfflineData() {
             let queue = JSON.parse(localStorage.getItem('nihss_offline_queue') || '[]');
             if(queue.length === 0 || !navigator.onLine) return;
@@ -766,13 +753,11 @@
             if (navigator.share) { navigator.share({ title: 'ผลประเมิน NIHSS', text: text }).catch(e=>{}); } 
             else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว นำไปวางส่งใน LINE ได้เลยครับ"); }
         }
-        function printCurrentAssessment() { window.print(); }
         function closeSuccessAndGoHome() { document.getElementById('successModal').style.display = 'none'; resetForm(); }
 
-        // --- History View ---
         function showHistory() {
             if(!currentUser) return alert("กรุณาเข้าสู่ระบบก่อนดูประวัติ");
-            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วยก่อนดูแฟ้มประวัติ");
+            if(!document.getElementById('currentHn').value) return alert("กรุณาผูกประวัติผู้ป่วย (กดปุ่มรูปบัตรประจำตัว) ก่อนดูแฟ้มประวัติ");
             
             const tbody = document.getElementById('historyTbody'); tbody.innerHTML = '';
             if(currentHistory.length === 0) { tbody.innerHTML = '<tr><td colspan="20">ไม่พบประวัติ</td></tr>'; } 
@@ -804,28 +789,6 @@
             document.getElementById('editAlert').style.display = 'block';
             document.getElementById('historyModal').style.display = 'none';
             window.scrollTo(0,0);
-        }
-
-        function printSelected() {
-            const rows = document.querySelectorAll('.history-row'); const checkboxes = document.querySelectorAll('.print-checkbox');
-            let hasSelection = false;
-            checkboxes.forEach((cb, i) => { if(!cb.checked) rows[i].classList.add('no-print'); else hasSelection = true; });
-            if(!hasSelection) { rows.forEach(r => r.classList.remove('no-print')); return alert("กรุณาเลือกประวัติอย่างน้อย 1 รายการ"); }
-            document.getElementById('printAssessorName2').innerText = currentUser.name;
-            window.print();
-            setTimeout(() => { rows.forEach(r => r.classList.remove('no-print')); }, 500);
-        }
-
-        function shareSelectedHistory() {
-            const checkboxes = document.querySelectorAll('.print-checkbox:checked');
-            if(checkboxes.length === 0) return alert("เลือกประวัติอย่างน้อย 1 รายการ");
-            let text = `รายงานประวัติ NIHSS\nผู้ป่วย: ${document.getElementById('currentName').value}\n\n`;
-            checkboxes.forEach(cb => {
-                const d = currentHistory[cb.value];
-                text += `📌 ตรวจเมื่อ: ${new Date(d.date).toLocaleString('th-TH')}\nคะแนน: ${d.total} | ประเมินโดย: ${d.assessor}\n---\n`;
-            });
-            if (navigator.share) { navigator.share({ title: 'ประวัติ NIHSS', text: text }).catch(e=>{}); } 
-            else { navigator.clipboard.writeText(text); alert("คัดลอกข้อความแล้ว"); }
         }
     </script>
 </body>
